@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import profilePhoto from "../../assets/images/photo.jpeg";
+import photo1 from "../../assets/images/photo_1.jpeg";
+import photo2 from "../../assets/images/photo_2.jpeg";
+
+const photos = [photo1, photo2];
 
 // Radar Chart Component
 function RadarChart() {
@@ -136,6 +139,7 @@ function RadarChart() {
 
 export default function AboutSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isPhotoHovered, setIsPhotoHovered] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -200,18 +204,25 @@ export default function AboutSection() {
               style={{ transitionDelay: "0ms" }}
             >
               <div
-                className="relative w-full aspect-[3/4] overflow-hidden border"
+                className="relative w-full aspect-[3/4] overflow-hidden border cursor-pointer"
                 style={{
                   backgroundColor: "var(--color-teal)",
                   borderColor: "var(--color-ink)",
                 }}
+                onMouseEnter={() => setIsPhotoHovered(true)}
+                onMouseLeave={() => setIsPhotoHovered(false)}
+                onClick={() => setIsPhotoHovered((prev) => !prev)}
               >
-                {/* Profile Photo */}
-                <img
-                  src={profilePhoto}
-                  alt="Haru Li"
-                  className="absolute inset-0 w-full h-full object-cover object-top"
-                />
+                {/* Profile Photos - hover crossfade */}
+                {photos.map((src, i) => (
+                  <img
+                    key={i}
+                    src={src}
+                    alt="Haru Li"
+                    className="absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500"
+                    style={{ opacity: i === (isPhotoHovered ? 1 : 0) ? 1 : 0 }}
+                  />
+                ))}
 
                 {/* Player Number Tag */}
                 <div

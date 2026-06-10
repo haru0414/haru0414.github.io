@@ -1,61 +1,20 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { projects } from "../../data/projects";
 
-const episodes = [
-  {
-    id: "01",
-    title: "E-COMMERCE ARC",
-    desc: "Vue 3 + Quasar + TypeScript 電商平台，完整 RWD、Pinia 狀態管理、Axios API 封裝、reCAPTCHA、SSR + SEO",
-    color: "var(--color-nekoma)",
-    year: "2026",
-  },
-  {
-    id: "02",
-    title: "OFFICIAL SITE SAGA",
-    desc: "Next.js 14 App Router 架構遷移，多步驟驗屋預約、TapPay 金流、LINE LIFF 登入、GA4 電商事件追蹤",
-    color: "var(--color-teal)",
-    year: "2024",
-  },
-  {
-    id: "03",
-    title: "ADMIN SYSTEM ARC",
-    desc: "React + MUI 後台系統，WebSocket 即時客服聊天室，LINE 貼圖渲染、排班、訂單、會員管理模組",
-    color: "var(--color-poster)",
-    year: "2024",
-  },
-  {
-    id: "04",
-    title: "CLINIC SYSTEM",
-    desc: "醫美診所管理系統，React Hook Form + Zod 多步驟表單、TanStack Query、帳號權限管理、罐頭訊息模組",
-    color: "#6366f1",
-    year: "2025",
-  },
-  {
-    id: "05",
-    title: "EMS DASHBOARD",
-    desc: "React 19 + Vite 能源/環境監控 SPA，自適應縮放（1280px ～ 4K），即時節點流量追蹤、品牌設計系統",
-    color: "#0891b2",
-    year: "2025",
-  },
-  {
-    id: "06",
-    title: "POS CHRONICLES",
-    desc: "平板最佳化餐飲 POS 系統，WebSocket 即時訂單更新、條碼掃描、多元支付辨識，高頻操作場景設計",
-    color: "#16a34a",
-    year: "2025",
-  },
-];
-
-function EpisodeCard({ episode }: { episode: (typeof episodes)[0] }) {
+function EpisodeCard({ episode }: { episode: (typeof projects)[0] }) {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div
-      className="flex-shrink-0 snap-center w-72 md:w-80"
+      className="flex-shrink-0 snap-center w-72 md:w-80 cursor-pointer"
       style={{
         perspective: "1000px",
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={() => navigate(`/project/${episode.id}`)}
     >
       <div
         className="w-full aspect-[2/3] relative transition-all duration-300"
@@ -157,6 +116,10 @@ function EpisodeCard({ episode }: { episode: (typeof episodes)[0] }) {
                   backgroundColor: "var(--color-ink)",
                   borderColor: "var(--color-ink)",
                 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/project/${episode.id}`);
+                }}
               >
                 READ &gt;
               </button>
@@ -170,7 +133,23 @@ function EpisodeCard({ episode }: { episode: (typeof episodes)[0] }) {
 
 export default function PortfolioSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      const cardWidth = el.scrollWidth / (projects.length + 2);
+      const index = Math.round((el.scrollLeft - cardWidth) / cardWidth);
+      setActiveIndex(Math.max(0, Math.min(index, projects.length - 1)));
+    };
+
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -236,16 +215,19 @@ export default function PortfolioSection() {
 
       {/* Horizontal Scroll Container */}
       <div
+        ref={scrollRef}
         className="flex overflow-x-auto gap-8 px-4 pb-8 snap-x snap-mandatory"
         style={{
           scrollbarWidth: "none",
           msOverflowStyle: "none",
+          overscrollBehaviorX: "contain",
+          touchAction: "pan-x",
         }}
       >
         {/* Spacer */}
         <div className="flex-shrink-0 w-4 md:w-16" />
 
-        {episodes.map((episode, index) => (
+        {projects.map((episode, index) => (
           <div
             key={episode.id}
             className={`transform transition-all duration-500 ${
@@ -265,14 +247,17 @@ export default function PortfolioSection() {
 
       {/* Mobile Scroll Hint */}
       <div className="md:hidden flex justify-center mt-4 gap-2">
-        {episodes.map((_, index) => (
+        {projects.map((_, index) => (
           <div
             key={index}
             className="w-2 h-2 rounded-full"
             style={{
               backgroundColor:
-                index === 0 ? "var(--color-nekoma)" : "var(--color-ink)",
-              opacity: index === 0 ? 1 : 0.3,
+                index === activeIndex
+                  ? "var(--color-nekoma)"
+                  : "var(--color-ink)",
+              opacity: index === activeIndex ? 1 : 0.3,
+              transition: "opacity 0.3s, background-color 0.3s",
             }}
           />
         ))}
