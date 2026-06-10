@@ -26,7 +26,7 @@ function RadarChart() {
   return (
     <div
       ref={chartRef}
-      className="relative w-full max-w-[180px] mx-auto aspect-square"
+      className="relative w-full max-w-[180px] md:max-w-[220px] lg:max-w-[260px] mx-auto aspect-square"
     >
       <svg viewBox="-25 -18 150 136" className="w-full h-full overflow-visible">
         {/* Background Grid */}
