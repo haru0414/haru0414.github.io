@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+@theme {
+  /* Color System - Retro Manga Style */
+  --color-paper: #F2EAD3;
+  --color-ink: #1A2332;
+  --color-nekoma: #C83E34;
+  --color-poster: #FFC845;
+  --color-teal: #2F5C68;
+
+  /* Font families */
+  --font-heading: "Dela Gothic One", sans-serif;
+  --font-body: "Noto Sans JP", sans-serif;
+
+  /* Box shadows - Manga style */
+  --shadow-manga: 6px 6px 0px 0px #1A2332;
+  --shadow-manga-sm: 3px 3px 0px 0px #1A2332;
+  --shadow-manga-hover: 9px 9px 0px 0px #1A2332;
+}
+
+@layer base {
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+
+  html, body, #root {
+    @apply w-full min-h-full;
+  }
+
+  body {
+    font-family: var(--font-body);
+    @apply antialiased;
+    color: var(--color-ink);
+    background-color: var(--color-paper);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    @apply tracking-tight;
+  }
+
+  ::selection {
+    background-color: var(--color-poster);
+    color: var(--color-ink);
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 12px;
+    background: var(--color-paper);
+    border-left: 2px solid var(--color-ink);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-nekoma);
+    border: 2px solid var(--color-ink);
+  }
+}
+
+@layer components {
+  /* Noise Overlay */
+  .noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* Halftone Pattern */
+  .halftone {
+    background-size: 20px 20px;
+    background-image: radial-gradient(var(--color-ink) 2px, transparent 2px);
+  }
+
+  /* Manga Card */
+  .manga-card {
+    @apply bg-white border-2 p-4 transition-all duration-200;
+    border-color: var(--color-ink);
+    box-shadow: var(--shadow-manga);
+  }
+
+  .manga-card:hover {
+    @apply -translate-y-1;
+    box-shadow: var(--shadow-manga-hover);
+  }
+
+  /* Manga Button */
+  .manga-btn {
+    @apply px-6 py-3 font-bold transition-all duration-150 border-2;
+    font-family: var(--font-heading);
+    background-color: var(--color-nekoma);
+    color: white;
+    border-color: var(--color-ink);
+    box-shadow: var(--shadow-manga-sm);
+  }
+
+  .manga-btn:hover {
+    @apply -translate-x-0.5 -translate-y-0.5;
+    box-shadow: var(--shadow-manga);
+  }
+
+  .manga-btn:active {
+    @apply translate-x-0.5 translate-y-0.5;
+    box-shadow: 2px 2px 0px 0px var(--color-ink);
+  }
+
+  /* Text Outline Effect */
+  .text-outline {
+    -webkit-text-stroke: 2px var(--color-ink);
+    color: var(--color-poster);
+  }
+
+  .text-outline-white {
+    -webkit-text-stroke: 2px var(--color-ink);
+    color: white;
+  }
+
+  /* Vertical Text */
+  .text-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  /* Tag/Label */
+  .manga-tag {
+    @apply px-2 py-1 text-xs font-bold border-2;
+    font-family: var(--font-heading);
+    border-color: var(--color-ink);
+    box-shadow: 2px 2px 0px 0px var(--color-ink);
+  }
+
+  /* Dialogue Bubble */
+  .speech-bubble {
+    @apply bg-white border-2 p-4 relative;
+    border-color: var(--color-ink);
+    border-radius: 50% 50% 0 50%;
+    box-shadow: var(--shadow-manga);
+  }
+
+  /* Section */
+  .section {
+    @apply min-h-screen relative overflow-hidden;
+  }
+}
+
+@layer utilities {
+  /* Animation for floating elements */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Diagonal stripe pattern */
+  .diagonal-stripes {
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      var(--color-ink) 10px,
+      var(--color-ink) 11px
+    );
+    opacity: 0.05;
+  }
+}
