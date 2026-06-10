@@ -219,7 +219,7 @@ export default function AboutSection() {
                     key={i}
                     src={src}
                     alt="Haru Li"
-                    className="absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-500"
+                    className="absolute inset-0 w-full h-full object-cover object-bottom transition-opacity duration-500"
                     style={{ opacity: i === (isPhotoHovered ? 1 : 0) ? 1 : 0 }}
                   />
                 ))}
