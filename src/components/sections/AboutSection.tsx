@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import photo1 from "../../assets/images/photo_1.jpeg";
 import photo2 from "../../assets/images/photo_2.jpeg";
+import catCover from "../../assets/images/onigiri/cover.jpeg";
+import sticker1 from "../../assets/images/onigiri/stickers/1.png";
 
 const photos = [photo1, photo2];
 
@@ -193,7 +195,7 @@ export default function AboutSection() {
           </div>
 
           {/* Main Bento Grid */}
-          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Card 1: Profile Photo */}
             <div
               className={`md:col-span-1 manga-card transform transition-all duration-500 ${
@@ -311,9 +313,64 @@ export default function AboutSection() {
               </p>
             </div>
 
-            {/* Card 4: Tech Stack (Full Width) */}
+            {/* Card 4: Cat */}
             <div
-              className={`md:col-span-3 p-6 border-2 transform transition-all duration-500 ${
+              className={`md:col-span-1 manga-card transform transition-all duration-500 ${
+                isVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-10 opacity-0"
+              }`}
+              style={{ transitionDelay: "300ms" }}
+            >
+              <div
+                className="relative w-full aspect-[3/4] overflow-hidden border"
+                style={{
+                  backgroundColor: "var(--color-nekoma)",
+                  borderColor: "var(--color-ink)",
+                }}
+              >
+                <img
+                  src={catCover}
+                  alt="飯糰"
+                  width={1658}
+                  height={1414}
+                  className="w-full h-full object-cover object-left"
+                />
+                {/* Sticker overlay */}
+                <img
+                  src={sticker1}
+                  alt=""
+                  aria-hidden="true"
+                  width={1013}
+                  height={527}
+                  className="absolute bottom-8 right-1 w-16 h-auto"
+                  style={{ filter: "drop-shadow(1px 2px 0px rgba(0,0,0,0.5))" }}
+                />
+                <div
+                  className="absolute bottom-0 left-0 px-3 py-1 border-t-2 border-r-2 text-xs"
+                  style={{
+                    fontFamily: "var(--font-heading)",
+                    backgroundColor: "var(--color-poster)",
+                    borderColor: "var(--color-ink)",
+                  }}
+                >
+                  CODE REVIEWER
+                </div>
+              </div>
+              <div className="mt-3 text-center">
+                <h3
+                  className="text-xl"
+                  style={{ fontFamily: "var(--font-heading)" }}
+                >
+                  ONIGIRI
+                </h3>
+                <p className="text-xs text-gray-500 mt-1">常駐監工 🐾</p>
+              </div>
+            </div>
+
+            {/* Card 5: Tech Stack (Full Width) */}
+            <div
+              className={`md:col-span-4 p-6 border-2 transform transition-all duration-500 ${
                 isVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-10 opacity-0"

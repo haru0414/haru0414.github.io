@@ -7,6 +7,7 @@ import PortfolioSection from "./components/sections/PortfolioSection";
 import SkillsSection from "./components/sections/SkillsSection";
 import ContactSection from "./components/sections/ContactSection";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
+import FloatingCat from "./components/FloatingCat";
 
 // Custom Cursor Component - Using refs for smooth performance
 function CustomCursor() {
@@ -231,6 +232,7 @@ export default function Root() {
   return (
     <HashRouter>
       <CustomCursor />
+      <FloatingCat />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/project/:id" element={<ProjectDetailPage />} />
