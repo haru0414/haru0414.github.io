@@ -169,14 +169,10 @@ export default function AboutSection() {
     "SCSS",
     "Vite",
     "Astro",
-    "TanStack Query",
     "WebSocket",
     "Axios",
     "LINE LIFF",
     "TapPay",
-    "GA4 / GTM",
-    "Docker / GCP",
-    "PHP / SQL",
   ];
 
   return (
