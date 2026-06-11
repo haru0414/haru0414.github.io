@@ -1,6 +1,6 @@
 import { useState } from "react";
 import catCover from "../assets/images/onigiri/cover.jpeg";
-import sticker2 from "../assets/images/onigiri/stickers/2.png";
+import sticker1 from "../assets/images/onigiri/stickers/1.png";
 
 export default function FloatingCat() {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +53,7 @@ export default function FloatingCat() {
         style={{ filter: "drop-shadow(2px 4px 0px rgba(0,0,0,0.4))" }}
       >
         <img
-          src={sticker2}
+          src={sticker1}
           alt="飯糰貼紙"
           width={960}
           height={870}

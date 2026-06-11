@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import photo1 from "../../assets/images/photo_1.jpeg";
 import photo2 from "../../assets/images/photo_2.jpeg";
 import catCover from "../../assets/images/onigiri/cover.jpeg";
-import sticker1 from "../../assets/images/onigiri/stickers/1.png";
+import sticker3 from "../../assets/images/onigiri/stickers/3.png";
 
 const photos = [photo1, photo2];
 
@@ -227,7 +227,19 @@ export default function AboutSection() {
                     style={{ opacity: i === (isPhotoHovered ? 1 : 0) ? 1 : 0 }}
                   />
                 ))}
-
+                {/* Sticker overlay */}
+                <img
+                  src={sticker3}
+                  alt=""
+                  aria-hidden="true"
+                  width={1013}
+                  height={527}
+                  className="absolute bottom-4 object-cover object-left right-2 w-16 h-16 rounded-full p-1 opacity-80 pointer-events-none transition-transform duration-300 hover:scale-110"
+                  style={{
+                    filter: "drop-shadow(1px 2px 0px rgba(0,0,0,0.5))",
+                    backgroundColor: "var(--color-nekoma)",
+                  }}
+                />
                 {/* Player Number Tag */}
                 <div
                   className="absolute bottom-0 left-0 px-3 py-1 border-t-2 border-r-2 text-xs"
@@ -336,16 +348,7 @@ export default function AboutSection() {
                   height={1414}
                   className="w-full h-full object-cover object-left"
                 />
-                {/* Sticker overlay */}
-                <img
-                  src={sticker1}
-                  alt=""
-                  aria-hidden="true"
-                  width={1013}
-                  height={527}
-                  className="absolute bottom-8 right-1 w-16 h-auto"
-                  style={{ filter: "drop-shadow(1px 2px 0px rgba(0,0,0,0.5))" }}
-                />
+
                 <div
                   className="absolute bottom-0 left-0 px-3 py-1 border-t-2 border-r-2 text-xs"
                   style={{
