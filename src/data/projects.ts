@@ -1,3 +1,6 @@
+import ndayScreenshot from "../assets/images/website/www.nday.com.tw_.png";
+import jiahescreenshot from "../assets/images/website/www.jiahe.net.tw_.png";
+
 export interface ProjectData {
   id: string;
   title: string;
@@ -53,6 +56,7 @@ export const projects: ProjectData[] = [
       "Nginx",
     ],
     liveUrl: "https://www.nday.com.tw/",
+    screenshots: [ndayScreenshot],
   },
   {
     id: "03",
@@ -112,5 +116,17 @@ export const projects: ProjectData[] = [
     fullDesc:
       "使用 React + Tailwind CSS 建構平板最佳化操作介面，透過 WebSocket 實作訂單與狀態的即時更新。整合條碼掃描，支援多元支付辨識與結帳流程。以高頻操作場景為前提，設計可擴充且易維護的前端架構，確保在快節奏的餐飲環境中操作流暢不卡頓。",
     techStack: ["React", "Tailwind CSS", "WebSocket", "TypeScript"],
+  },
+  {
+    id: "07",
+    title: "SANATORIUM SITE",
+    year: "2025",
+    color: "#84846a",
+    desc: "療養院官方網站，從零規劃前端架構，Astro + React、Swiper 輪播、RWD、GA4 埋碼追蹤",
+    fullDesc:
+      "獨立負責療養院官方網站前端開發，從零規劃整體前端架構，包含頁面路由設計、元件系統建立與全域樣式規範制定。以 Astro + React 組合建構靜態網站，兼顧 SEO 與互動性需求。實作完整 RWD 響應式版型，確保桌機、平板、手機各裝置正常顯示。整合 Swiper 實作輪播互動元件，協作對接後端資料並完成 GA4 埋碼追蹤設定。",
+    techStack: ["Astro", "React.js", "Git", "Swiper", "GA4 / GTM", "SEO"],
+    liveUrl: "https://www.jiahe.net.tw/",
+    screenshots: [jiahescreenshot],
   },
 ];

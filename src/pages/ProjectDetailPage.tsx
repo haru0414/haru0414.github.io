@@ -97,8 +97,8 @@ export default function ProjectDetailPage() {
         {/* Live Preview Browser Mockup */}
         {project.liveUrl && (
           <div className="mb-10">
-            <div
-              className="absolute -top-3 -left-3 px-3 py-1 text-sm text-white border-2 relative inline-block mb-4"
+            <span
+              className="inline-block px-3 py-1 text-sm text-white border-2 mb-4"
               style={{
                 fontFamily: "var(--font-heading)",
                 backgroundColor: "var(--color-teal)",
@@ -107,7 +107,7 @@ export default function ProjectDetailPage() {
               }}
             >
               LIVE PREVIEW
-            </div>
+            </span>
             <div
               className="border-2 overflow-hidden"
               style={{
@@ -144,85 +144,101 @@ export default function ProjectDetailPage() {
                   ↗
                 </a>
               </div>
-              {/* Preview area */}
+
+              {/* Screenshots or placeholder */}
+              {project.screenshots && project.screenshots.length > 0 ? (
+                <div
+                  className="divide-y-2"
+                  style={{ borderColor: "var(--color-ink)" }}
+                >
+                  {project.screenshots.map((src, i) => (
+                    <img
+                      key={i}
+                      src={src}
+                      alt={`${project.title} screenshot ${i + 1}`}
+                      className="w-full h-auto block"
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div
+                  className="relative flex items-center justify-center"
+                  style={{
+                    height: "220px",
+                    backgroundColor: "var(--color-paper)",
+                  }}
+                >
+                  <div
+                    className="absolute inset-0 opacity-10"
+                    style={{
+                      backgroundImage: `linear-gradient(var(--color-ink) 1px, transparent 1px), linear-gradient(90deg, var(--color-ink) 1px, transparent 1px)`,
+                      backgroundSize: "32px 32px",
+                    }}
+                  />
+                  <p
+                    className="relative text-4xl opacity-10"
+                    style={{ fontFamily: "var(--font-heading)" }}
+                  >
+                    {project.title}
+                  </p>
+                </div>
+              )}
+
+              {/* Hint + Button */}
               <div
-                className="relative flex flex-col items-center justify-center gap-6"
+                className="flex items-center justify-between gap-4 px-5 py-4 border-t-2"
                 style={{
-                  height: "300px",
+                  borderColor: "var(--color-ink)",
                   backgroundColor: "var(--color-paper)",
                 }}
               >
-                {/* Grid decoration */}
-                <div
-                  className="absolute inset-0 opacity-10"
+                <p className="text-xs text-gray-500 leading-relaxed">
+                  {project.screenshots && project.screenshots.length > 0
+                    ? "以上為網站實際截圖，點擊右側按鈕前往完整網站"
+                    : "網站安全政策不允許嵌入預覽，點擊右側按鈕前往完整網站"}
+                </p>
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-shrink-0 px-5 py-2 text-sm text-white border-2 transition-all hover:-translate-y-0.5"
                   style={{
-                    backgroundImage: `
-                      linear-gradient(var(--color-ink) 1px, transparent 1px),
-                      linear-gradient(90deg, var(--color-ink) 1px, transparent 1px)
-                    `,
-                    backgroundSize: "32px 32px",
+                    fontFamily: "var(--font-heading)",
+                    backgroundColor: "var(--color-ink)",
+                    borderColor: "var(--color-ink)",
+                    boxShadow: "3px 3px 0 0 var(--color-teal)",
                   }}
-                />
-                {/* Halftone dots */}
-                <div
-                  className="absolute inset-0 opacity-5"
-                  style={{
-                    backgroundImage:
-                      "radial-gradient(rgba(0,0,0,0.8) 1px, transparent 1px)",
-                    backgroundSize: "6px 6px",
-                  }}
-                />
-                <div className="relative z-10 text-center">
-                  <p
-                    className="text-5xl mb-2 opacity-20"
-                    style={{ fontFamily: "var(--font-heading)" }}
-                  >
-                    NDAY
-                  </p>
-                  <p className="text-sm text-gray-500 mb-6">
-                    網站安全政策不允許嵌入預覽
-                  </p>
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-8 py-3 text-sm text-white border-2 transition-all hover:-translate-y-1 inline-block"
-                    style={{
-                      fontFamily: "var(--font-heading)",
-                      backgroundColor: "var(--color-ink)",
-                      borderColor: "var(--color-ink)",
-                      boxShadow: "4px 4px 0 0 var(--color-teal)",
-                    }}
-                  >
-                    VISIT SITE →
-                  </a>
-                </div>
+                >
+                  VISIT SITE →
+                </a>
               </div>
             </div>
           </div>
         )}
 
-        {/* Screenshots */}
-        {project.screenshots && project.screenshots.length > 0 && (
-          <div className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-4">
-            {project.screenshots.map((src, i) => (
-              <div
-                key={i}
-                className="border-2 overflow-hidden"
-                style={{
-                  borderColor: "var(--color-ink)",
-                  boxShadow: "4px 4px 0 0 var(--color-ink)",
-                }}
-              >
-                <img
-                  src={src}
-                  alt={`${project.title} screenshot ${i + 1}`}
-                  className="w-full h-auto object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        )}
+        {/* Screenshots (for projects without liveUrl) */}
+        {!project.liveUrl &&
+          project.screenshots &&
+          project.screenshots.length > 0 && (
+            <div className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+              {project.screenshots.map((src, i) => (
+                <div
+                  key={i}
+                  className="border-2 overflow-hidden"
+                  style={{
+                    borderColor: "var(--color-ink)",
+                    boxShadow: "4px 4px 0 0 var(--color-ink)",
+                  }}
+                >
+                  <img
+                    src={src}
+                    alt={`${project.title} screenshot ${i + 1}`}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
 
         {/* Description */}
         {project.fullDesc && (
