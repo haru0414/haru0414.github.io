@@ -83,7 +83,7 @@ function EpisodeCard({ episode }: { episode: (typeof projects)[0] }) {
 
             {/* Title on Cover */}
             <h3
-              className="absolute bottom-3 right-3 text-3xl text-white leading-tight text-right max-w-[80%]"
+              className="absolute bottom-3 right-3 text-xl md:text-2xl text-white leading-tight text-right max-w-[80%] break-words"
               style={{
                 fontFamily: "var(--font-heading)",
                 textShadow: "2px 2px 0 var(--color-ink)",
