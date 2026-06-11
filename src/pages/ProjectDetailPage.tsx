@@ -91,6 +91,7 @@ export default function ProjectDetailPage() {
             style={{ fontFamily: "var(--font-heading)", color: project.color }}
           >
             {project.title}
+            <span className="sr-only"> — {project.year} | Haru Li</span>
           </h1>
         </div>
 
@@ -156,6 +157,8 @@ export default function ProjectDetailPage() {
                       key={i}
                       src={src}
                       alt={`${project.title} screenshot ${i + 1}`}
+                      width={3098}
+                      height={1838}
                       className="w-full h-auto block"
                     />
                   ))}
