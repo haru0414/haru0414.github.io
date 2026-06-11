@@ -142,9 +142,21 @@ export default function PortfolioSection() {
     if (!el) return;
 
     const handleScroll = () => {
-      const cardWidth = el.scrollWidth / (projects.length + 2);
-      const index = Math.round((el.scrollLeft - cardWidth) / cardWidth);
-      setActiveIndex(Math.max(0, Math.min(index, projects.length - 1)));
+      const containerCenter = el.scrollLeft + el.clientWidth / 2;
+      const cards = el.querySelectorAll<HTMLElement>("[data-card]");
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      cards.forEach((card, i) => {
+        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+        const distance = Math.abs(cardCenter - containerCenter);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = i;
+        }
+      });
+
+      setActiveIndex(closestIndex);
     };
 
     el.addEventListener("scroll", handleScroll, { passive: true });
@@ -230,6 +242,7 @@ export default function PortfolioSection() {
         {projects.map((episode, index) => (
           <div
             key={episode.id}
+            data-card
             className={`transform transition-all duration-500 ${
               isVisible
                 ? "translate-y-0 opacity-100"

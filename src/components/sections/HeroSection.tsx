@@ -45,10 +45,16 @@ export default function HeroSection() {
             className="text-5xl sm:text-7xl md:text-9xl tracking-tighter leading-none mb-4"
             style={{ fontFamily: "var(--font-heading)" }}
           >
-            <span className="text-outline block">FRONTEND</span>
+            <span className="sr-only">
+              Haru Li — Frontend Engineer, React, Next.js, TypeScript
+            </span>
+            <span className="text-outline block" aria-hidden="true">
+              FRONTEND
+            </span>
             <span
               className="block transform translate-x-2 md:translate-x-4"
               style={{ color: "var(--color-ink)" }}
+              aria-hidden="true"
             >
               DEV!!
             </span>

@@ -168,7 +168,7 @@ export default function SkillsSection() {
               }}
             >
               <span
-                className="text-lg"
+                className="text-smmd:text-lg"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
                 NOW
