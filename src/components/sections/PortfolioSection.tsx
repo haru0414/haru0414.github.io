@@ -185,8 +185,8 @@ export default function PortfolioSection() {
       ref={sectionRef}
       id="episodes"
       className="py-20 relative border-y-4"
-      style={{ overflowX: "clip" }}
       style={{
+        overflowX: "clip",
         backgroundColor: "white",
         borderColor: "var(--color-ink)",
       }}
@@ -229,7 +229,7 @@ export default function PortfolioSection() {
       {/* Horizontal Scroll Container */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-8 px-4 pb-8 snap-x snap-mandatory"
+        className="flex overflow-x-auto gap-8 px-4 pt-4 pb-8 snap-x snap-mandatory"
         style={{
           scrollbarWidth: "none",
           msOverflowStyle: "none",
