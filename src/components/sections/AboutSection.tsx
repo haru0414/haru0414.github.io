@@ -164,12 +164,11 @@ export default function AboutSection() {
   const techStack = [
     "React",
     "Next.js",
-    "Vue 3",
     "TypeScript",
     "Tailwind CSS",
     "SCSS",
     "Vite",
-    "Pinia",
+    "Astro",
     "TanStack Query",
     "WebSocket",
     "Axios",
