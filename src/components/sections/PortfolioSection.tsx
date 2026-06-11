@@ -184,7 +184,8 @@ export default function PortfolioSection() {
     <section
       ref={sectionRef}
       id="episodes"
-      className="py-20 overflow-hidden relative border-y-4"
+      className="py-20 relative border-y-4"
+      style={{ overflowX: "clip" }}
       style={{
         backgroundColor: "white",
         borderColor: "var(--color-ink)",
