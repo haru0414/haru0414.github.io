@@ -94,6 +94,90 @@ export default function ProjectDetailPage() {
           </h1>
         </div>
 
+        {/* Live Preview Browser Mockup */}
+        {project.liveUrl && (
+          <div className="mb-10">
+            <div
+              className="absolute -top-3 -left-3 px-3 py-1 text-sm text-white border-2 relative inline-block mb-4"
+              style={{
+                fontFamily: "var(--font-heading)",
+                backgroundColor: "var(--color-teal)",
+                borderColor: "var(--color-ink)",
+                boxShadow: "2px 2px 0 0 var(--color-ink)",
+              }}
+            >
+              LIVE PREVIEW
+            </div>
+            <div
+              className="border-2 overflow-hidden"
+              style={{
+                borderColor: "var(--color-ink)",
+                boxShadow: "4px 4px 0 0 var(--color-ink)",
+              }}
+            >
+              {/* Browser Chrome */}
+              <div
+                className="flex items-center gap-3 px-4 py-2 border-b-2"
+                style={{
+                  backgroundColor: "var(--color-ink)",
+                  borderColor: "var(--color-ink)",
+                }}
+              >
+                <div className="flex gap-1.5 flex-shrink-0">
+                  <div className="w-3 h-3 rounded-full bg-red-400" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                  <div className="w-3 h-3 rounded-full bg-green-400" />
+                </div>
+                <div
+                  className="flex-1 px-3 py-1 text-xs text-white/80 rounded font-mono truncate"
+                  style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
+                >
+                  {project.liveUrl}
+                </div>
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-shrink-0 text-white/60 hover:text-white transition-colors text-sm"
+                  title="在新分頁開啟"
+                >
+                  ↗
+                </a>
+              </div>
+              {/* iframe */}
+              <div className="relative" style={{ height: "520px" }}>
+                <iframe
+                  src={project.liveUrl}
+                  title={`${project.title} Live Preview`}
+                  className="w-full h-full border-0"
+                  loading="lazy"
+                />
+                {/* Fallback overlay */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-4 py-3 text-sm"
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
+                  }}
+                >
+                  <span className="text-white/70 text-xs">
+                    若網站不支援嵌入，請使用右側連結開啟
+                  </span>
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3 py-1 text-xs text-white border border-white/50 hover:bg-white/20 transition-colors flex-shrink-0 ml-4"
+                    style={{ fontFamily: "var(--font-heading)" }}
+                  >
+                    OPEN SITE →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Screenshots */}
         {project.screenshots && project.screenshots.length > 0 && (
           <div className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-4">
