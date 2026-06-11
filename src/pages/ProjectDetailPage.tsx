@@ -144,33 +144,57 @@ export default function ProjectDetailPage() {
                   ↗
                 </a>
               </div>
-              {/* iframe */}
-              <div className="relative" style={{ height: "520px" }}>
-                <iframe
-                  src={project.liveUrl}
-                  title={`${project.title} Live Preview`}
-                  className="w-full h-full border-0"
-                  loading="lazy"
-                />
-                {/* Fallback overlay */}
+              {/* Preview area */}
+              <div
+                className="relative flex flex-col items-center justify-center gap-6"
+                style={{
+                  height: "300px",
+                  backgroundColor: "var(--color-paper)",
+                }}
+              >
+                {/* Grid decoration */}
                 <div
-                  className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-4 py-3 text-sm"
+                  className="absolute inset-0 opacity-10"
                   style={{
-                    background:
-                      "linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%)",
+                    backgroundImage: `
+                      linear-gradient(var(--color-ink) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--color-ink) 1px, transparent 1px)
+                    `,
+                    backgroundSize: "32px 32px",
                   }}
-                >
-                  <span className="text-white/70 text-xs">
-                    若網站不支援嵌入，請使用右側連結開啟
-                  </span>
+                />
+                {/* Halftone dots */}
+                <div
+                  className="absolute inset-0 opacity-5"
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(rgba(0,0,0,0.8) 1px, transparent 1px)",
+                    backgroundSize: "6px 6px",
+                  }}
+                />
+                <div className="relative z-10 text-center">
+                  <p
+                    className="text-5xl mb-2 opacity-20"
+                    style={{ fontFamily: "var(--font-heading)" }}
+                  >
+                    NDAY
+                  </p>
+                  <p className="text-sm text-gray-500 mb-6">
+                    網站安全政策不允許嵌入預覽
+                  </p>
                   <a
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3 py-1 text-xs text-white border border-white/50 hover:bg-white/20 transition-colors flex-shrink-0 ml-4"
-                    style={{ fontFamily: "var(--font-heading)" }}
+                    className="px-8 py-3 text-sm text-white border-2 transition-all hover:-translate-y-1 inline-block"
+                    style={{
+                      fontFamily: "var(--font-heading)",
+                      backgroundColor: "var(--color-ink)",
+                      borderColor: "var(--color-ink)",
+                      boxShadow: "4px 4px 0 0 var(--color-teal)",
+                    }}
                   >
-                    OPEN SITE →
+                    VISIT SITE →
                   </a>
                 </div>
               </div>
