@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import CrayonUnderline from "../crayon/CrayonUnderline";
+import CrayonDoodle from "../crayon/CrayonDoodle";
+import CrayonTrail from "../crayon/CrayonTrail";
 
 export default function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -56,7 +59,9 @@ export default function HeroSection() {
               style={{ color: "var(--color-ink)" }}
               aria-hidden="true"
             >
-              DEV!!
+              <CrayonUnderline color="var(--color-nekoma)" delay={900}>
+                DEV!!
+              </CrayonUnderline>
             </span>
           </h1>
         </div>
@@ -130,6 +135,26 @@ export default function HeroSection() {
                 }}
               />
 
+              {/* Crayon Doodles */}
+              <CrayonDoodle
+                type="star"
+                color="var(--color-nekoma)"
+                className="absolute top-8 left-12 w-10 h-10 md:w-14 md:h-14 opacity-70"
+                delay={800}
+              />
+              <CrayonDoodle
+                type="swirl"
+                color="var(--color-teal)"
+                className="absolute bottom-10 right-1/4 w-12 h-12 md:w-16 md:h-16 opacity-60"
+                delay={1100}
+              />
+              <CrayonDoodle
+                type="sparkle"
+                color="var(--color-poster)"
+                className="absolute top-1/3 right-10 w-8 h-8 md:w-12 md:h-12 opacity-80"
+                delay={1400}
+              />
+
               {/* Grid Lines */}
               <div
                 className="absolute inset-0 opacity-10"
@@ -170,6 +195,9 @@ export default function HeroSection() {
                 不只實作介面，更關注系統設計。"
               </p>
             </div>
+
+            {/* Crayon Canvas - 在封面內按住拖曳可以用蠟筆塗鴉 */}
+            <CrayonTrail className="absolute inset-0 z-10 opacity-80" />
 
             {/* Speed Lines Effect */}
             <div className="absolute inset-0 overflow-hidden opacity-5">

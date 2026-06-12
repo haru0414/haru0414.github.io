@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import CrayonDoodle from "../crayon/CrayonDoodle";
 
 const careerPath = [
   {
@@ -47,10 +48,22 @@ export default function SkillsSection() {
       <div className="container mx-auto px-4 flex flex-col items-center">
         {/* Section Title */}
         <div
-          className={`mb-12 transform transition-all duration-700 ${
+          className={`relative mb-12 transform transition-all duration-700 ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
         >
+          <CrayonDoodle
+            type="sparkle"
+            color="var(--color-nekoma)"
+            className="absolute -top-6 -left-10 w-8 h-8"
+            delay={400}
+          />
+          <CrayonDoodle
+            type="star"
+            color="var(--color-poster)"
+            className="absolute -bottom-7 -right-12 w-10 h-10"
+            delay={700}
+          />
           <h2
             className="text-3xl md:text-4xl px-6 py-3 bg-white border-2"
             style={{

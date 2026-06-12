@@ -161,6 +161,24 @@
     animation: float 6s ease-in-out infinite;
   }
 
+  /* Crayon boil - hand-drawn wobble by cycling turbulence seeds */
+  .crayon-boil {
+    animation: crayon-boil 0.5s steps(1) infinite;
+  }
+
+  @keyframes crayon-boil {
+    0%, 100% { filter: url(#crayon-rough-1); }
+    33% { filter: url(#crayon-rough-2); }
+    66% { filter: url(#crayon-rough-3); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .crayon-boil {
+      animation: none;
+      filter: url(#crayon-rough-1);
+    }
+  }
+
   /* Diagonal stripe pattern */
   .diagonal-stripes {
     background: repeating-linear-gradient(

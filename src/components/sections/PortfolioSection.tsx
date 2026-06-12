@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { projects } from "../../data/projects";
+import CrayonUnderline from "../crayon/CrayonUnderline";
 
 function EpisodeCard({ episode }: { episode: (typeof projects)[0] }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -8,7 +9,7 @@ function EpisodeCard({ episode }: { episode: (typeof projects)[0] }) {
 
   return (
     <div
-      className="flex-shrink-0 snap-center w-72 md:w-80 cursor-pointer"
+      className="shrink-0 snap-center w-72 md:w-80 cursor-pointer"
       style={{
         perspective: "1000px",
       }}
@@ -17,7 +18,7 @@ function EpisodeCard({ episode }: { episode: (typeof projects)[0] }) {
       onClick={() => navigate(`/project/${episode.id}`)}
     >
       <div
-        className="w-full aspect-[2/3] relative transition-all duration-300"
+        className="w-full aspect-2/3 relative transition-all duration-300"
         style={{
           transform: isHovered
             ? "translateY(-10px) rotateY(5deg)"
@@ -212,7 +213,11 @@ export default function PortfolioSection() {
           >
             PROJECT
             <br />
-            <span style={{ color: "var(--color-nekoma)" }}>LIST</span>
+            <span style={{ color: "var(--color-nekoma)" }}>
+              <CrayonUnderline color="var(--color-poster)" delay={300}>
+                LIST
+              </CrayonUnderline>
+            </span>
           </h2>
         </div>
 

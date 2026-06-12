@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import CrayonUnderline from "../crayon/CrayonUnderline";
 
 export default function ContactSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -85,9 +86,16 @@ export default function ContactSection() {
               transform: isHovered ? "scale(1.05)" : "scale(1)",
             }}
           >
-            TO BE
-            <br />
-            CONTINUED
+            <CrayonUnderline
+              variant="circle"
+              trigger="hover"
+              active={isHovered}
+              color="var(--color-nekoma)"
+            >
+              TO BE
+              <br />
+              CONTINUED
+            </CrayonUnderline>
           </h2>
         </div>
 
