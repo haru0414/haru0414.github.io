@@ -172,7 +172,6 @@ export default function AboutSection() {
     "WebSocket",
     "Axios",
     "LINE LIFF",
-    "TapPay",
   ];
 
   return (
