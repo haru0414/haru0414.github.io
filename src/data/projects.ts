@@ -1,5 +1,6 @@
 import ndayScreenshot from "../assets/images/website/www.nday.com.tw_.png";
 import jiahescreenshot from "../assets/images/website/www.jiahe.net.tw_.png";
+import asteriskScreenshot from "../assets/images/website/www.asterisk-tech.com_.png";
 
 export interface ProjectData {
   id: string;
@@ -128,5 +129,17 @@ export const projects: ProjectData[] = [
     techStack: ["Astro", "React.js", "Git", "Swiper", "GA4 / GTM", "SEO"],
     liveUrl: "https://www.jiahe.net.tw/",
     screenshots: [jiahescreenshot],
+  },
+  {
+    id: "08",
+    title: "CORPORATE SITE DESIGN",
+    year: "2025",
+    color: "#e11d48",
+    desc: "企業官方網站，著重整體網站設計與頁面 UI 實作，並完成基本 SEO 欄位檢查與優化",
+    fullDesc:
+      "負責企業官方網站的網站設計與前端頁面 UI 實作，無特定前端框架依賴，聚焦於版面視覺、互動細節與切版品質。依設計需求完成各頁面排版與響應式呈現，確保桌機、平板、手機各裝置正常顯示。同時進行基本 SEO 欄位檢查與優化，包含 title、meta description、Open Graph、語意化標籤與圖片 alt 等，提升搜尋引擎收錄與社群分享呈現品質。",
+    techStack: ["HTML", "CSS", "JavaScript", "RWD", "UI Design", "SEO"],
+    liveUrl: "https://www.asterisk-tech.com/",
+    screenshots: [asteriskScreenshot],
   },
 ];
