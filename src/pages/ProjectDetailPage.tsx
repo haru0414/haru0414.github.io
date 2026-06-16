@@ -36,7 +36,7 @@ export default function ProjectDetailPage() {
     <div
       className="min-h-screen relative"
       style={{
-        backgroundColor: "var(--color-paper)",
+        backgroundColor: "var(--color-bg)",
         color: "var(--color-ink)",
       }}
     >
@@ -120,7 +120,7 @@ export default function ProjectDetailPage() {
               <div
                 className="flex items-center gap-3 px-4 py-2 border-b-2"
                 style={{
-                  backgroundColor: "var(--color-ink)",
+                  backgroundColor: "var(--color-panel)",
                   borderColor: "var(--color-ink)",
                 }}
               >
@@ -209,7 +209,7 @@ export default function ProjectDetailPage() {
                   className="flex-shrink-0 px-5 py-2 text-sm text-white border-2 transition-all hover:-translate-y-0.5"
                   style={{
                     fontFamily: "var(--font-heading)",
-                    backgroundColor: "var(--color-ink)",
+                    backgroundColor: "var(--color-panel)",
                     borderColor: "var(--color-ink)",
                     boxShadow: "3px 3px 0 0 var(--color-teal)",
                   }}
@@ -254,7 +254,7 @@ export default function ProjectDetailPage() {
             style={{
               borderColor: "var(--color-ink)",
               boxShadow: "4px 4px 0 0 var(--color-ink)",
-              backgroundColor: "white",
+              backgroundColor: "var(--color-surface)",
             }}
           >
             <div
@@ -278,7 +278,7 @@ export default function ProjectDetailPage() {
         <div
           className="mb-10 p-6 border-2"
           style={{
-            backgroundColor: "var(--color-ink)",
+            backgroundColor: "var(--color-panel)",
             borderColor: "var(--color-ink)",
             boxShadow: "4px 4px 0 0 rgba(0,0,0,0.3)",
           }}

@@ -380,7 +380,7 @@ export default function AboutSection() {
               }`}
               style={{
                 transitionDelay: "300ms",
-                backgroundColor: "var(--color-ink)",
+                backgroundColor: "var(--color-panel)",
                 borderColor: "var(--color-ink)",
                 boxShadow: "var(--shadow-manga)",
               }}
@@ -398,7 +398,7 @@ export default function AboutSection() {
                 {techStack.map((tech, index) => (
                   <span
                     key={tech}
-                    className="px-4 py-2 border-2 text-sm text-white hover:bg-white hover:text-[var(--color-ink)] transition-colors cursor-default"
+                    className="px-4 py-2 border-2 text-sm text-white hover:bg-white hover:text-[var(--color-panel)] transition-colors cursor-default"
                     style={{
                       fontFamily: "var(--font-heading)",
                       borderColor: "white",

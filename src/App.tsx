@@ -200,7 +200,7 @@ function App() {
       ref={containerRef}
       className="relative min-h-screen"
       style={{
-        backgroundColor: "var(--color-paper)",
+        backgroundColor: "var(--color-bg)",
         color: "var(--color-ink)",
       }}
     >

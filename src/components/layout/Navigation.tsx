@@ -116,7 +116,7 @@ export default function Navigation() {
                   className="absolute -bottom-9 left-1/2 -translate-x-1/2 px-2 py-1 text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                   style={{
                     fontFamily: "var(--font-heading)",
-                    backgroundColor: "var(--color-ink)",
+                    backgroundColor: "var(--color-panel)",
                     color: "white",
                   }}
                 >
@@ -159,7 +159,7 @@ export default function Navigation() {
             <div
               className="px-4 py-2 border-b-4 flex items-center justify-between"
               style={{
-                backgroundColor: "var(--color-ink)",
+                backgroundColor: "var(--color-panel)",
                 borderColor: "var(--color-ink)",
               }}
             >

@@ -98,7 +98,7 @@ function EpisodeCard({ episode }: { episode: (typeof projects)[0] }) {
               className="absolute top-3 right-3 px-2 py-1 text-xs border"
               style={{
                 fontFamily: "var(--font-heading)",
-                backgroundColor: "white",
+                backgroundColor: "var(--color-surface)",
                 borderColor: "var(--color-ink)",
               }}
             >
@@ -114,7 +114,7 @@ function EpisodeCard({ episode }: { episode: (typeof projects)[0] }) {
                 className="px-4 py-2 text-sm text-white border-2 transition-all duration-200 hover:bg-[var(--color-nekoma)]"
                 style={{
                   fontFamily: "var(--font-heading)",
-                  backgroundColor: "var(--color-ink)",
+                  backgroundColor: "var(--color-panel)",
                   borderColor: "var(--color-ink)",
                 }}
                 onClick={(e) => {
@@ -188,7 +188,7 @@ export default function PortfolioSection() {
       className="py-20 relative border-y-4"
       style={{
         overflowX: "clip",
-        backgroundColor: "white",
+        backgroundColor: "var(--color-surface)",
         borderColor: "var(--color-ink)",
       }}
     >

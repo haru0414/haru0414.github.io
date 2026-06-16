@@ -152,7 +152,7 @@ export default function ContactSection() {
                 borderColor: "var(--color-paper)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = "var(--color-teal)";
+                e.currentTarget.style.color = "var(--color-panel)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = "var(--color-paper)";

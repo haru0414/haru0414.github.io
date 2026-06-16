@@ -19,6 +19,41 @@
 }
 
 @layer base {
+  /* 語意化色票（淺色預設）：
+     bg = 頁面背景、surface = 卡片表面、muted = 說明文字 */
+  :root {
+    --color-bg: #f2ead3;
+    --color-surface: #ffffff;
+    --color-muted: #6b7280;
+    /* 反白面板（深底淺字的盒子：按鈕、技術卡、tooltip…）淺色下＝ink */
+    --color-panel: #1a2332;
+  }
+
+  /* 深色模式（漫畫夜讀版）：建立層次 —— 頁面最深、卡片抬高一階、
+     邊框/文字用米白；強調色稍微提亮以在深底上跳出來 */
+  .dark {
+    --color-bg: #11141c;
+    --color-paper: #222a38;
+    --color-surface: #222a38;
+    --color-ink: #ece4d0;
+    --color-nekoma: #e35a4f;
+    --color-poster: #ffd45e;
+    --color-teal: #6fb0c0;
+    --color-muted: #9aa3b2;
+    /* 反白面板在深色下維持深色（比頁面略亮一階），白字才讀得到 */
+    --color-panel: #2a3343;
+    --shadow-manga: 6px 6px 0px 0px #000000;
+    --shadow-manga-sm: 3px 3px 0px 0px #000000;
+    --shadow-manga-hover: 9px 9px 0px 0px #000000;
+  }
+
+  /* 平滑切換深淺色 */
+  body {
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
   html {
     font-size: 16px;
     scroll-behavior: smooth;
@@ -33,7 +68,7 @@
     font-family: var(--font-body);
     @apply antialiased;
     color: var(--color-ink);
-    background-color: var(--color-paper);
+    background-color: var(--color-bg);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -81,7 +116,8 @@
 
   /* Manga Card */
   .manga-card {
-    @apply bg-white border-2 p-4 transition-all duration-200;
+    @apply border-2 p-4 transition-all duration-200;
+    background-color: var(--color-surface);
     border-color: var(--color-ink);
     box-shadow: var(--shadow-manga);
   }
@@ -138,7 +174,8 @@
 
   /* Dialogue Bubble */
   .speech-bubble {
-    @apply bg-white border-2 p-4 relative;
+    @apply border-2 p-4 relative;
+    background-color: var(--color-surface);
     border-color: var(--color-ink);
     border-radius: 50% 50% 0 50%;
     box-shadow: var(--shadow-manga);
@@ -190,4 +227,16 @@
     );
     opacity: 0.05;
   }
+}
+
+/* 深色模式對寫死 utility 的覆寫。
+   刻意放在所有 @layer 之外（unlayered）—— unlayered 樣式優先級高於任何
+   @layer，才蓋得過 Tailwind v4 utilities 層的 .bg-white / .text-gray-*。 */
+.dark .bg-white {
+  background-color: var(--color-surface);
+}
+.dark .text-gray-500,
+.dark .text-gray-600,
+.dark .text-gray-700 {
+  color: var(--color-muted);
 }
