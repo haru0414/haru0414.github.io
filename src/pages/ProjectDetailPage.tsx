@@ -159,6 +159,8 @@ export default function ProjectDetailPage() {
                       alt={`${project.title} screenshot ${i + 1}`}
                       width={3098}
                       height={1838}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-auto block"
                     />
                   ))}
@@ -236,6 +238,8 @@ export default function ProjectDetailPage() {
                   <img
                     src={src}
                     alt={`${project.title} screenshot ${i + 1}`}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-auto object-cover"
                   />
                 </div>

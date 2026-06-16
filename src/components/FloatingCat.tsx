@@ -1,6 +1,6 @@
 import { useState } from "react";
-import catCover from "../assets/images/onigiri/cover.jpeg";
-import sticker1 from "../assets/images/onigiri/stickers/1.png";
+import catCover from "../assets/images/onigiri/cover.webp";
+import sticker1 from "../assets/images/onigiri/stickers/1.webp";
 
 export default function FloatingCat() {
   const [isOpen, setIsOpen] = useState(false);

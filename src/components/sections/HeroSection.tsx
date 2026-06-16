@@ -45,7 +45,7 @@ export default function HeroSection() {
           }`}
         >
           <h1
-            className="text-5xl sm:text-7xl md:text-9xl tracking-tighter leading-none mb-4"
+            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tighter leading-none mb-4"
             style={{ fontFamily: "var(--font-heading)" }}
           >
             <span className="sr-only">

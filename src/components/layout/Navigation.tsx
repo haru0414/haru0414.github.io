@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import catCover from "../../assets/images/onigiri/cover.jpeg";
+import catCover from "../../assets/images/onigiri/cover.webp";
 
 const sections = [
   { id: "start", label: "Intro" },

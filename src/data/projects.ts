@@ -1,6 +1,6 @@
-import ndayScreenshot from "../assets/images/website/www.nday.com.tw_.png";
-import jiahescreenshot from "../assets/images/website/www.jiahe.net.tw_.png";
-import asteriskScreenshot from "../assets/images/website/www.asterisk-tech.com_.png";
+import ndayScreenshot from "../assets/images/website/www.nday.com.tw_.webp";
+import jiahescreenshot from "../assets/images/website/www.jiahe.net.tw_.webp";
+import asteriskScreenshot from "../assets/images/website/www.asterisk-tech.com_.webp";
 
 export interface ProjectData {
   id: string;

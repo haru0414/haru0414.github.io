@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import photo1 from "../../assets/images/photo_1.jpeg";
-import photo2 from "../../assets/images/photo_2.jpeg";
-import catCover from "../../assets/images/onigiri/cover.jpeg";
-import sticker3 from "../../assets/images/onigiri/stickers/3.png";
+import photo1 from "../../assets/images/photo_1.webp";
+import photo2 from "../../assets/images/photo_2.webp";
+import catCover from "../../assets/images/onigiri/cover.webp";
+import sticker3 from "../../assets/images/onigiri/stickers/3.webp";
 
 const photos = [photo1, photo2];
 
@@ -189,7 +189,7 @@ export default function AboutSection() {
           </div>
 
           {/* Main Bento Grid */}
-          <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Card 1: Profile Photo */}
             <div
               className={`md:col-span-1 manga-card transform transition-all duration-500 ${
@@ -217,6 +217,8 @@ export default function AboutSection() {
                     alt="Haru Li"
                     width={i === 0 ? 3933 : 2268}
                     height={i === 0 ? 5244 : 4032}
+                    loading="lazy"
+                    decoding="async"
                     className="absolute inset-0 w-full h-full object-cover object-bottom transition-opacity duration-500"
                     style={{ opacity: i === (isPhotoHovered ? 1 : 0) ? 1 : 0 }}
                   />
@@ -228,6 +230,8 @@ export default function AboutSection() {
                   aria-hidden="true"
                   width={1013}
                   height={527}
+                  loading="lazy"
+                  decoding="async"
                   className="absolute bottom-4 object-cover object-left right-2 w-16 h-16 rounded-full p-1 opacity-80 pointer-events-none transition-transform duration-300 hover:scale-110"
                   style={{
                     filter: "drop-shadow(1px 2px 0px rgba(0,0,0,0.5))",
@@ -340,6 +344,8 @@ export default function AboutSection() {
                   alt="飯糰"
                   width={1658}
                   height={1414}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover object-left"
                 />
 
@@ -367,7 +373,7 @@ export default function AboutSection() {
 
             {/* Card 5: Tech Stack (Full Width) */}
             <div
-              className={`md:col-span-4 p-6 border-2 transform transition-all duration-500 ${
+              className={`md:col-span-2 lg:col-span-4 p-6 border-2 transform transition-all duration-500 ${
                 isVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-10 opacity-0"
