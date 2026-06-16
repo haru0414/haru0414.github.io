@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
+import { advanceCrayonColor, getNextCrayonColor } from "./crayonColor";
 
-const COLORS = ["#C83E34", "#2F5C68", "#FFC845"];
 const LIFE_MS = 180000; // 筆跡留存 3 分鐘
 const FADE_MS = 6000; // 最後 6 秒淡出
 const MAX_SEGMENTS = 6000;
@@ -25,6 +25,23 @@ interface CrayonTrailProps {
   className?: string;
 }
 
+// 蠟筆游標：整支筆身與筆尖都用「下一筆的顏色」，紙環中性色、深色描邊；
+// 熱點對準筆尖 (6 26)，讓游標尖端對齊實際下筆點
+function buildCrayonCursor(color: string) {
+  const c = color.replace("#", "%23");
+  const svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'>" +
+    "<g transform='rotate(45 16 16)'>" +
+    `<rect x='13' y='2' width='6' height='20' rx='2' fill='${c}'/>` +
+    "<rect x='13' y='7' width='6' height='3' fill='%23F5EBD8'/>" +
+    `<path d='M13 22 L19 22 L16 30 Z' fill='${c}'/>` +
+    "<path d='M14.5 24 L17.5 24 L16 27.5 Z' fill='%23FFFFFF' opacity='0.5'/>" +
+    "<rect x='13' y='2' width='6' height='20' rx='2' fill='none' stroke='%23222' stroke-width='1'/>" +
+    "<path d='M13 22 L19 22 L16 30 Z' fill='none' stroke='%23222' stroke-width='1'/>" +
+    "</g></svg>";
+  return `url("data:image/svg+xml,${svg}") 6 26, crosshair`;
+}
+
 // Crayon drawing canvas: click-drag to scribble, one color per stroke.
 // Desktop only, skipped when the user prefers reduced motion.
 // New segments are drawn incrementally; a low-frequency sweep redraws the
@@ -46,6 +63,13 @@ export default function CrayonTrail({
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    // 能塗鴉的桌機才顯示蠟筆游標，提示這塊區域可以畫畫；
+    // 顏色對應「下一筆」會用到的顏色
+    const updateCursor = () => {
+      canvas.style.cursor = buildCrayonCursor(getNextCrayonColor());
+    };
+    updateCursor();
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     let width = 0;
@@ -125,7 +149,7 @@ export default function CrayonTrail({
 
     let last: { x: number; y: number } | null = null;
     let drawing = false;
-    let colorIndex = -1;
+    let strokeColor = getNextCrayonColor(); // 這一筆的顏色
     let seedCounter = 0;
 
     // Container-relative coordinates so strokes land exactly under the cursor;
@@ -146,7 +170,9 @@ export default function CrayonTrail({
       if (!p) return;
       drawing = true;
       last = p;
-      colorIndex = (colorIndex + 1) % COLORS.length; // 一筆一色
+      strokeColor = getNextCrayonColor(); // 這一筆用「下一個」顏色
+      advanceCrayonColor(); // 推進到下一筆的顏色
+      updateCursor(); // 游標即時切到新的下一筆顏色
     };
 
     const handleMove = (e: MouseEvent) => {
@@ -171,7 +197,7 @@ export default function CrayonTrail({
         y1: last.y,
         x2: p.x,
         y2: p.y,
-        color: COLORS[colorIndex],
+        color: strokeColor,
         born: performance.now(),
         seed: seedCounter++,
       };
