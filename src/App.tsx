@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, lazy, Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/layout/Navigation";
 import HeroSection from "./components/sections/HeroSection";
@@ -6,9 +7,12 @@ import AboutSection from "./components/sections/AboutSection";
 import PortfolioSection from "./components/sections/PortfolioSection";
 import SkillsSection from "./components/sections/SkillsSection";
 import ContactSection from "./components/sections/ContactSection";
-import ProjectDetailPage from "./pages/ProjectDetailPage";
 import FloatingCat from "./components/FloatingCat";
+import SeoMeta from "./components/SeoMeta";
 import CrayonDefs from "./components/crayon/CrayonDefs";
+
+// 詳情頁懶載入：首頁不必載入這支程式碼，點進專案時才抓對應 chunk
+const ProjectDetailPage = lazy(() => import("./pages/ProjectDetailPage"));
 
 // Custom Cursor Component - Using refs for smooth performance
 function CustomCursor() {
@@ -166,6 +170,7 @@ function ParallaxElements({ scrollProgress }: { scrollProgress: number }) {
 }
 
 function App() {
+  const { t } = useTranslation();
   const [scrollProgress, setScrollProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -204,8 +209,13 @@ function App() {
         color: "var(--color-ink)",
       }}
     >
+      {/* Skip link：鍵盤第一個 Tab 即可跳過裝飾直達主內容 */}
+      <a href="#main" className="skip-link">
+        {t("a11y.skip")}
+      </a>
+
       {/* Noise Overlay */}
-      <div className="noise-overlay" />
+      <div className="noise-overlay" aria-hidden="true" />
 
       {/* Parallax Background */}
       <ParallaxElements scrollProgress={scrollProgress} />
@@ -214,7 +224,7 @@ function App() {
       <Navigation />
 
       {/* Main Content */}
-      <main className="relative z-10">
+      <main id="main" tabIndex={-1} className="relative z-10 outline-none">
         <HeroSection />
         <AboutSection />
         <PortfolioSection />
@@ -233,11 +243,19 @@ export default function Root() {
   return (
     <HashRouter>
       <CrayonDefs />
+      <SeoMeta />
       <CustomCursor />
       <FloatingCat />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/project/:id" element={<ProjectDetailPage />} />
+        <Route
+          path="/project/:id"
+          element={
+            <Suspense fallback={null}>
+              <ProjectDetailPage />
+            </Suspense>
+          }
+        />
       </Routes>
     </HashRouter>
   );

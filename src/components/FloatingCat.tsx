@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { changeLanguage } from "../i18n";
 import catCover from "../assets/images/onigiri/cover.webp";
 import sticker1 from "../assets/images/onigiri/stickers/1.webp";
 
 // 浮動「常駐監工」多功能鈕：點飯糰貼紙展開選單，
 // 收納主題切換（夜讀／日讀版）與回到頂部，避免與頂部導覽列重疊。
 export default function FloatingCat() {
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">(() =>
     typeof document !== "undefined" &&
@@ -50,6 +53,12 @@ export default function FloatingCat() {
     setIsOpen(false);
   };
 
+  // 中 / 英切換：changeLanguage 會先動態載入語系包再切換，
+  // 並寫回 localStorage，所有用 t() 的元件自動重繪
+  const toggleLang = () => {
+    changeLanguage(i18n.language === "en" ? "zh" : "en");
+  };
+
   return (
     <div
       ref={rootRef}
@@ -76,7 +85,7 @@ export default function FloatingCat() {
           <div className="relative">
             <img
               src={catCover}
-              alt="飯糰"
+              alt={t("a11y.cat")}
               width={1658}
               height={1414}
               className="w-full h-24 object-cover object-bottom block"
@@ -91,7 +100,9 @@ export default function FloatingCat() {
               >
                 ONIGIRI
               </span>
-              <span className="text-[10px] text-white/70">常駐監工 🐾</span>
+              <span className="text-[10px] text-white/70">
+                {t("menu.role")} 🐾
+              </span>
             </div>
           </div>
 
@@ -106,7 +117,21 @@ export default function FloatingCat() {
             <span className="text-base w-5 text-center">
               {isDark ? "☀︎" : "☾"}
             </span>
-            {isDark ? "日讀版" : "夜讀版"}
+            {isDark ? t("menu.light") : t("menu.dark")}
+          </button>
+
+          <button
+            type="button"
+            role="menuitem"
+            onClick={toggleLang}
+            className="interactive w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-left border-t-2 transition-colors hover:bg-poster hover:text-(--color-panel)"
+            style={{
+              fontFamily: "var(--font-heading)",
+              borderColor: "var(--color-ink)",
+            }}
+          >
+            <span className="text-base w-5 text-center">文</span>
+            {t("menu.lang")}
           </button>
 
           <button
@@ -120,7 +145,7 @@ export default function FloatingCat() {
             }}
           >
             <span className="text-base w-5 text-center">↑</span>
-            回到頂部
+            {t("menu.top")}
           </button>
         </div>
       </div>
@@ -128,7 +153,7 @@ export default function FloatingCat() {
       {/* 飯糰貼紙觸發鈕 */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        aria-label="開啟監工選單"
+        aria-label={t("a11y.menuOpen")}
         aria-expanded={isOpen}
         className={`interactive w-16 transition-all duration-200 hover:-translate-y-1 ${
           isOpen ? "opacity-60" : "opacity-100"
@@ -137,7 +162,7 @@ export default function FloatingCat() {
       >
         <img
           src={sticker1}
-          alt="飯糰貼紙"
+          alt={t("a11y.catSticker")}
           width={960}
           height={870}
           className="w-full h-auto"

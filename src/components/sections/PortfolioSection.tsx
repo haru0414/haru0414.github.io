@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { projects } from "../../data/projects";
 import CrayonUnderline from "../crayon/CrayonUnderline";
 
 function EpisodeCard({ episode }: { episode: (typeof projects)[0] }) {
+  const { t } = useTranslation();
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
@@ -108,7 +110,9 @@ function EpisodeCard({ episode }: { episode: (typeof projects)[0] }) {
 
           {/* Bottom Info */}
           <div className="ml-10 p-4 flex-1 flex flex-col justify-between">
-            <p className="font-bold text-base">{episode.desc}</p>
+            <p className="font-bold text-base">
+              {t(`projects.${episode.id}.desc`)}
+            </p>
             <div className="flex justify-end mt-4">
               <button
                 className="px-4 py-2 text-sm text-white border-2 transition-all duration-200 hover:bg-[var(--color-nekoma)]"

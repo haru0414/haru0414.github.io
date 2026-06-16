@@ -1,28 +1,16 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import CrayonDoodle from "../crayon/CrayonDoodle";
 
+// 只留下年份；職稱 / 公司 / 描述依索引放在 i18n career.*
 const careerPath = [
-  {
-    year: "2019 — 2023",
-    role: "學士｜電腦與通訊工程學系",
-    company: "國立高雄科技大學",
-    desc: "系排名 20 / 112（前 17.86%）。系學會美宣長，奠定前端開發與系統設計基礎，畢業前已實際參與專案開發。",
-  },
-  {
-    year: "2022 — 2023",
-    role: "前端實習生（大四實習）",
-    company: "GLSoft",
-    desc: "以 Angular + SCSS 為主，學習基本切版與 UI 實作，協助簡單功能修復，建立前端開發的實務基礎。",
-  },
-  {
-    year: "2024 — NOW",
-    role: "Frontend Engineer",
-    company: "好日子科技",
-    desc: "主導前端架構從 Astro+React 遷移至 Next.js 14 App Router，開發多步驟預約系統、TapPay 金流、LINE LIFF 登入、GA4 電商追蹤與 WebSocket 即時客服聊天室。",
-  },
+  { year: "2019 — 2023" },
+  { year: "2022 — 2023" },
+  { year: "2024 — NOW" },
 ];
 
 export default function SkillsSection() {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -136,11 +124,13 @@ export default function SkillsSection() {
                       color: "var(--color-nekoma)",
                     }}
                   >
-                    {job.company}
+                    {t(`career.${index}.company`)}
                   </h3>
-                  <h4 className="font-medium mb-2 text-gray-700">{job.role}</h4>
+                  <h4 className="font-medium mb-2 text-gray-700">
+                    {t(`career.${index}.role`)}
+                  </h4>
                   <p className="text-sm text-gray-500 leading-relaxed font-normal">
-                    {job.desc}
+                    {t(`career.${index}.desc`)}
                   </p>
                 </div>
               </div>

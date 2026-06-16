@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import CrayonUnderline from "../crayon/CrayonUnderline";
 import CrayonDoodle from "../crayon/CrayonDoodle";
 import CrayonTrail from "../crayon/CrayonTrail";
 
 export default function HeroSection() {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export default function HeroSection() {
               boxShadow: "var(--shadow-manga-sm)",
             }}
           >
-            VOL. 1: FRONTEND ENGINEER
+            {t("hero.volume")}
           </h2>
         </div>
 
@@ -89,7 +91,7 @@ export default function HeroSection() {
                   borderColor: "var(--color-ink)",
                 }}
               >
-                OPEN TO WORK
+                {t("hero.openToWork")}
               </span>
               <span
                 className="px-3 py-1 text-xs text-white border"
@@ -190,9 +192,7 @@ export default function HeroSection() {
               }`}
             >
               <p className="text-sm font-bold leading-tight">
-                "重視產品理解與工程品質，
-                <br />
-                不只實作介面，更關注系統設計。"
+                {t("hero.quote")}
               </p>
             </div>
 
@@ -228,7 +228,7 @@ export default function HeroSection() {
             className="text-sm tracking-widest mb-2"
             style={{ fontFamily: "var(--font-heading)" }}
           >
-            SCROLL
+            {t("hero.scroll")}
           </span>
           <div
             className="w-6 h-10 rounded-full border-2 flex justify-center pt-2"

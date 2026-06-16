@@ -59,6 +59,44 @@
     scroll-behavior: smooth;
   }
 
+  /* 鍵盤焦點清楚可見（游標被藏成 none，這對鍵盤族尤其重要） */
+  :focus-visible {
+    outline: 3px solid var(--color-nekoma);
+    outline-offset: 2px;
+  }
+
+  /* 尊重「偏好減少動態」：關閉動畫與平滑捲動，避免前庭不適 */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Skip link：鍵盤 Tab 第一下即可跳到主內容，平常隱藏 */
+  .skip-link {
+    position: fixed;
+    top: -100px;
+    left: 1rem;
+    z-index: 9999;
+    padding: 0.6rem 1rem;
+    font-family: var(--font-heading);
+    background-color: var(--color-poster);
+    color: var(--color-panel);
+    border: 2px solid var(--color-ink);
+    box-shadow: var(--shadow-manga-sm);
+    transition: top 0.2s ease;
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+
   html, body, #root {
     @apply w-full min-h-full;
     overflow-x: hidden;

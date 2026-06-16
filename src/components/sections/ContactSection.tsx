@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Trans } from "react-i18next";
 import CrayonUnderline from "../crayon/CrayonUnderline";
 
 export default function ContactSection() {
@@ -99,14 +100,27 @@ export default function ContactSection() {
           </h2>
         </div>
 
-        {/* Subtitle */}
+        {/* Subtitle - BIO 螢光標記樣式，關鍵字以黃色標起 */}
         <p
-          className={`text-xl mb-10 max-w-md mx-auto transform transition-all duration-700 delay-200 ${
+          className={`text-xl font-medium mb-10 max-w-md mx-auto leading-relaxed transform transition-all duration-700 delay-200 ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
           style={{ color: "var(--color-paper)" }}
         >
-          對具系統深度與產品思維的機會保持開放，歡迎洽談合作或職缺。
+          <Trans
+            i18nKey="contact.subtitle"
+            components={{
+              hl: (
+                <span
+                  className="px-1"
+                  style={{
+                    backgroundColor: "var(--color-poster)",
+                    color: "var(--color-panel)",
+                  }}
+                />
+              ),
+            }}
+          />
         </p>
 
         {/* Contact Button */}

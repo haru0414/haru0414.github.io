@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import catCover from "../../assets/images/onigiri/cover.webp";
 
+// id 對應頁面區塊、navKey 對應 i18n 字典裡 nav.* 的鍵
 const sections = [
-  { id: "start", label: "Intro" },
-  { id: "character", label: "About" },
-  { id: "episodes", label: "Projects" },
-  { id: "career", label: "Career" },
-  { id: "next", label: "Contact" },
+  { id: "start", navKey: "intro" },
+  { id: "character", navKey: "about" },
+  { id: "episodes", navKey: "projects" },
+  { id: "career", navKey: "career" },
+  { id: "next", navKey: "contact" },
 ];
 
 export default function Navigation() {
+  const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState("start");
   const [logoClickCount, setLogoClickCount] = useState(0);
   const [showCatEgg, setShowCatEgg] = useState(false);
@@ -120,7 +123,7 @@ export default function Navigation() {
                     color: "white",
                   }}
                 >
-                  {section.label}
+                  {t(`nav.${section.navKey}`)}
                 </span>
               </button>
 
@@ -167,7 +170,7 @@ export default function Navigation() {
                 className="text-sm text-white"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
-                HIDDEN CHARACTER UNLOCKED
+                {t("egg.unlocked")}
               </span>
               <button
                 onClick={() => setShowCatEgg(false)}
@@ -179,7 +182,7 @@ export default function Navigation() {
             </div>
             <img
               src={catCover}
-              alt="飯糰"
+              alt={t("a11y.cat")}
               width={1658}
               height={1414}
               className="w-full object-cover block"
@@ -191,9 +194,7 @@ export default function Navigation() {
               >
                 ✦ ONIGIRI ✦
               </p>
-              <p className="text-sm text-gray-500">
-                常駐在我身邊的監工，負責審查所有程式碼品質。
-              </p>
+              <p className="text-sm text-gray-500">{t("egg.desc")}</p>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import photo1 from "../../assets/images/photo_1.webp";
 import photo2 from "../../assets/images/photo_2.webp";
 import catCover from "../../assets/images/onigiri/cover.webp";
@@ -8,6 +9,7 @@ const photos = [photo1, photo2];
 
 // Radar Chart Component
 function RadarChart() {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const chartRef = useRef<HTMLDivElement>(null);
 
@@ -33,7 +35,12 @@ function RadarChart() {
       ref={chartRef}
       className="relative w-full max-w-[180px] md:max-w-[220px] lg:max-w-[260px] mx-auto aspect-square"
     >
-      <svg viewBox="-25 -18 150 136" className="w-full h-full overflow-visible">
+      <svg
+        viewBox="-25 -18 150 136"
+        className="w-full h-full overflow-visible"
+        role="img"
+        aria-label={t("a11y.radar")}
+      >
         {/* Background Grid */}
         <polygon
           points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5"
@@ -140,6 +147,7 @@ function RadarChart() {
 }
 
 export default function AboutSection() {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const [isPhotoHovered, setIsPhotoHovered] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
@@ -258,7 +266,7 @@ export default function AboutSection() {
                 >
                   HARU LI
                 </h3>
-                <p className="text-xs text-gray-500 mt-1">Frontend Developer</p>
+                <p className="text-xs text-gray-500 mt-1">{t("about.role")}</p>
               </div>
             </div>
 
@@ -309,17 +317,16 @@ export default function AboutSection() {
               </div>
 
               <p className="font-medium leading-relaxed mt-4">
-                "以前端工程為核心，主要使用 React，熟悉 TypeScript、SCSS 與
-                Tailwind CSS，擅長將設計需求轉化為可維護的前端架構。
+                {t("about.bio.intro")}
                 <br />
                 <br />
                 <span
                   className="px-1"
                   style={{ backgroundColor: "rgba(255, 200, 69, 0.5)" }}
                 >
-                  核心優勢：
+                  {t("about.bio.strengthLabel")}
                 </span>{" "}
-                架構重構能力 ✕ AI 輔助開發流程"
+                {t("about.bio.strengthValue")}
               </p>
             </div>
 
@@ -341,7 +348,7 @@ export default function AboutSection() {
               >
                 <img
                   src={catCover}
-                  alt="飯糰"
+                  alt={t("a11y.cat")}
                   width={1658}
                   height={1414}
                   loading="lazy"
@@ -367,7 +374,9 @@ export default function AboutSection() {
                 >
                   ONIGIRI
                 </h3>
-                <p className="text-xs text-gray-500 mt-1">常駐監工 🐾</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {t("menu.role")} 🐾
+                </p>
               </div>
             </div>
 

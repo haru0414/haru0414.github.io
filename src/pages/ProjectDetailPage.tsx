@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { projects } from "../data/projects";
 
 export default function ProjectDetailPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const project = projects.find((p) => p.id === id);
@@ -10,8 +12,8 @@ export default function ProjectDetailPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const t = setTimeout(() => setIsVisible(true), 50);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setIsVisible(true), 50);
+    return () => clearTimeout(timer);
   }, []);
 
   if (!project) {
@@ -140,7 +142,7 @@ export default function ProjectDetailPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-shrink-0 text-white/60 hover:text-white transition-colors text-sm"
-                  title="在新分頁開啟"
+                  title={t("detail.openNewTab")}
                 >
                   ↗
                 </a>
@@ -199,8 +201,8 @@ export default function ProjectDetailPage() {
               >
                 <p className="text-xs text-gray-500 leading-relaxed">
                   {project.screenshots && project.screenshots.length > 0
-                    ? "以上為網站實際截圖，點擊右側按鈕前往完整網站"
-                    : "網站安全政策不允許嵌入預覽，點擊右側按鈕前往完整網站"}
+                    ? t("detail.hintScreenshot")
+                    : t("detail.hintEmbed")}
                 </p>
                 <a
                   href={project.liveUrl}
@@ -248,31 +250,29 @@ export default function ProjectDetailPage() {
           )}
 
         {/* Description */}
-        {project.fullDesc && (
+        <div
+          className="mb-10 p-6 border-2 relative"
+          style={{
+            borderColor: "var(--color-ink)",
+            boxShadow: "4px 4px 0 0 var(--color-ink)",
+            backgroundColor: "var(--color-surface)",
+          }}
+        >
           <div
-            className="mb-10 p-6 border-2 relative"
+            className="absolute -top-3 -left-3 px-3 py-1 text-sm text-white border-2"
             style={{
+              fontFamily: "var(--font-heading)",
+              backgroundColor: "var(--color-nekoma)",
               borderColor: "var(--color-ink)",
-              boxShadow: "4px 4px 0 0 var(--color-ink)",
-              backgroundColor: "var(--color-surface)",
+              boxShadow: "2px 2px 0 0 var(--color-ink)",
             }}
           >
-            <div
-              className="absolute -top-3 -left-3 px-3 py-1 text-sm text-white border-2"
-              style={{
-                fontFamily: "var(--font-heading)",
-                backgroundColor: "var(--color-nekoma)",
-                borderColor: "var(--color-ink)",
-                boxShadow: "2px 2px 0 0 var(--color-ink)",
-              }}
-            >
-              DETAIL
-            </div>
-            <p className="leading-relaxed text-gray-700 mt-2">
-              {project.fullDesc}
-            </p>
+            DETAIL
           </div>
-        )}
+          <p className="leading-relaxed text-gray-700 mt-2">
+            {t(`projects.${project.id}.full`)}
+          </p>
+        </div>
 
         {/* Tech Stack */}
         <div
