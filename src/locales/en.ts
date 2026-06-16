@@ -50,7 +50,8 @@ const en = {
         intro:
           "Frontend engineering is my core focus. I primarily work with React and am comfortable with TypeScript, SCSS, and Tailwind CSS, turning design requirements into maintainable frontend architecture.",
         strengthLabel: "Core strengths:",
-        strengthValue: "Architecture refactoring ✕ AI-assisted development workflow",
+        strengthValue:
+          "Architecture refactoring ✕ AI-assisted development workflow",
       },
     },
     career: {
@@ -66,7 +67,7 @@ const en = {
       },
       "2": {
         role: "Frontend Engineer",
-        company: "Nice Day Technology",
+        company: "A Nice Day Technology",
         desc: "Led the frontend migration from Astro + React to Next.js 14 App Router; built a multi-step booking system, TapPay payments, LINE LIFF login, GA4 e-commerce tracking, and a WebSocket-powered live customer support chat.",
       },
     },
