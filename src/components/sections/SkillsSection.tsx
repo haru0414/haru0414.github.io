@@ -9,53 +9,190 @@ const careerPath = [
   { year: "2024 — NOW" },
 ];
 
-export default function SkillsSection() {
+const clamp = (n: number, min: number, max: number) =>
+  Math.min(Math.max(n, min), max);
+
+// 單一章節分鏡：自帶 IntersectionObserver，捲入視窗時從左/右滑入
+function Chapter({ index, year }: { index: number; year: string }) {
   const { t } = useTranslation();
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+  // 交替方向：EP.01 右、EP.02 左、EP.03 右…
+  const onRight = index % 2 === 0;
+  const ep = String(index + 1).padStart(2, "0");
+
+  useEffect(() => {
+    const ob = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setShown(true);
+      },
+      { threshold: 0.35 },
+    );
+    if (ref.current) ob.observe(ref.current);
+    return () => ob.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="relative mb-16 md:mb-24">
+      {/* 線上的節點：章節現身時點亮 */}
+      <div
+        className="absolute left-8 md:left-1/2 top-7 z-10 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border-4 transition-colors duration-500"
+        style={{
+          backgroundColor: shown ? "var(--color-nekoma)" : "var(--color-surface)",
+          borderColor: "var(--color-ink)",
+          boxShadow: "2px 2px 0 0 var(--color-ink)",
+        }}
+      >
+        <span
+          className="text-[10px]"
+          style={{
+            fontFamily: "var(--font-heading)",
+            color: shown ? "#fff" : "var(--color-ink)",
+          }}
+        >
+          {index + 1}
+        </span>
+      </div>
+
+      {/* 章節卡：偏向其中一側，捲入時滑入 */}
+      <div
+        className={`ml-20 md:ml-0 md:w-[calc(50%-2.75rem)] ${
+          onRight ? "md:ml-auto" : "md:mr-auto"
+        }`}
+        style={{
+          opacity: shown ? 1 : 0,
+          transform: shown
+            ? "translateX(0)"
+            : `translateX(${onRight ? "40px" : "-40px"})`,
+          transition: "opacity 0.6s ease-out, transform 0.6s ease-out",
+        }}
+      >
+        <div
+          className="relative overflow-hidden border-2 p-5 pt-6"
+          style={{
+            backgroundColor: "var(--color-surface)",
+            borderColor: "var(--color-ink)",
+            boxShadow: "var(--shadow-manga)",
+          }}
+        >
+          {/* 大型 EP 浮水印 */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-2 -top-3 select-none text-7xl leading-none opacity-10"
+            style={{ fontFamily: "var(--font-heading)", color: "var(--color-ink)" }}
+          >
+            {ep}
+          </span>
+
+          {/* EP 標籤 + 年份 */}
+          <div className="mb-2 flex items-center gap-3">
+            <span
+              className="px-2 py-0.5 text-xs text-white"
+              style={{
+                fontFamily: "var(--font-heading)",
+                backgroundColor: "var(--color-panel)",
+              }}
+            >
+              EP.{ep}
+            </span>
+            <span
+              className="px-2 py-0.5 text-xs"
+              style={{
+                fontFamily: "var(--font-heading)",
+                backgroundColor: "var(--color-poster)",
+                color: "var(--color-panel)",
+                border: "1px solid var(--color-ink)",
+              }}
+            >
+              {year}
+            </span>
+          </div>
+
+          <h3
+            className="relative text-xl"
+            style={{
+              fontFamily: "var(--font-heading)",
+              color: "var(--color-nekoma)",
+            }}
+          >
+            {t(`career.${index}.company`)}
+          </h3>
+          <h4 className="mb-2 font-medium text-gray-700">
+            {t(`career.${index}.role`)}
+          </h4>
+          <p className="text-sm font-normal leading-relaxed text-gray-500">
+            {t(`career.${index}.desc`)}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function SkillsSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const [progress, setProgress] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
+        if (entry.isIntersecting) setIsVisible(true);
       },
       { threshold: 0.2 },
     );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
+    if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
+  }, []);
+
+  // 連接線隨捲動「畫出」：依時間軸容器捲過視窗的比例設定填滿高度
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const el = trackRef.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const start = window.innerHeight * 0.75; // 容器頂進到視窗 75% 處開始畫
+        setProgress(clamp((start - rect.top) / rect.height, 0, 1));
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   return (
     <section ref={sectionRef} id="career" className="py-20">
-      <div className="container mx-auto px-4 flex flex-col items-center">
+      <div className="container mx-auto flex flex-col items-center px-4">
         {/* Section Title */}
         <div
-          className={`relative mb-12 transform transition-all duration-700 ${
+          className={`relative mb-16 transform transition-all duration-700 ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
         >
           <CrayonDoodle
             type="sparkle"
             color="var(--color-nekoma)"
-            className="absolute -top-6 -left-10 w-8 h-8"
+            className="absolute -left-10 -top-6 h-8 w-8"
             delay={400}
           />
           <CrayonDoodle
             type="star"
             color="var(--color-poster)"
-            className="absolute -bottom-7 -right-12 w-10 h-10"
+            className="absolute -bottom-7 -right-12 h-10 w-10"
             delay={700}
           />
           <h2
-            className="text-3xl md:text-4xl px-6 py-3 bg-white border-2"
+            className="border-2 px-6 py-3 text-3xl md:text-4xl"
             style={{
               fontFamily: "var(--font-heading)",
+              backgroundColor: "var(--color-surface)",
               borderColor: "var(--color-ink)",
               boxShadow: "var(--shadow-manga)",
             }}
@@ -64,115 +201,42 @@ export default function SkillsSection() {
           </h2>
         </div>
 
-        {/* Timeline */}
-        <div className="relative max-w-2xl w-full">
-          {/* Vertical Line */}
+        {/* Timeline track */}
+        <div ref={trackRef} className="relative w-full max-w-2xl">
+          {/* 底線（淡） */}
           <div
-            className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 transform -translate-x-1/2"
-            style={{ backgroundColor: "var(--color-ink)" }}
+            className="absolute bottom-0 left-8 top-0 w-1 -translate-x-1/2 md:left-1/2"
+            style={{ backgroundColor: "var(--color-ink)", opacity: 0.15 }}
+          />
+          {/* 填滿線（隨捲動畫出） */}
+          <div
+            className="absolute left-8 top-0 w-1 -translate-x-1/2 md:left-1/2"
+            style={{
+              height: `${progress * 100}%`,
+              backgroundColor: "var(--color-nekoma)",
+            }}
           />
 
           {careerPath.map((job, index) => (
-            <div
-              key={index}
-              className={`relative flex items-center mb-12 transform transition-all duration-500 ${
-                isVisible ? "opacity-100" : "opacity-0"
-              } ${index % 2 === 0 ? "md:flex-row-reverse" : ""}`}
-              style={{
-                transitionDelay: `${index * 200}ms`,
-                transform: isVisible
-                  ? "translateX(0)"
-                  : index % 2 === 0
-                    ? "translateX(50px)"
-                    : "translateX(-50px)",
-              }}
-            >
-              {/* Content Box */}
-              <div className="ml-20 md:ml-0 md:w-1/2 px-4">
-                <div
-                  className={`bg-white border-2 p-5 relative ${
-                    index % 2 === 0
-                      ? "md:text-left md:mr-8"
-                      : "md:text-right md:ml-8"
-                  }`}
-                  style={{
-                    borderColor: "var(--color-ink)",
-                    boxShadow: "var(--shadow-manga)",
-                  }}
-                >
-                  {/* Year Tag */}
-                  <span
-                    className={`absolute -top-3 px-3 py-1 text-xs border ${
-                      index % 2 === 0
-                        ? "left-4"
-                        : "md:right-4 left-4 md:left-auto"
-                    }`}
-                    style={{
-                      fontFamily: "var(--font-heading)",
-                      backgroundColor: "var(--color-poster)",
-                      borderColor: "var(--color-ink)",
-                      boxShadow: "2px 2px 0 0 var(--color-ink)",
-                    }}
-                  >
-                    {job.year}
-                  </span>
-
-                  <h3
-                    className="text-xl mt-2"
-                    style={{
-                      fontFamily: "var(--font-heading)",
-                      color: "var(--color-nekoma)",
-                    }}
-                  >
-                    {t(`career.${index}.company`)}
-                  </h3>
-                  <h4 className="font-medium mb-2 text-gray-700">
-                    {t(`career.${index}.role`)}
-                  </h4>
-                  <p className="text-sm text-gray-500 leading-relaxed font-normal">
-                    {t(`career.${index}.desc`)}
-                  </p>
-                </div>
-              </div>
-
-              {/* Bus Stop Node */}
-              <div
-                className="absolute left-8 md:left-1/2 transform -translate-x-1/2 w-10 h-10 bg-white border-4 rounded-full flex items-center justify-center z-10"
-                style={{
-                  borderColor: "var(--color-ink)",
-                  boxShadow: "2px 2px 0 0 var(--color-ink)",
-                }}
-              >
-                <div
-                  className="w-4 h-4 rounded-full"
-                  style={{ backgroundColor: "var(--color-nekoma)" }}
-                />
-              </div>
-
-              {/* Spacer for opposite side */}
-              <div className="hidden md:block md:w-1/2" />
-            </div>
+            <Chapter key={index} index={index} year={job.year} />
           ))}
 
-          {/* End Node */}
-          <div
-            className={`relative flex justify-center transform transition-all duration-500 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-            style={{ transitionDelay: `${careerPath.length * 200}ms` }}
-          >
+          {/* 連載中：結尾節點 */}
+          <div className="relative flex justify-start md:justify-center">
             <div
-              className="w-14 h-14 bg-white border-4 rounded-full flex items-center justify-center z-10 ml-8 md:ml-0"
+              className="ml-8 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full border-4 md:ml-0 md:translate-x-0"
               style={{
+                backgroundColor: "var(--color-poster)",
                 borderColor: "var(--color-ink)",
                 boxShadow: "var(--shadow-manga-sm)",
               }}
             >
               <span
-                className="text-smmd:text-lg"
-                style={{ fontFamily: "var(--font-heading)" }}
+                className="text-sm md:text-base"
+                style={{
+                  fontFamily: "var(--font-heading)",
+                  color: "var(--color-panel)",
+                }}
               >
                 NOW
               </span>
