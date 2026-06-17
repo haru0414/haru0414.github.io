@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef, lazy, Suspense } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navigation from "./components/layout/Navigation";
 import HeroSection from "./components/sections/HeroSection";
 import AboutSection from "./components/sections/AboutSection";
@@ -10,12 +10,10 @@ import ContactSection from "./components/sections/ContactSection";
 import FloatingCat from "./components/FloatingCat";
 import SeoMeta from "./components/SeoMeta";
 import CrayonDefs from "./components/crayon/CrayonDefs";
-
-// 首頁五個 section 同步載入：首頁已在建置時 prerender 成靜態 HTML，
-// LCP 不再等 JS，因此不需要懶載入；同步 render 才能讓 hydrate 時的
-// 初次 render 與快照 DOM 一致。
-// 詳情頁仍懶載入：首頁不必載入這支程式碼，點進專案時才抓對應 chunk
-const ProjectDetailPage = lazy(() => import("./pages/ProjectDetailPage"));
+// 詳情頁同步 import（非 lazy）：專案頁已在建置時 prerender，renderToString
+// 必須能渲染出完整內容；lazy 會在 SSR 只渲染 Suspense fallback、導致 hydration
+// 邊界不一致（React #419）。
+import ProjectDetailPage from "./pages/ProjectDetailPage";
 
 // Custom Cursor Component - Using refs for smooth performance
 function CustomCursor() {
@@ -253,14 +251,9 @@ export function AppShell() {
       <FloatingCat />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route
-          path="/project/:id"
-          element={
-            <Suspense fallback={null}>
-              <ProjectDetailPage />
-            </Suspense>
-          }
-        />
+        <Route path="/project/:id" element={<ProjectDetailPage />} />
+        {/* 未知路徑導回首頁（搭配 GitHub Pages 的 404.html fallback） */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );
@@ -268,8 +261,8 @@ export function AppShell() {
 
 export default function Root() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <AppShell />
-    </HashRouter>
+    </BrowserRouter>
   );
 }
