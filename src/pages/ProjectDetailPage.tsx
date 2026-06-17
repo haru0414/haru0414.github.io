@@ -70,7 +70,7 @@ export default function ProjectDetailPage() {
               className="px-3 py-1 text-xs text-white border"
               style={{
                 fontFamily: "var(--font-heading)",
-                backgroundColor: "var(--color-teal)",
+                backgroundColor: "var(--color-badge-teal)",
                 borderColor: "var(--color-ink)",
               }}
             >
@@ -81,6 +81,7 @@ export default function ProjectDetailPage() {
               style={{
                 fontFamily: "var(--font-heading)",
                 backgroundColor: "var(--color-poster)",
+                color: "var(--color-on-poster)",
                 borderColor: "var(--color-ink)",
               }}
             >
@@ -104,7 +105,7 @@ export default function ProjectDetailPage() {
               className="inline-block px-3 py-1 text-sm text-white border-2 mb-4"
               style={{
                 fontFamily: "var(--font-heading)",
-                backgroundColor: "var(--color-teal)",
+                backgroundColor: "var(--color-badge-teal)",
                 borderColor: "var(--color-ink)",
                 boxShadow: "2px 2px 0 0 var(--color-ink)",
               }}
@@ -262,7 +263,7 @@ export default function ProjectDetailPage() {
             className="absolute -top-3 -left-3 px-3 py-1 text-sm text-white border-2"
             style={{
               fontFamily: "var(--font-heading)",
-              backgroundColor: "var(--color-nekoma)",
+              backgroundColor: "var(--color-badge-red)",
               borderColor: "var(--color-ink)",
               boxShadow: "2px 2px 0 0 var(--color-ink)",
             }}
@@ -334,7 +335,7 @@ export default function ProjectDetailPage() {
                 className="px-6 py-3 border-2 text-sm text-white transition-all hover:translate-x-1 hover:translate-y-1"
                 style={{
                   fontFamily: "var(--font-heading)",
-                  backgroundColor: "var(--color-nekoma)",
+                  backgroundColor: "var(--color-badge-red)",
                   borderColor: "var(--color-ink)",
                   boxShadow: "4px 4px 0 0 var(--color-ink)",
                 }}

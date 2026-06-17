@@ -24,17 +24,20 @@ export default function HeroSection() {
       <div className="relative z-10 container mx-auto px-4 flex flex-col items-center">
         {/* Volume Tag */}
         <div className="rise-in">
-          <h2
+          {/* 裝飾性「卷號」標籤：非章節標題，用 <p> 不佔 heading 階層；
+             poster 黃底固定深字確保深色模式對比 */}
+          <p
             className="text-sm sm:text-xl md:text-2xl tracking-wide md:tracking-widest mb-4 px-3 py-1 inline-block border-2 transform -rotate-2"
             style={{
               fontFamily: "var(--font-heading)",
               backgroundColor: "var(--color-poster)",
+              color: "var(--color-on-poster)",
               borderColor: "var(--color-ink)",
               boxShadow: "var(--shadow-manga-sm)",
             }}
           >
             {t("hero.volume")}
-          </h2>
+          </p>
         </div>
 
         {/* Main Title */}
@@ -82,7 +85,7 @@ export default function HeroSection() {
                 className="px-3 py-1 text-sm text-white border"
                 style={{
                   fontFamily: "var(--font-heading)",
-                  backgroundColor: "var(--color-nekoma)",
+                  backgroundColor: "var(--color-badge-red)",
                   borderColor: "var(--color-ink)",
                 }}
               >
@@ -92,7 +95,7 @@ export default function HeroSection() {
                 className="px-3 py-1 text-xs text-white border"
                 style={{
                   fontFamily: "var(--font-heading)",
-                  backgroundColor: "var(--color-teal)",
+                  backgroundColor: "var(--color-badge-teal)",
                   borderColor: "var(--color-ink)",
                 }}
               >

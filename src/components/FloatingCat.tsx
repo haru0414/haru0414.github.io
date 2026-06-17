@@ -75,8 +75,10 @@ export default function FloatingCat() {
             : "scale-90 opacity-0 translate-y-2 pointer-events-none"
         }`}
       >
+        {/* disclosure 彈出面板：用一般按鈕群即可（無 role="menu"，因為沒有
+           實作方向鍵導覽；原生 <button> 本身就無障礙），觸發鈕帶 aria-expanded */}
         <div
-          role="menu"
+          aria-label={t("menu.role")}
           className="border-2 overflow-hidden w-52"
           style={{
             backgroundColor: "var(--color-surface)",
@@ -112,7 +114,6 @@ export default function FloatingCat() {
           {/* 功能列 */}
           <button
             type="button"
-            role="menuitem"
             onClick={toggleTheme}
             className="interactive w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-left transition-colors hover:bg-poster hover:text-(--color-panel)"
             style={{ fontFamily: "var(--font-heading)" }}
@@ -125,7 +126,6 @@ export default function FloatingCat() {
 
           <button
             type="button"
-            role="menuitem"
             onClick={toggleLang}
             className="interactive w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-left border-t-2 transition-colors hover:bg-poster hover:text-(--color-panel)"
             style={{
@@ -139,7 +139,6 @@ export default function FloatingCat() {
 
           <button
             type="button"
-            role="menuitem"
             onClick={scrollToTop}
             className="interactive w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-left border-t-2 transition-colors hover:bg-poster hover:text-(--color-panel)"
             style={{

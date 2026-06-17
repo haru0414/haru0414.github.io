@@ -78,8 +78,8 @@ export default function Navigation() {
               fontFamily: "var(--font-heading)",
               color:
                 logoClickCount > 0
-                  ? "var(--color-teal)"
-                  : "var(--color-nekoma)",
+                  ? "var(--color-badge-teal)"
+                  : "var(--color-badge-red)",
               background: "none",
               border: "none",
               cursor: "pointer",

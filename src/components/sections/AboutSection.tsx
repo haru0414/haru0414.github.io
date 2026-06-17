@@ -186,10 +186,11 @@ export default function AboutSection() {
     <section ref={sectionRef} id="character" className="section py-20">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row gap-8">
-          {/* Left: Vertical Title */}
-          <div className="hidden md:flex flex-col justify-center items-center">
+          {/* Left: Vertical Title。手機用 sr-only 保留章節標題給螢幕閱讀器，
+             維持 heading 階層（h1→h2→h3 不跳階）；桌機顯示垂直裝飾標題 */}
+          <div className="md:flex flex-col justify-center items-center">
             <h2
-              className="text-vertical text-6xl opacity-20 text-outline"
+              className="sr-only md:not-sr-only text-vertical text-6xl opacity-20 text-outline"
               style={{ fontFamily: "var(--font-heading)" }}
             >
               CHARACTER
@@ -252,6 +253,7 @@ export default function AboutSection() {
                   style={{
                     fontFamily: "var(--font-heading)",
                     backgroundColor: "var(--color-poster)",
+                    color: "var(--color-on-poster)",
                     borderColor: "var(--color-ink)",
                   }}
                 >
@@ -308,7 +310,7 @@ export default function AboutSection() {
                 className="absolute -top-3 -left-3 px-3 py-1 text-sm text-white border-2"
                 style={{
                   fontFamily: "var(--font-heading)",
-                  backgroundColor: "var(--color-nekoma)",
+                  backgroundColor: "var(--color-badge-red)",
                   borderColor: "var(--color-ink)",
                   boxShadow: "2px 2px 0 0 var(--color-ink)",
                 }}
@@ -361,6 +363,7 @@ export default function AboutSection() {
                   style={{
                     fontFamily: "var(--font-heading)",
                     backgroundColor: "var(--color-poster)",
+                    color: "var(--color-on-poster)",
                     borderColor: "var(--color-ink)",
                   }}
                 >
