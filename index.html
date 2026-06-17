@@ -74,12 +74,29 @@
     />
 
     <!-- Fonts -->
+    <!-- 標題字型 Dela Gothic One 已自架，preload 首屏 LCP 標題用的 Latin 子集 -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/dela-gothic-one-latin.woff2"
+      crossorigin
+    />
+    <!-- 內文 Noto Sans JP（CJK 太大不自架）：非阻塞載入，不卡首次繪製 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>

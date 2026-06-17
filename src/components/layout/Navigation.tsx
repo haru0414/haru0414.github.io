@@ -50,10 +50,13 @@ export default function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (id: string) => {
+  const scrollToSection = (id: string, attempt = 0) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
+    } else if (attempt < 20) {
+      // 折線下方的 section 是懶載入的，剛載入前可能還不在 DOM；短暫重試
+      window.setTimeout(() => scrollToSection(id, attempt + 1), 50);
     }
   };
 

@@ -2,7 +2,12 @@
 // Three turbulence seeds let CSS cycle filters for a hand-drawn "boil" wobble.
 export default function CrayonDefs() {
   return (
-    <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
+    <svg
+      width="0"
+      height="0"
+      style={{ position: "absolute" }}
+      aria-hidden="true"
+    >
       <defs>
         {[1, 2, 3].map((n) => (
           <filter
@@ -16,7 +21,7 @@ export default function CrayonDefs() {
             <feTurbulence
               type="fractalNoise"
               baseFrequency="0.05"
-              numOctaves="3"
+              numOctaves="1"
               seed={n * 7}
               result="noise"
             />

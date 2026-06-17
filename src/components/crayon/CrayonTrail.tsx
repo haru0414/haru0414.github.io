@@ -67,7 +67,13 @@ export default function CrayonTrail({
     // 能塗鴉的桌機才顯示蠟筆游標，提示這塊區域可以畫畫；
     // 顏色對應「下一筆」會用到的顏色
     const updateCursor = () => {
-      canvas.style.cursor = buildCrayonCursor(getNextCrayonColor());
+      // important：全站有 `* { cursor: none !important }`，這裡要以同等優先權
+      // 蓋回，畫布才保留「可塗鴉」的蠟筆游標提示
+      canvas.style.setProperty(
+        "cursor",
+        buildCrayonCursor(getNextCrayonColor()),
+        "important",
+      );
     };
     updateCursor();
 

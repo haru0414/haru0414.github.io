@@ -9,14 +9,17 @@ import sticker1 from "../assets/images/onigiri/stickers/1.webp";
 export default function FloatingCat() {
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">(() =>
-    typeof document !== "undefined" &&
-    document.documentElement.classList.contains("dark")
-      ? "dark"
-      : "light",
-  );
+  // 初次 render 一律 light，與 prerender 快照一致（避免 hydration mismatch）；
+  // mount 後再用 effect 校正成 <html> 上的實際主題
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const rootRef = useRef<HTMLDivElement>(null);
   const isDark = theme === "dark";
+
+  useEffect(() => {
+    if (document.documentElement.classList.contains("dark")) {
+      setTheme("dark");
+    }
+  }, []);
 
   // 開啟時：點面板外或按 Esc 都關閉
   useEffect(() => {

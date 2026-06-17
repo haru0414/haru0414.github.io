@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CrayonUnderline from "../crayon/CrayonUnderline";
 import CrayonDoodle from "../crayon/CrayonDoodle";
 import CrayonTrail from "../crayon/CrayonTrail";
 
+// 決定性偽隨機（取代 Math.random），讓 speed lines 在 prerender 快照與
+// client render 產生相同值，避免 hydration mismatch
+function rand(seed: number) {
+  const x = Math.sin(seed * 12.9898) * 43758.5453;
+  return x - Math.floor(x);
+}
+
 export default function HeroSection() {
   const { t } = useTranslation();
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
 
   return (
     <section
@@ -22,11 +23,7 @@ export default function HeroSection() {
 
       <div className="relative z-10 container mx-auto px-4 flex flex-col items-center">
         {/* Volume Tag */}
-        <div
-          className={`transform transition-all duration-700 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
-        >
+        <div className="rise-in">
           <h2
             className="text-sm sm:text-xl md:text-2xl tracking-wide md:tracking-widest mb-4 px-3 py-1 inline-block border-2 transform -rotate-2"
             style={{
@@ -42,9 +39,8 @@ export default function HeroSection() {
 
         {/* Main Title */}
         <div
-          className={`text-center transform transition-all duration-700 delay-200 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-          }`}
+          className="text-center rise-in"
+          style={{ animationDelay: "200ms" }}
         >
           <h1
             className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tighter leading-none mb-4"
@@ -70,9 +66,8 @@ export default function HeroSection() {
 
         {/* Hero Image / Manga Cover */}
         <div
-          className={`relative mt-8 w-full max-w-4xl aspect-video transform transition-all duration-700 delay-400 ${
-            isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
-          }`}
+          className="relative mt-8 w-full max-w-4xl aspect-video pop-in"
+          style={{ animationDelay: "400ms" }}
         >
           <div
             className="w-full h-full bg-white border-4 overflow-hidden group"
@@ -187,9 +182,8 @@ export default function HeroSection() {
 
             {/* Dialogue Bubble */}
             <div
-              className={`absolute bottom-8 right-8 speech-bubble max-w-xs transform transition-all duration-500 delay-700 ${
-                isVisible ? "scale-100 opacity-100" : "scale-0 opacity-0"
-              }`}
+              className="absolute bottom-8 right-8 speech-bubble max-w-xs pop-in"
+              style={{ animationDelay: "700ms" }}
             >
               <p className="text-sm font-bold leading-tight">
                 {t("hero.quote")}
@@ -209,8 +203,8 @@ export default function HeroSection() {
                     backgroundColor: "var(--color-ink)",
                     top: `${5 + i * 5}%`,
                     left: "50%",
-                    width: `${30 + Math.random() * 20}%`,
-                    transform: `rotate(${-15 + Math.random() * 30}deg)`,
+                    width: `${30 + rand(i) * 20}%`,
+                    transform: `rotate(${-15 + rand(i + 100) * 30}deg)`,
                   }}
                 />
               ))}
@@ -220,9 +214,8 @@ export default function HeroSection() {
 
         {/* Scroll Indicator */}
         <div
-          className={`mt-12 flex flex-col items-center transform transition-all duration-700 delay-1000 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
-          }`}
+          className="mt-12 flex flex-col items-center rise-in"
+          style={{ animationDelay: "1000ms" }}
         >
           <span
             className="text-sm tracking-widest mb-2"

@@ -1,15 +1,11 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
-
-const prefersReducedMotion = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+import { useState, type CSSProperties, type ReactNode } from "react";
 
 interface CrayonUnderlineProps {
   children: ReactNode;
   color?: string;
   /** underline = 波浪底線, circle = 蠟筆圈圈 */
   variant?: "underline" | "circle";
-  /** view = 滾動進入視野時畫出, hover = 滑鼠移入時畫出 */
+  /** view = 載入時描繪出（純 CSS）, hover = 滑鼠移入時畫出（JS） */
   trigger?: "view" | "hover";
   /** 外部控制 hover 狀態（覆寫內建 hover 偵測） */
   active?: boolean;
@@ -17,6 +13,7 @@ interface CrayonUnderlineProps {
 }
 
 // Hand-drawn crayon stroke that draws itself in around/under the children.
+// view 觸發用純 CSS 動畫（DOM 穩定、可安全 hydrate）；hover 觸發維持 JS。
 export default function CrayonUnderline({
   children,
   color = "var(--color-nekoma)",
@@ -25,36 +22,23 @@ export default function CrayonUnderline({
   active,
   delay = 0,
 }: CrayonUnderlineProps) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [reduced] = useState(prefersReducedMotion);
-  const [drawn, setDrawn] = useState(reduced);
   const [hovered, setHovered] = useState(false);
 
-  useEffect(() => {
-    if (trigger !== "view" || reduced) return;
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setDrawn(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.5 },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [trigger, reduced]);
-
-  const isDrawn =
-    reduced || (trigger === "view" ? drawn : (active ?? hovered));
+  const viewMode = trigger === "view";
   const selfHover = trigger === "hover" && active === undefined;
+  const hoverDrawn = active ?? hovered;
   const duration = variant === "circle" ? 900 : 600;
+
+  // view：交給 CSS draw-stroke（初始未畫、載入後描繪）；DOM 不含會變動的狀態。
+  // hover：用 JS 控制 stroke-dashoffset（初次一律未畫，快照/client 一致）。
+  const pathClass = viewMode ? "draw-stroke" : undefined;
+  const pathStyle: CSSProperties = viewMode
+    ? { animationDuration: `${duration}ms`, animationDelay: `${delay}ms` }
+    : { transition: `stroke-dashoffset ${duration}ms ease-out ${delay}ms` };
+  const pathOffset = viewMode ? undefined : hoverDrawn ? 0 : 1;
 
   return (
     <span
-      ref={ref}
       className="relative inline-block"
       onMouseEnter={selfHover ? () => setHovered(true) : undefined}
       onMouseLeave={selfHover ? () => setHovered(false) : undefined}
@@ -63,12 +47,18 @@ export default function CrayonUnderline({
       {variant === "underline" ? (
         <svg
           className="crayon-boil absolute pointer-events-none overflow-visible"
-          style={{ left: "-2%", bottom: "-0.18em", width: "104%", height: "0.24em" }}
+          style={{
+            left: "-2%",
+            bottom: "-0.18em",
+            width: "104%",
+            height: "0.24em",
+          }}
           viewBox="0 0 300 28"
           preserveAspectRatio="none"
           aria-hidden="true"
         >
           <path
+            className={pathClass}
             d="M6 18 C 42 10, 76 24, 116 16 S 196 8, 230 18 S 282 14, 294 12"
             fill="none"
             stroke={color}
@@ -77,12 +67,8 @@ export default function CrayonUnderline({
             opacity="0.9"
             pathLength={1}
             strokeDasharray={1}
-            strokeDashoffset={isDrawn ? 0 : 1}
-            style={{
-              transition: reduced
-                ? "none"
-                : `stroke-dashoffset ${duration}ms ease-out ${delay}ms`,
-            }}
+            strokeDashoffset={pathOffset}
+            style={pathStyle}
           />
         </svg>
       ) : (
@@ -94,6 +80,7 @@ export default function CrayonUnderline({
           aria-hidden="true"
         >
           <path
+            className={pathClass}
             d="M160 12 C 64 10, 14 38, 16 70 C 18 106, 88 132, 168 128 C 250 124, 306 100, 304 66 C 302 32, 232 6, 150 12 C 102 16, 56 30, 42 50"
             fill="none"
             stroke={color}
@@ -102,12 +89,8 @@ export default function CrayonUnderline({
             opacity="0.85"
             pathLength={1}
             strokeDasharray={1}
-            strokeDashoffset={isDrawn ? 0 : 1}
-            style={{
-              transition: reduced
-                ? "none"
-                : `stroke-dashoffset ${duration}ms ease-out ${delay}ms`,
-            }}
+            strokeDashoffset={pathOffset}
+            style={pathStyle}
           />
         </svg>
       )}

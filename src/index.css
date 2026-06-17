@@ -1,5 +1,32 @@
 @import "tailwindcss";
 
+/* 自架標題字型 Dela Gothic One（Latin）：同源 + preload，
+   讓首屏 LCP 標題的字型即時抵達，不必等 Google Fonts 跨來源往返 */
+@font-face {
+  font-family: "Dela Gothic One";
+  font-style: normal;
+  font-weight: 400;
+  /* swap：保證粗體標題字型一定會顯示（optional 在慢速首載會永久用細的
+     fallback，失去手繪粗體感）。字型已 preload 且僅 13KB，FOUT 極短。 */
+  font-display: swap;
+  src: url("/fonts/dela-gothic-one-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Dela Gothic One";
+  font-style: normal;
+  font-weight: 400;
+  /* swap：保證粗體標題字型一定會顯示（optional 在慢速首載會永久用細的
+     fallback，失去手繪粗體感）。字型已 preload 且僅 13KB，FOUT 極短。 */
+  font-display: swap;
+  src: url("/fonts/dela-gothic-one-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 @theme {
   /* Color System - Retro Manga Style */
   --color-paper: #F2EAD3;
@@ -63,6 +90,18 @@
   :focus-visible {
     outline: 3px solid var(--color-nekoma);
     outline-offset: 2px;
+  }
+
+  /* 自訂游標：桌機（滑鼠）全站隱藏系統游標，避免按鈕(default)、
+     cursor-pointer 的卡片/連結等各自的游標蓋過自訂游標而「跑出來」。
+     以自訂游標放大作為 hover 提示。Hero 蠟筆畫布是刻意的塗鴉提示，
+     由 JS 以 important 優先權保留其蠟筆游標（見 CrayonTrail）。 */
+  @media (hover: hover) and (pointer: fine) {
+    *,
+    *::before,
+    *::after {
+      cursor: none !important;
+    }
   }
 
   /* 尊重「偏好減少動態」：關閉動畫與平滑捲動，避免前庭不適 */
@@ -236,22 +275,71 @@
     animation: float 6s ease-in-out infinite;
   }
 
-  /* Crayon boil - hand-drawn wobble by cycling turbulence seeds */
-  .crayon-boil {
-    animation: crayon-boil 0.5s steps(1) infinite;
-  }
-
-  @keyframes crayon-boil {
-    0%, 100% { filter: url(#crayon-rough-1); }
-    33% { filter: url(#crayon-rough-2); }
-    66% { filter: url(#crayon-rough-3); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .crayon-boil {
-      animation: none;
-      filter: url(#crayon-rough-1);
+  /* 進場動畫：純 CSS（不靠 JS state），讓 prerender 快照與 client 初次 render
+     的 DOM 完全一致，避免 hydration mismatch。動畫進度純粹是 runtime 視覺，
+     不影響 React 的 DOM 比對。stagger 用各元素的 inline animation-delay 控制。 */
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
     }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .rise-in {
+    animation: rise-in 0.7s ease-out both;
+  }
+  .pop-in {
+    animation: pop-in 0.7s ease-out both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rise-in,
+    .pop-in {
+      animation: none;
+    }
+  }
+
+  /* 蠟筆「描繪進場」：純 CSS 取代原本的 IntersectionObserver + JS state，
+     讓 prerender 快照與 client 初次 render 的 DOM 一致。
+     需搭配 path 的 pathLength=1 / stroke-dasharray=1；
+     時長與延遲用 inline style 的 animation-duration / animation-delay 控制。 */
+  @keyframes draw-stroke {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .draw-stroke {
+    stroke-dashoffset: 0;
+    animation: draw-stroke 0.7s ease-out both;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .draw-stroke {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Crayon rough edge — 靜態手繪粗邊。
+     原本每 0.5s 在 3 個 feTurbulence 濾鏡間切換做「boil」抖動，
+     但 SVG filter 重新光柵化極貴（Style & Layout ~2s、拖慢 LCP），
+     改為單一靜態濾鏡：保留手繪質感、移除每幀重算。 */
+  .crayon-boil {
+    filter: url(#crayon-rough-1);
   }
 
   /* Diagonal stripe pattern */

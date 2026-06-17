@@ -2,6 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { Trans } from "react-i18next";
 import CrayonUnderline from "../crayon/CrayonUnderline";
 
+// 決定性偽隨機（取代 Math.random），讓 speed lines 在 SSR 與 client render
+// 產生相同值，避免 hydration mismatch
+function rand(seed: number) {
+  const x = Math.sin(seed * 12.9898) * 43758.5453;
+  return x - Math.floor(x);
+}
+
 export default function ContactSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -49,11 +56,11 @@ export default function ContactSection() {
               className="absolute h-px"
               style={{
                 backgroundColor: "white",
-                top: `${Math.random() * 100}%`,
+                top: `${rand(i) * 100}%`,
                 left: 0,
                 right: 0,
-                transform: `rotate(${-5 + Math.random() * 10}deg)`,
-                opacity: 0.3 + Math.random() * 0.7,
+                transform: `rotate(${-5 + rand(i + 50) * 10}deg)`,
+                opacity: 0.3 + rand(i + 100) * 0.7,
               }}
             />
           ))}

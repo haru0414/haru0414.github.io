@@ -12,9 +12,6 @@ function EpisodeCard({ episode }: { episode: (typeof projects)[0] }) {
   return (
     <div
       className="shrink-0 snap-center w-72 md:w-80 cursor-pointer"
-      style={{
-        perspective: "1000px",
-      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => navigate(`/project/${episode.id}`)}
@@ -22,9 +19,9 @@ function EpisodeCard({ episode }: { episode: (typeof projects)[0] }) {
       <div
         className="w-full aspect-2/3 relative transition-all duration-300"
         style={{
-          transform: isHovered
-            ? "translateY(-10px) rotateY(5deg)"
-            : "translateY(0) rotateY(0)",
+          // 只用 2D 抬升；原本的 rotateY 3D 旋轉會讓 compositor 對小目標
+          // （READ 按鈕）的點擊 hit-test 失準，導致按鈕點不到
+          transform: isHovered ? "translateY(-10px)" : "translateY(0)",
         }}
       >
         <div

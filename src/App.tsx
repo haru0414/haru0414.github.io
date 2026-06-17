@@ -11,7 +11,10 @@ import FloatingCat from "./components/FloatingCat";
 import SeoMeta from "./components/SeoMeta";
 import CrayonDefs from "./components/crayon/CrayonDefs";
 
-// 詳情頁懶載入：首頁不必載入這支程式碼，點進專案時才抓對應 chunk
+// 首頁五個 section 同步載入：首頁已在建置時 prerender 成靜態 HTML，
+// LCP 不再等 JS，因此不需要懶載入；同步 render 才能讓 hydrate 時的
+// 初次 render 與快照 DOM 一致。
+// 詳情頁仍懶載入：首頁不必載入這支程式碼，點進專案時才抓對應 chunk
 const ProjectDetailPage = lazy(() => import("./pages/ProjectDetailPage"));
 
 // Custom Cursor Component - Using refs for smooth performance
@@ -239,9 +242,11 @@ function HomePage() {
   return <App />;
 }
 
-export default function Root() {
+// router 內的整棵樹，抽出來讓 client(HashRouter)與 build 期 SSR(MemoryRouter)
+// 共用，確保 prerender 的 HTML 與 client hydration 完全一致
+export function AppShell() {
   return (
-    <HashRouter>
+    <>
       <CrayonDefs />
       <SeoMeta />
       <CustomCursor />
@@ -257,6 +262,14 @@ export default function Root() {
           }
         />
       </Routes>
+    </>
+  );
+}
+
+export default function Root() {
+  return (
+    <HashRouter>
+      <AppShell />
     </HashRouter>
   );
 }

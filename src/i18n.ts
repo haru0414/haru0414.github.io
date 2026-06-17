@@ -6,9 +6,16 @@ import zh from "./locales/zh";
 // 預設中文：初始只內建 zh，英文語系包採動態載入（見 ensureLanguage）
 const resources = { zh };
 
-i18n
+// build 期 SSR 在 Node 執行：沒有 window/localStorage，跳過語言偵測（直接用
+// fallback zh），確保 prerender 的 HTML 與 client 初次 render 一致
+const isBrowser = typeof window !== "undefined";
+
+if (isBrowser) {
   // 偵測初始語言：只看 localStorage，沒有就用 fallback（中文），不跟瀏覽器走
-  .use(LanguageDetector)
+  i18n.use(LanguageDetector);
+}
+
+i18n
   // 把 i18next 接到 React（提供 useTranslation / 語言變更自動 re-render）
   .use(initReactI18next)
   .init({
@@ -41,15 +48,18 @@ export async function changeLanguage(lng: string) {
 }
 
 // 回訪者若上次選英文，啟動時補載入英文包（首屏可能短暫顯示中文後切換）
-if (i18n.language?.startsWith("en")) {
+if (isBrowser && i18n.language?.startsWith("en")) {
   void changeLanguage("en");
 }
 
-// 讓 <html lang> 跟著目前語言走（SEO / 螢幕閱讀器會讀這個）
+// 讓 <html lang> 跟著目前語言走（SEO / 螢幕閱讀器會讀這個）；SSR 無 document
 const syncHtmlLang = (lng: string) => {
+  if (typeof document === "undefined") return;
   document.documentElement.lang = lng === "en" ? "en" : "zh-TW";
 };
-syncHtmlLang(i18n.language);
-i18n.on("languageChanged", syncHtmlLang);
+if (isBrowser) {
+  syncHtmlLang(i18n.language);
+  i18n.on("languageChanged", syncHtmlLang);
+}
 
 export default i18n;
