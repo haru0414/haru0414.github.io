@@ -130,9 +130,9 @@ export default function ContactSection() {
           />
         </p>
 
-        {/* Contact Button */}
+        {/* Contact + Resume Buttons */}
         <div
-          className={`transform transition-all duration-700 delay-400 ${
+          className={`flex flex-wrap items-center justify-center gap-5 transform transition-all duration-700 delay-400 ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
           }`}
         >
@@ -153,6 +153,27 @@ export default function ContactSection() {
             }}
           >
             CONTACT ME
+          </a>
+          {/* 下載履歷 PDF：poster 黃底固定深字（對比安全），download 觸發另存 */}
+          <a
+            href="/files/resume.pdf"
+            download="Haru-Li-Resume.pdf"
+            className="inline-block text-2xl px-10 py-5 border-4 transition-all duration-200 hover:translate-x-1 hover:translate-y-1"
+            style={{
+              fontFamily: "var(--font-heading)",
+              backgroundColor: "var(--color-poster)",
+              color: "var(--color-on-poster)",
+              borderColor: "var(--color-ink)",
+              boxShadow: "8px 8px 0 0 var(--color-ink)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = "4px 4px 0 0 var(--color-ink)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = "8px 8px 0 0 var(--color-ink)";
+            }}
+          >
+            RESUME ↓
           </a>
         </div>
 
