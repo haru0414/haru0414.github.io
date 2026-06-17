@@ -1,12 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./components/layout/Navigation";
 import HeroSection from "./components/sections/HeroSection";
 import AboutSection from "./components/sections/AboutSection";
 import PortfolioSection from "./components/sections/PortfolioSection";
 import SkillsSection from "./components/sections/SkillsSection";
 import ContactSection from "./components/sections/ContactSection";
+import ScrollCat from "./components/play/ScrollCat";
+import NotFoundPage from "./pages/NotFoundPage";
 import FloatingCat from "./components/FloatingCat";
 import SeoMeta from "./components/SeoMeta";
 import CrayonDefs from "./components/crayon/CrayonDefs";
@@ -232,6 +234,9 @@ function App() {
         <SkillsSection />
         <ContactSection />
       </main>
+
+      {/* 捲動陪跑貓：沿底線跟著捲動走 */}
+      <ScrollCat />
     </div>
   );
 }
@@ -252,8 +257,8 @@ export function AppShell() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/project/:id" element={<ProjectDetailPage />} />
-        {/* 未知路徑導回首頁（搭配 GitHub Pages 的 404.html fallback） */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* 未知路徑顯示 404 迷路貓（搭配 GitHub Pages 的 404.html fallback） */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );

@@ -360,6 +360,32 @@
     );
     opacity: 0.05;
   }
+
+  /* 逗貓棒 Onigiri：位移／翻面／擠壓由 JS rAF 寫在外層 transform，
+     這裡只負責貓本體的呼吸起伏，由 data-state 控制快慢。 */
+  @keyframes cat-breathe {
+    0%,
+    100% {
+      transform: scaleY(1);
+    }
+    50% {
+      transform: scaleY(1.04);
+    }
+  }
+  .cat-breathe {
+    transform-origin: center bottom;
+    animation: cat-breathe 3.2s ease-in-out infinite;
+  }
+  [data-state="run"] .cat-breathe,
+  [data-state="pounce"] .cat-breathe {
+    animation-duration: 0.9s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cat-breathe {
+      animation: none;
+    }
+  }
 }
 
 /* 深色模式對寫死 utility 的覆寫。

@@ -15,6 +15,14 @@ const zh = {
       career: "經歷",
       contact: "聯絡",
     },
+    notFound: {
+      tag: "ERROR 404",
+      bubble: "喵…？這裡沒路了",
+      title: "這頁好像走丟了",
+      desc: "Onigiri 找遍了也沒找到這個頁面。牠的腳印停在這——要不要一起回首頁？",
+      home: "帶我回首頁",
+      back: "回上一頁",
+    },
     menu: {
       dark: "夜讀版",
       light: "日讀版",

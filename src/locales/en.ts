@@ -14,6 +14,14 @@ const en = {
       career: "Career",
       contact: "Contact",
     },
+    notFound: {
+      tag: "ERROR 404",
+      bubble: "meow…? dead end",
+      title: "This page wandered off",
+      desc: "Onigiri looked everywhere but couldn't find it. The paw prints stop here — shall we head home together?",
+      home: "Take me home",
+      back: "Go back",
+    },
     menu: {
       dark: "Dark mode",
       light: "Light mode",
