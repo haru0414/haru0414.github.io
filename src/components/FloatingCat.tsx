@@ -65,13 +65,15 @@ export default function FloatingCat() {
   return (
     <div
       ref={rootRef}
-      className="fixed bottom-2 right-5 z-60 flex flex-col items-end gap-3"
+      // 容器本身不攔點擊：它會撐到選單面板寬（w-52），在手機上是一大片透明區，
+      // 否則會蓋住底下的陪跑貓且點了沒反應。只有實際互動子元素開回 pointer-events。
+      className="pointer-events-none fixed bottom-2 right-5 z-60 flex flex-col items-end gap-3"
     >
       {/* 多功能選單面板 */}
       <div
         className={`transition-all duration-300 origin-bottom-right ${
           isOpen
-            ? "scale-100 opacity-100 translate-y-0"
+            ? "scale-100 opacity-100 translate-y-0 pointer-events-auto"
             : "scale-90 opacity-0 translate-y-2 pointer-events-none"
         }`}
       >
@@ -157,7 +159,7 @@ export default function FloatingCat() {
         onClick={() => setIsOpen((prev) => !prev)}
         aria-label={t("a11y.menuOpen")}
         aria-expanded={isOpen}
-        className={`interactive w-11 transition-all duration-200 hover:-translate-y-1 ${
+        className={`interactive pointer-events-auto w-11 transition-all duration-200 hover:-translate-y-1 ${
           isOpen ? "opacity-60" : "opacity-100"
         }`}
         style={{ filter: "drop-shadow(2px 4px 0px rgba(0,0,0,0.4))" }}
