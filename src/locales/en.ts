@@ -32,6 +32,7 @@ const en = {
     a11y: {
       cat: "Onigiri the cat",
       catSticker: "Onigiri sticker",
+      meetCat: "Meet Onigiri",
       menuOpen: "Open supervisor menu",
       skip: "Skip to content",
       radar:
@@ -47,6 +48,7 @@ const en = {
     egg: {
       unlocked: "HIDDEN CHARACTER UNLOCKED",
       desc: "My ever-present supervisor, keeping an eye on code quality.",
+      close: "Close",
     },
     contact: {
       subtitle:

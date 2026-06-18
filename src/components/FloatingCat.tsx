@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "../i18n";
 import catCover from "../assets/images/onigiri/cover.webp";
-import sticker1 from "../assets/images/onigiri/stickers/1.webp";
+import PetBowl from "./play/PetBowl";
 
 // 浮動「常駐監工」多功能鈕：點飯糰貼紙展開選單，
 // 收納主題切換（夜讀／日讀版）與回到頂部，避免與頂部導覽列重疊。
@@ -65,7 +65,7 @@ export default function FloatingCat() {
   return (
     <div
       ref={rootRef}
-      className="fixed bottom-6 right-6 z-60 flex flex-col items-end gap-2"
+      className="fixed bottom-2 right-5 z-60 flex flex-col items-end gap-3"
     >
       {/* 多功能選單面板 */}
       <div
@@ -152,23 +152,17 @@ export default function FloatingCat() {
         </div>
       </div>
 
-      {/* 飯糰貼紙觸發鈕 */}
+      {/* 飼料碗觸發鈕：捲到頁面底部時，陪跑貓會走過來吃飼料 */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         aria-label={t("a11y.menuOpen")}
         aria-expanded={isOpen}
-        className={`interactive w-16 transition-all duration-200 hover:-translate-y-1 ${
+        className={`interactive w-11 transition-all duration-200 hover:-translate-y-1 ${
           isOpen ? "opacity-60" : "opacity-100"
         }`}
         style={{ filter: "drop-shadow(2px 4px 0px rgba(0,0,0,0.4))" }}
       >
-        <img
-          src={sticker1}
-          alt={t("a11y.catSticker")}
-          width={960}
-          height={870}
-          className="w-full h-auto"
-        />
+        <PetBowl className="block h-auto w-full" />
       </button>
     </div>
   );

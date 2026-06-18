@@ -361,8 +361,7 @@
     opacity: 0.05;
   }
 
-  /* 逗貓棒 Onigiri：位移／翻面／擠壓由 JS rAF 寫在外層 transform，
-     這裡只負責貓本體的呼吸起伏，由 data-state 控制快慢。 */
+  /* 貓本體的呼吸起伏（404 迷路貓沿用）。 */
   @keyframes cat-breathe {
     0%,
     100% {
@@ -376,9 +375,42 @@
     transform-origin: center bottom;
     animation: cat-breathe 3.2s ease-in-out infinite;
   }
-  [data-state="run"] .cat-breathe,
-  [data-state="pounce"] .cat-breathe {
-    animation-duration: 0.9s;
+
+  /* 捲動陪跑貓 sprite：5 張疊在同一框，依 data-pose / data-frame 切換顯示。
+     位移／翻面由 JS rAF 寫在外層 transform。 */
+  .cat-sprites {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    appearance: none;
+  }
+  .cat-sprite {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom;
+    opacity: 0;
+    user-select: none;
+  }
+  .cat-sprites[data-pose="sleep"] .cat-sleep {
+    opacity: 1;
+  }
+  .cat-sprites[data-pose="wait"] .cat-wait {
+    opacity: 1;
+  }
+  /* 站著（中途停下）顯示走路第一幀 */
+  .cat-sprites[data-pose="idle"] .cat-run-1 {
+    opacity: 1;
+  }
+  .cat-sprites[data-pose="run"][data-frame="1"] .cat-run-1,
+  .cat-sprites[data-pose="run"][data-frame="2"] .cat-run-2,
+  .cat-sprites[data-pose="run"][data-frame="3"] .cat-run-3 {
+    opacity: 1;
   }
 
   @media (prefers-reduced-motion: reduce) {

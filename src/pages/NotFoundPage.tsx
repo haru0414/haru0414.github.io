@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import CrayonDoodle from "../components/crayon/CrayonDoodle";
-import catArt from "../assets/images/onigiri/cat.svg";
+import catArt from "../assets/images/onigiri/wait-cat.webp";
 
 // 走進來的腳印：往貓的方向漸濃，暗示牠一路晃到這裡就沒路了
 function PawTrail() {
@@ -71,7 +71,10 @@ export default function NotFoundPage() {
         {/* 角落標籤 */}
         <span
           className="manga-tag absolute -left-3 -top-4 select-none"
-          style={{ backgroundColor: "var(--color-poster)", color: "var(--color-panel)" }}
+          style={{
+            backgroundColor: "var(--color-poster)",
+            color: "var(--color-panel)",
+          }}
         >
           {t("notFound.tag")}
         </span>
@@ -97,7 +100,7 @@ export default function NotFoundPage() {
             src={catArt}
             alt={t("a11y.cat")}
             width={200}
-            height={146}
+            height={200}
             draggable={false}
             className="cat-breathe w-44 select-none md:w-52"
             style={{ animationDuration: "2.6s" }}
@@ -107,7 +110,10 @@ export default function NotFoundPage() {
 
         <h1
           className="mt-6 text-2xl md:text-3xl"
-          style={{ fontFamily: "var(--font-heading)", color: "var(--color-ink)" }}
+          style={{
+            fontFamily: "var(--font-heading)",
+            color: "var(--color-ink)",
+          }}
         >
           {t("notFound.title")}
         </h1>

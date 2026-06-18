@@ -33,6 +33,7 @@ const zh = {
     a11y: {
       cat: "飯糰",
       catSticker: "飯糰貼紙",
+      meetCat: "認識飯糰",
       menuOpen: "開啟監工選單",
       skip: "跳至主內容",
       radar: "技能雷達圖：程式、設計、敘事、速度、邏輯、品味六項能力分布",
@@ -46,6 +47,7 @@ const zh = {
     egg: {
       unlocked: "HIDDEN CHARACTER UNLOCKED",
       desc: "常駐在我身邊的監工，負責審查所有程式碼品質。",
+      close: "關閉",
     },
     contact: {
       subtitle:

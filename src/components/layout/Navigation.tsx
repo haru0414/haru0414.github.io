@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import catCover from "../../assets/images/onigiri/cover.webp";
 
 // id 對應頁面區塊、navKey 對應 i18n 字典裡 nav.* 的鍵
 const sections = [
@@ -14,18 +13,6 @@ const sections = [
 export default function Navigation() {
   const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState("start");
-  const [logoClickCount, setLogoClickCount] = useState(0);
-  const [showCatEgg, setShowCatEgg] = useState(false);
-
-  const handleLogoClick = () => {
-    const next = logoClickCount + 1;
-    if (next >= 3) {
-      setShowCatEgg(true);
-      setLogoClickCount(0);
-    } else {
-      setLogoClickCount(next);
-    }
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,22 +57,17 @@ export default function Navigation() {
             boxShadow: "var(--shadow-manga-sm)",
           }}
         >
-          {/* Logo */}
+          {/* Logo：點擊回頂部 */}
           <button
-            onClick={handleLogoClick}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="hidden sm:block text-sm tracking-wider select-none"
             style={{
               fontFamily: "var(--font-heading)",
-              color:
-                logoClickCount > 0
-                  ? "var(--color-badge-teal)"
-                  : "var(--color-badge-red)",
+              color: "var(--color-badge-red)",
               background: "none",
               border: "none",
               cursor: "pointer",
-              transition: "color 0.2s",
             }}
-            title={logoClickCount > 0 ? `${3 - logoClickCount} more...` : ""}
           >
             H·L
           </button>
@@ -144,64 +126,6 @@ export default function Navigation() {
           ))}
         </div>
       </nav>
-
-      {/* Easter egg modal */}
-      {showCatEgg && (
-        <div
-          className="fixed inset-0 z-[200] flex items-center justify-center p-4"
-          style={{ backgroundColor: "rgba(0,0,0,0.7)" }}
-          onClick={() => setShowCatEgg(false)}
-        >
-          <div
-            className="relative border-4 overflow-hidden max-w-xs w-full"
-            style={{
-              backgroundColor: "var(--color-paper)",
-              borderColor: "var(--color-ink)",
-              boxShadow: "8px 8px 0 0 var(--color-nekoma)",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header */}
-            <div
-              className="px-4 py-2 border-b-4 flex items-center justify-between"
-              style={{
-                backgroundColor: "var(--color-panel)",
-                borderColor: "var(--color-ink)",
-              }}
-            >
-              <span
-                className="text-sm text-white"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                {t("egg.unlocked")}
-              </span>
-              <button
-                onClick={() => setShowCatEgg(false)}
-                className="text-white/70 hover:text-white text-xs"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                ✕
-              </button>
-            </div>
-            <img
-              src={catCover}
-              alt={t("a11y.cat")}
-              width={1658}
-              height={1414}
-              className="w-full object-cover block"
-            />
-            <div className="px-5 py-4 text-center">
-              <p
-                className="text-xl mb-1"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                ✦ ONIGIRI ✦
-              </p>
-              <p className="text-sm text-gray-500">{t("egg.desc")}</p>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
