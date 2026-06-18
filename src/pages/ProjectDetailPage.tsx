@@ -7,14 +7,22 @@ export default function ProjectDetailPage() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const project = projects.find((p) => p.id === id);
+  const index = projects.findIndex((p) => p.id === id);
+  const project = index >= 0 ? projects[index] : undefined;
+  // 上一篇 / 下一篇（環狀：最後一篇接回第一篇，方便連續瀏覽）
+  const prev = projects[(index - 1 + projects.length) % projects.length];
+  const next = projects[(index + 1) % projects.length];
   const [isVisible, setIsVisible] = useState(false);
 
+  // 依 id 重跑：切換上一篇/下一篇時回到頂部並重播進場動畫
   useEffect(() => {
     window.scrollTo(0, 0);
+    setIsVisible(false);
     const timer = setTimeout(() => setIsVisible(true), 50);
     return () => clearTimeout(timer);
-  }, []);
+  }, [id]);
+
+  const backToList = () => navigate("/", { state: { scrollTo: "episodes" } });
 
   if (!project) {
     return (
@@ -26,7 +34,7 @@ export default function ProjectDetailPage() {
           >
             404
           </p>
-          <button onClick={() => navigate("/")} className="underline">
+          <button onClick={backToList} className="underline">
             Back to Home
           </button>
         </div>
@@ -52,7 +60,7 @@ export default function ProjectDetailPage() {
       >
         {/* Back Button */}
         <button
-          onClick={() => navigate("/")}
+          onClick={backToList}
           className="mb-8 flex items-center gap-2 px-4 py-2 border-2 text-sm transition-all hover:translate-x-1"
           style={{
             fontFamily: "var(--font-heading)",
@@ -241,6 +249,8 @@ export default function ProjectDetailPage() {
                   <img
                     src={src}
                     alt={`${project.title} screenshot ${i + 1}`}
+                    width={3098}
+                    height={1838}
                     loading="lazy"
                     decoding="async"
                     className="w-full h-auto object-cover"
@@ -345,6 +355,50 @@ export default function ProjectDetailPage() {
             )}
           </div>
         )}
+
+        {/* 上一篇 / 下一篇導覽 */}
+        <nav
+          className="mt-14 pt-6 border-t-2 flex items-stretch justify-between gap-4"
+          style={{ borderColor: "var(--color-ink)" }}
+          aria-label={t("detail.pager")}
+        >
+          <button
+            onClick={() => navigate(`/project/${prev.id}`)}
+            className="group flex-1 text-left px-4 py-3 border-2 transition-all hover:-translate-y-0.5"
+            style={{
+              borderColor: "var(--color-ink)",
+              boxShadow: "3px 3px 0 0 var(--color-ink)",
+            }}
+          >
+            <span
+              className="block text-xs opacity-60"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              ← PREV / VOL. {prev.id}
+            </span>
+            <span className="block text-sm font-bold mt-0.5 truncate">
+              {prev.title}
+            </span>
+          </button>
+          <button
+            onClick={() => navigate(`/project/${next.id}`)}
+            className="group flex-1 text-right px-4 py-3 border-2 transition-all hover:-translate-y-0.5"
+            style={{
+              borderColor: "var(--color-ink)",
+              boxShadow: "3px 3px 0 0 var(--color-ink)",
+            }}
+          >
+            <span
+              className="block text-xs opacity-60"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              NEXT / VOL. {next.id} →
+            </span>
+            <span className="block text-sm font-bold mt-0.5 truncate">
+              {next.title}
+            </span>
+          </button>
+        </nav>
       </div>
     </div>
   );

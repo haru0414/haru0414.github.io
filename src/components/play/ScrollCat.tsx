@@ -192,30 +192,40 @@ export default function ScrollCat() {
           <img
             src={sleepCat}
             alt=""
+            width={512}
+            height={512}
             draggable={false}
             className="cat-sprite cat-sleep"
           />
           <img
             src={run1}
             alt=""
+            width={512}
+            height={512}
             draggable={false}
             className="cat-sprite cat-run-1"
           />
           <img
             src={run2}
             alt=""
+            width={512}
+            height={512}
             draggable={false}
             className="cat-sprite cat-run-2"
           />
           <img
             src={run3}
             alt=""
+            width={512}
+            height={512}
             draggable={false}
             className="cat-sprite cat-run-3"
           />
           <img
             src={waitCat}
             alt=""
+            width={512}
+            height={512}
             draggable={false}
             className="cat-sprite cat-wait"
           />

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Navigation from "./components/layout/Navigation";
 import HeroSection from "./components/sections/HeroSection";
 import AboutSection from "./components/sections/AboutSection";
@@ -174,8 +174,26 @@ function ParallaxElements({ scrollProgress }: { scrollProgress: number }) {
 
 function App() {
   const { t } = useTranslation();
+  const location = useLocation();
   const [scrollProgress, setScrollProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // 從專案詳情頁「← BACK」返回時，直接捲回 project list 區，免得又從頭滑下來
+  useEffect(() => {
+    const target = (location.state as { scrollTo?: string } | null)?.scrollTo;
+    if (!target) return;
+    // 清掉 history state，避免重新整理時又自動捲動
+    window.history.replaceState({}, "");
+    // 冷啟動時上方版面（圖片）仍在 reflow，連續幾幀重新校正、把位置釘在目標區
+    let frame = 0;
+    let raf = 0;
+    const pin = () => {
+      document.getElementById(target)?.scrollIntoView();
+      if (++frame < 6) raf = requestAnimationFrame(pin);
+    };
+    raf = requestAnimationFrame(pin);
+    return () => cancelAnimationFrame(raf);
+  }, [location]);
 
   useEffect(() => {
     const handleScroll = () => {

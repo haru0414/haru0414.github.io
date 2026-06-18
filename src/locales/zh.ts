@@ -83,6 +83,7 @@ const zh = {
       openNewTab: "在新分頁開啟",
       hintScreenshot: "以上為網站實際截圖，可點擊按鈕前往完整網站",
       hintEmbed: "網站安全政策不允許嵌入預覽，可點擊按鈕前往完整網站",
+      pager: "專案切換：上一篇 / 下一篇",
     },
     projects: {
       "01": {

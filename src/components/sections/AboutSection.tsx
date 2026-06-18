@@ -36,7 +36,7 @@ function RadarChart() {
       className="relative w-full max-w-[180px] md:max-w-[220px] lg:max-w-[260px] mx-auto aspect-square"
     >
       <svg
-        viewBox="-25 -18 150 136"
+        viewBox="-42 -18 184 136"
         className="w-full h-full overflow-visible"
         role="img"
         aria-label={t("a11y.radar")}
@@ -73,7 +73,7 @@ function RadarChart() {
           x="50"
           y="-2"
           textAnchor="middle"
-          className="text-[8px]"
+          className="text-[7px]"
           style={{
             fontFamily: "var(--font-heading)",
             fill: "var(--color-ink)",
@@ -82,10 +82,10 @@ function RadarChart() {
           CODE
         </text>
         <text
-          x="102"
+          x="100"
           y="28"
           textAnchor="start"
-          className="text-[8px]"
+          className="text-[7px]"
           style={{
             fontFamily: "var(--font-heading)",
             fill: "var(--color-ink)",
@@ -94,10 +94,10 @@ function RadarChart() {
           DESIGN
         </text>
         <text
-          x="102"
+          x="100"
           y="78"
           textAnchor="start"
-          className="text-[8px]"
+          className="text-[7px]"
           style={{
             fontFamily: "var(--font-heading)",
             fill: "var(--color-ink)",
@@ -109,7 +109,7 @@ function RadarChart() {
           x="50"
           y="108"
           textAnchor="middle"
-          className="text-[8px]"
+          className="text-[7px]"
           style={{
             fontFamily: "var(--font-heading)",
             fill: "var(--color-ink)",
@@ -121,7 +121,7 @@ function RadarChart() {
           x="-2"
           y="78"
           textAnchor="end"
-          className="text-[8px]"
+          className="text-[7px]"
           style={{
             fontFamily: "var(--font-heading)",
             fill: "var(--color-ink)",
@@ -133,7 +133,7 @@ function RadarChart() {
           x="-2"
           y="28"
           textAnchor="end"
-          className="text-[8px]"
+          className="text-[7px]"
           style={{
             fontFamily: "var(--font-heading)",
             fill: "var(--color-ink)",

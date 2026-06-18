@@ -87,6 +87,7 @@ const en = {
         "These are actual screenshots of the site. Use the button to visit the full website.",
       hintEmbed:
         "The site's security policy blocks embedded previews. Use the button to visit the full website.",
+      pager: "Project navigation: previous / next",
     },
     projects: {
       "01": {
