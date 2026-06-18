@@ -16,7 +16,9 @@ import waitCat from "../../assets/images/onigiri/wait-cat.webp";
 const CAT_W = 100; // 貓框寬高（px，圖為 500×500 正方形）
 const RIGHT_GAP = 24; // 右側保留給飼料碗：捲到底時坐等貓湊到碗邊
 const LEFT_PAD = 8;
-const STRIDE = 17; // 每走過幾 px 換一幀，讓步頻跟著捲動速度
+// 整趟（最左↔最右）大約換幾次幀。手機可走範圍短，固定 px 步幅會換不了幾幀
+// 看起來像滑行；改成依範圍除以這個次數動態算步幅，窄螢幕自動變快。
+const STRIDE_STEPS = 52;
 const SEAT = 14; // 把貓往下坐進地面的垂直補償（圖在 500 框內偏上）
 
 const clamp = (n: number, lo: number, hi: number) =>
@@ -117,8 +119,10 @@ export default function ScrollCat() {
 
       // 走動中：依走過距離換幀，加一點上下起伏
       if (speed > 20) {
+        // 步幅 = 可走範圍 / 目標換幀次數，並夾在合理範圍（窄螢幕更密、寬螢幕不過密）
+        const strideLen = clamp(range() / STRIDE_STEPS, 6, 17);
         stride += Math.abs(move);
-        if (stride >= STRIDE) {
+        if (stride >= strideLen) {
           frameIdx = (frameIdx + 1) % 3;
           stride = 0;
         }
