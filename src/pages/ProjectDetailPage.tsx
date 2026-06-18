@@ -364,7 +364,7 @@ export default function ProjectDetailPage() {
         >
           <button
             onClick={() => navigate(`/project/${prev.id}`)}
-            className="group flex-1 text-left px-4 py-3 border-2 transition-all hover:-translate-y-0.5"
+            className="group min-w-0 flex-1 text-left px-4 py-3 border-2 transition-all hover:-translate-y-0.5"
             style={{
               borderColor: "var(--color-ink)",
               boxShadow: "3px 3px 0 0 var(--color-ink)",
@@ -382,7 +382,7 @@ export default function ProjectDetailPage() {
           </button>
           <button
             onClick={() => navigate(`/project/${next.id}`)}
-            className="group flex-1 text-right px-4 py-3 border-2 transition-all hover:-translate-y-0.5"
+            className="group min-w-0 flex-1 text-right px-4 py-3 border-2 transition-all hover:-translate-y-0.5"
             style={{
               borderColor: "var(--color-ink)",
               boxShadow: "3px 3px 0 0 var(--color-ink)",
