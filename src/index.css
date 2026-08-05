@@ -37,7 +37,11 @@
 
   /* Font families */
   --font-heading: "Dela Gothic One", sans-serif;
-  --font-body: "Noto Sans JP", sans-serif;
+  /* 改用系統中文字型：Google Fonts 的 CJK 全字集要拆成上百個子集檔下載，
+     單一句「Noto Sans JP」內文字就讓頁面多背 3MB+，直接是 LCP 的主因 */
+  --font-body:
+    -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei",
+    "Heiti TC", sans-serif;
 
   /* Box shadows - Manga style */
   --shadow-manga: 6px 6px 0px 0px #1A2332;
