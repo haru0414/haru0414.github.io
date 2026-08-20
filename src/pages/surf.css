@@ -241,6 +241,23 @@ html.surf-mode #root {
   display: block;
 }
 
+/* S5 下沉暗幕：由淺至深疊上去，模擬愈沉愈暗。只動 opacity，不觸發重繪 */
+.surf-s5-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to bottom, #05141c 0%, #020a10 100%);
+  opacity: 0;
+}
+.surf-s5 .surf-copy { z-index: 2; }
+
+/* S6 仰起：rotationX 需要祖先有 perspective 才會有透視效果 */
+.surf-s6 {
+  perspective: 1200px;
+  perspective-origin: 50% 100%;
+}
+
 /* S6 ------------------------------------------------------------------ */
 .surf-back {
   display: inline-block;
