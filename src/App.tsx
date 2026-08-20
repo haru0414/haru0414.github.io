@@ -276,7 +276,9 @@ export function AppShell() {
   // 用 useLocation 而非 CSS 隱藏：這些元件都有捲動 / 滑鼠監聽，
   // 只是視覺藏起來仍會跟 ScrollTrigger 搶主執行緒。
   const { pathname } = useLocation();
-  const isSurf = pathname === "/surf";
+  // 必須去掉尾斜線再比對：GitHub Pages 對 /surf 會 301 導向 /surf/，
+  // 線上的 pathname 帶尾斜線，用完全相等判斷會漏掉，飼料碗就跑出來了
+  const isSurf = pathname.replace(/\/+$/, "") === "/surf";
 
   return (
     <>
