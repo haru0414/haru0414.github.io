@@ -6,6 +6,8 @@ const PATHS: Record<string, string> = {
     "M50 8 L50 92 M8 50 L92 50 M27 27 L40 40 M73 73 L60 60 M73 27 L60 40 M27 73 L40 60",
   zigzag: "M5 62 L20 40 L35 62 L50 40 L65 62 L80 40 L95 62",
   arrow: "M12 84 C 32 62 52 60 76 38 M58 34 L78 34 L76 56",
+  // 三個由小到大往右上飄的 Z：睡著的提示，給 500 頁用
+  zzz: "M12 74 L30 74 L12 92 L30 92 M38 42 L62 42 L38 66 L62 66 M70 6 L96 6 L70 32 L96 32",
 };
 
 type DoodleType = keyof typeof PATHS;

@@ -151,6 +151,7 @@ export default function FloatingCat() {
             <span className="text-base w-5 text-center">↑</span>
             {t("menu.top")}
           </button>
+
         </div>
       </div>
 

@@ -15,6 +15,15 @@ const zh = {
       career: "經歷",
       contact: "聯絡",
     },
+    error: {
+      tag: "ERROR 500",
+      bubble: "呼……伺服器睡著了",
+      catAlt: "睡著的飯糰",
+      title: "伺服器打瞌睡了",
+      desc: "頁面在載入時遇到問題，可能是網路不穩或版本剛更新。重新整理通常就會好；如果還是不行，先回首頁吧。",
+      reload: "重新整理",
+      home: "回首頁",
+    },
     notFound: {
       tag: "ERROR 404",
       bubble: "喵…？這裡沒路了",
@@ -83,6 +92,13 @@ const zh = {
         company: "好日子科技",
         desc: "帶領工程團隊，統籌前後端架構規劃與 App 專案控管，涵蓋需求釐清、技術方案評估、排程與交付品質把關。除前端外實際參與後端開發，技術棧涵蓋 PHP / Laravel / SQL。",
       },
+    },
+    lab: {
+      intro: "商業案之外的東西：一頁式捲動敘事，以及平常只有走錯路或出錯才看得到的兩個畫面。",
+      enter: "ENTER →",
+      surf: { title: "浪的七幕", desc: "GSAP ScrollTrigger 七幕捲動敘事，桌機另接 Lenis 平滑捲動。" },
+      notFound: { title: "迷路的飯糰", desc: "404 頁。做成一格漫畫分鏡，貓的腳印停在這裡。" },
+      error: { title: "打瞌睡的伺服器", desc: "500 頁。與 404 同一視覺家族，飯糰睡著了。" },
     },
     detail: {
       openNewTab: "在新分頁開啟",
