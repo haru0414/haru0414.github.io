@@ -11,6 +11,9 @@ html.surf-mode #root {
   scroll-behavior: auto;
   overflow-x: clip;
   background: #05090c;
+  /* 文件高度從首頁的約 3000px 暴增到 11000px，瀏覽器的 scroll anchoring
+     會為了維持視覺錨點自動補償捲動量，把進站歸零的動作抵銷掉 */
+  overflow-anchor: none;
 }
 
 /* index.css:110 在 @layer base 內對桌機全站設 cursor: none !important
