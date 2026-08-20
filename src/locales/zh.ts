@@ -3,9 +3,9 @@
 const zh = {
   translation: {
     seo: {
-      title: "Haru Li｜前端工程師作品集",
+      title: "Haru Li｜全端工程師作品集",
       description:
-        "李哲瑋（Haru Li）— 前端工程師，專注 React、Next.js 與 TypeScript。具備多項商業專案經驗，涵蓋電商平台、官網架構遷移、後台系統、金流整合與即時通訊。重視產品思維、系統設計與工程品質。",
+        "李哲瑋（Haru Li）— 全端工程師，以前端為核心專長，專注 React、Next.js 與 TypeScript，並實際參與 PHP / Laravel / SQL 後端開發，現帶領工程團隊。具備多項商業專案經驗，涵蓋電商平台、官網架構遷移、後台系統、金流整合與即時通訊。重視產品思維、系統設計與工程品質。",
       ogLocale: "zh_TW",
     },
     nav: {
@@ -39,7 +39,7 @@ const zh = {
       radar: "技能雷達圖：程式、設計、敘事、速度、邏輯、品味六項能力分布",
     },
     hero: {
-      volume: "VOL. 1：前端工程師",
+      volume: "VOL. 1：全端工程師",
       openToWork: "OPEN TO WORK",
       quote: "「重視產品理解與工程品質，不只實作介面，更關注系統設計。」",
       scroll: "SCROLL",
@@ -54,10 +54,10 @@ const zh = {
         "對具備<hl>系統深度</hl>與<hl>產品思維</hl>的機會保持開放，歡迎洽談合作或職缺。",
     },
     about: {
-      role: "前端工程師",
+      role: "全端工程師",
       bio: {
         intro:
-          "以前端工程為核心，主要使用 React，熟悉 TypeScript、SCSS 與 Tailwind CSS，擅長將設計需求轉化為可維護的前端架構。",
+          "以前端工程為核心專長，主要使用 React，熟悉 TypeScript、SCSS 與 Tailwind CSS，擅長將設計需求轉化為可維護的前端架構；同時實際參與 PHP / Laravel / SQL 後端開發，並帶領工程團隊統籌前後端與 App 專案。",
         strengthLabel: "核心優勢：",
         strengthValue: "架構重構能力 ✕ AI 輔助開發流程",
       },
@@ -77,6 +77,11 @@ const zh = {
         role: "Frontend Engineer",
         company: "好日子科技",
         desc: "主導前端架構從 Astro+React 遷移至 Next.js 14 App Router，開發多步驟預約系統、TapPay 金流、LINE LIFF 登入、GA4 電商追蹤與 WebSocket 即時客服聊天室。",
+      },
+      "3": {
+        role: "工程部 Leader｜全端開發",
+        company: "好日子科技",
+        desc: "帶領工程團隊，統籌前後端架構規劃與 App 專案控管，涵蓋需求釐清、技術方案評估、排程與交付品質把關。除前端外實際參與後端開發，技術棧涵蓋 PHP / Laravel / SQL。",
       },
     },
     detail: {

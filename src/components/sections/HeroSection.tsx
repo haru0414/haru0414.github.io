@@ -45,15 +45,17 @@ export default function HeroSection() {
           className="text-center rise-in"
           style={{ animationDelay: "200ms" }}
         >
+          {/* 手機字級依視窗寬換算：FULL-STACK 在 tracking-tighter 下寬度約為字級的
+             7.85 倍，除以 8.2 留安全邊際，確保 320px 起都能單行、不被連字號斷開 */}
           <h1
-            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tighter leading-none mb-4"
+            className="text-[calc((100vw-2rem)/8.2)] sm:text-7xl md:text-8xl lg:text-9xl tracking-tighter leading-none mb-4"
             style={{ fontFamily: "var(--font-heading)" }}
           >
             <span className="sr-only">
-              Haru Li — Frontend Engineer, React, Next.js, TypeScript
+              Haru Li — Full-Stack Engineer, React, Next.js, TypeScript, PHP, Laravel
             </span>
             <span className="text-outline block" aria-hidden="true">
-              FRONTEND
+              FULL-STACK
             </span>
             <span
               className="block transform translate-x-2 md:translate-x-4"

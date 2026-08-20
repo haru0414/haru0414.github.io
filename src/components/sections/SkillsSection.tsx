@@ -6,7 +6,8 @@ import CrayonDoodle from "../crayon/CrayonDoodle";
 const careerPath = [
   { year: "2019 — 2023" },
   { year: "2022 — 2023" },
-  { year: "2024 — NOW" },
+  { year: "2024 — 2026" },
+  { year: "2026 — NOW" },
 ];
 
 const clamp = (n: number, min: number, max: number) =>

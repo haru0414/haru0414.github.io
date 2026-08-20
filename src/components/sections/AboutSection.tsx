@@ -180,6 +180,9 @@ export default function AboutSection() {
     "WebSocket",
     "Axios",
     "LINE LIFF",
+    "PHP",
+    "Laravel",
+    "SQL",
   ];
 
   return (
@@ -257,7 +260,7 @@ export default function AboutSection() {
                     borderColor: "var(--color-ink)",
                   }}
                 >
-                  FRONTEND DEV
+                  FULL-STACK DEV
                 </div>
               </div>
 

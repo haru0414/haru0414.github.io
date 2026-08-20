@@ -215,7 +215,7 @@ export default function ContactSection() {
             color: "var(--color-paper)",
           }}
         >
-          © 2026 HARU LI // FRONTEND DEVELOPER // TAIWAN
+          © 2026 HARU LI // FULL-STACK DEVELOPER // TAIWAN
         </div>
 
         {/* Decorative Elements */}

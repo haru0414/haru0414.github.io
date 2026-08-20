@@ -5,7 +5,7 @@ import i18n from "./i18n";
 import { AppShell } from "./App";
 import { projects } from "./data/projects";
 
-const SITE_TITLE = "Haru Li｜Frontend Engineer Portfolio";
+const SITE_TITLE = "Haru Li｜Full-Stack Engineer Portfolio";
 const ORIGIN = "https://haru0414.github.io";
 
 // build 期要 prerender 的所有路由（首頁 + 每個專案頁）

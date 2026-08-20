@@ -2,9 +2,9 @@
 const en = {
   translation: {
     seo: {
-      title: "Haru Li | Frontend Engineer Portfolio",
+      title: "Haru Li | Full-Stack Engineer Portfolio",
       description:
-        "Haru Li — Frontend Engineer focused on React, Next.js, and TypeScript. Commercial project experience across e-commerce platforms, website architecture migrations, admin systems, payment integrations, and real-time messaging. I value product thinking, system design, and engineering quality.",
+        "Haru Li — Full-Stack Engineer with frontend as the core strength, focused on React, Next.js, and TypeScript, with hands-on PHP / Laravel / SQL backend work and engineering team leadership. Commercial project experience across e-commerce platforms, website architecture migrations, admin systems, payment integrations, and real-time messaging. I value product thinking, system design, and engineering quality.",
       ogLocale: "en_US",
     },
     nav: {
@@ -39,7 +39,7 @@ const en = {
         "Skill radar chart across six axes: code, design, narrative, speed, logic, and taste",
     },
     hero: {
-      volume: "VOL. 1: FRONTEND ENGINEER",
+      volume: "VOL. 1: FULL-STACK ENGINEER",
       openToWork: "OPEN TO WORK",
       quote:
         '"I value product understanding and engineering quality — not just building UIs, but caring about system design."',
@@ -55,10 +55,10 @@ const en = {
         "Open to opportunities that value <hl>system depth</hl> and <hl>product thinking</hl> — let's talk about collaborations or roles.",
     },
     about: {
-      role: "Frontend Developer",
+      role: "Full-Stack Developer",
       bio: {
         intro:
-          "Frontend engineering is my core focus. I primarily work with React and am comfortable with TypeScript, SCSS, and Tailwind CSS, turning design requirements into maintainable frontend architecture.",
+          "Frontend engineering is my core strength. I primarily work with React and am comfortable with TypeScript, SCSS, and Tailwind CSS, turning design requirements into maintainable frontend architecture. I also work hands-on with PHP, Laravel, and SQL on the backend, and now lead an engineering team across frontend, backend, and mobile app delivery.",
         strengthLabel: "Core strengths:",
         strengthValue:
           "Architecture refactoring ✕ AI-assisted development workflow",
@@ -79,6 +79,11 @@ const en = {
         role: "Frontend Engineer",
         company: "A Nice Day Technology",
         desc: "Led the frontend migration from Astro + React to Next.js 14 App Router; built a multi-step booking system, TapPay payments, LINE LIFF login, GA4 e-commerce tracking, and a WebSocket-powered live customer support chat.",
+      },
+      "3": {
+        role: "Engineering Lead | Full-Stack",
+        company: "A Nice Day Technology",
+        desc: "Lead the engineering team, owning frontend/backend architecture planning and mobile app project delivery — from requirement definition and technical evaluation through scheduling and release quality — while contributing hands-on to backend development with PHP, Laravel, and SQL.",
       },
     },
     detail: {
