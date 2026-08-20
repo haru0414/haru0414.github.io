@@ -23,3 +23,6 @@ dist-server
 *.njsproj
 *.sln
 *.sw?
+
+# /surf 素材原圖（可用 scripts/optimize-surf-images.mjs 的 SOURCES 重抓）
+src/assets/images/surf/_source/

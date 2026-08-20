@@ -6,6 +6,7 @@ import HeroSection from "./components/sections/HeroSection";
 import AboutSection from "./components/sections/AboutSection";
 import PortfolioSection from "./components/sections/PortfolioSection";
 import SkillsSection from "./components/sections/SkillsSection";
+import LabSection from "./components/sections/LabSection";
 import ContactSection from "./components/sections/ContactSection";
 import ScrollCat from "./components/play/ScrollCat";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -16,6 +17,9 @@ import CrayonDefs from "./components/crayon/CrayonDefs";
 // 必須能渲染出完整內容；lazy 會在 SSR 只渲染 Suspense fallback、導致 hydration
 // 邊界不一致（React #419）。
 import ProjectDetailPage from "./pages/ProjectDetailPage";
+// 同步 import 的理由同上：/surf 也要進 prerender
+import SurfPage from "./pages/SurfPage";
+import ErrorBoundary, { ErrorScreen } from "./components/ErrorBoundary";
 
 // Custom Cursor Component - Using refs for smooth performance
 function CustomCursor() {
@@ -249,6 +253,7 @@ function App() {
         <HeroSection />
         <AboutSection />
         <PortfolioSection />
+        <LabSection />
         <SkillsSection />
         <ContactSection />
       </main>
@@ -266,18 +271,33 @@ function HomePage() {
 // router 內的整棵樹，抽出來讓 client(HashRouter)與 build 期 SSR(MemoryRouter)
 // 共用，確保 prerender 的 HTML 與 client hydration 完全一致
 export function AppShell() {
+  // /surf 是獨立的深色電影感 demo 頁，全站的漫畫風掛件都不該出現在上面。
+  // FloatingCat 內含右下角飼料碗選單（PetBowl），一併關掉。
+  // 用 useLocation 而非 CSS 隱藏：這些元件都有捲動 / 滑鼠監聽，
+  // 只是視覺藏起來仍會跟 ScrollTrigger 搶主執行緒。
+  const { pathname } = useLocation();
+  const isSurf = pathname === "/surf";
+
   return (
     <>
       <CrayonDefs />
       <SeoMeta />
-      <CustomCursor />
-      <FloatingCat />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/project/:id" element={<ProjectDetailPage />} />
-        {/* 未知路徑顯示 404 迷路貓（搭配 GitHub Pages 的 404.html fallback） */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      {!isSurf && <CustomCursor />}
+      {!isSurf && <FloatingCat />}
+      {/* 攔住 render 期例外。這站是靜態站沒有伺服器 500，等價的線上故障
+          就是元件拋錯導致整頁空白——沒有這層就連「出錯了」都不會顯示 */}
+      <ErrorBoundary>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/project/:id" element={<ProjectDetailPage />} />
+          <Route path="/surf" element={<SurfPage />} />
+          {/* 500 畫面的 demo 路由：它平常只有真的壞掉才看得到，
+              開一個入口才能當作品給人看，也才檢查得到樣式 */}
+          <Route path="/500" element={<ErrorScreen />} />
+          {/* 未知路徑顯示 404 迷路貓（搭配 GitHub Pages 的 404.html fallback） */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </ErrorBoundary>
     </>
   );
 }

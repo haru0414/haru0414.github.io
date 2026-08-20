@@ -20,6 +20,9 @@ export default defineConfig(({ isSsrBuild }) => ({
                 "react-i18next",
                 "i18next-browser-languagedetector",
               ],
+              // 只有 /surf 會動態 import，這裡分組是為了固定 chunk 檔名，
+              // 讓它在改動其他程式碼時仍能命中瀏覽器快取
+              gsap: ["gsap", "gsap/ScrollTrigger", "lenis"],
             },
       },
     },

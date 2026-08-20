@@ -14,6 +14,15 @@ const en = {
       career: "Career",
       contact: "Contact",
     },
+    error: {
+      tag: "ERROR 500",
+      bubble: "zzz… the server dozed off",
+      catAlt: "Onigiri asleep",
+      title: "The server nodded off",
+      desc: "The page hit a problem while loading — possibly a flaky connection or a fresh deploy. A reload usually fixes it; if not, head back home.",
+      reload: "Reload",
+      home: "Back home",
+    },
     notFound: {
       tag: "ERROR 404",
       bubble: "meow…? dead end",
@@ -80,6 +89,13 @@ const en = {
         company: "A Nice Day Technology",
         desc: "Led the frontend migration from Astro + React to Next.js 14 App Router; built a multi-step booking system, TapPay payments, LINE LIFF login, GA4 e-commerce tracking, and a WebSocket-powered live customer support chat.",
       },
+    },
+    lab: {
+      intro: "Work outside the commercial projects: a scroll-driven story page, plus two screens you normally only see when something goes wrong.",
+      enter: "ENTER →",
+      surf: { title: "Seven beats of a wave", desc: "A seven-beat GSAP ScrollTrigger narrative, with Lenis smooth scrolling on desktop." },
+      notFound: { title: "Onigiri, lost", desc: "The 404 page, drawn as a single manga panel where the paw prints stop." },
+      error: { title: "The napping server", desc: "The 500 page, same visual family as the 404 — Onigiri fell asleep." },
     },
     detail: {
       openNewTab: "Open in new tab",

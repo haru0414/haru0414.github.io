@@ -1,0 +1,302 @@
+/* /surf 專用樣式。與全站漫畫風完全隔離：色票自帶一組，不動 index.css 的 @theme。 */
+
+/* 進入 /surf 時由 useSurfScroll 對 <html> 加上，離開時移除。
+   兩條都是 ScrollTrigger 的已知衝突來源：
+   - scroll-behavior: smooth 與 ScrollTrigger 的 pin/scrub 不相容，會抖
+   - overflow-x: hidden 讓祖先建立 scroll container，pin 定位會失準；
+     改用 clip 一樣能擋橫向溢出，但不建立 scroll container */
+html.surf-mode,
+html.surf-mode body,
+html.surf-mode #root {
+  scroll-behavior: auto;
+  overflow-x: clip;
+  background: #05090c;
+}
+
+/* index.css:110 在 @layer base 內對桌機全站設 cursor: none !important
+   （原本由自訂游標接手）。/surf 不掛自訂游標，這條若不解除就完全沒有游標。
+   必須放進「同一個 layer」才蓋得掉：對 !important 宣告而言 layer 優先序是
+   反轉的——先宣告的 layer 勝出，未分層的 !important 反而最弱。
+   進到 base 之後才輪到具體度決勝，(0,1,1) 勝過 * 的 (0,0,0)。 */
+@layer base {
+  html.surf-mode *,
+  html.surf-mode *::before,
+  html.surf-mode *::after {
+    cursor: auto !important;
+  }
+  html.surf-mode a,
+  html.surf-mode button {
+    cursor: pointer !important;
+  }
+}
+
+/* 常駐返回鍵：整頁近 11000px，只有結尾有出口太難離開 */
+.surf-exit {
+  position: fixed;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  color: #e8f0f3;
+  background: rgba(5, 9, 12, 0.55);
+  border: 1px solid rgba(232, 240, 243, 0.28);
+  backdrop-filter: blur(6px);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.surf-exit:hover,
+.surf-exit:focus-visible {
+  background: rgba(5, 9, 12, 0.85);
+  border-color: #e8a03c;
+}
+
+.surf-root {
+  --surf-ink: #05090c;
+  --surf-deep: #0a1319;
+  --surf-fog: #e8f0f3;
+  --surf-dim: #8fa5ae;
+  --surf-gold: #e8a03c;
+
+  background: var(--surf-ink);
+  color: var(--surf-fog);
+  overflow-x: clip;
+}
+
+.surf-scene {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 滿版底圖。picture 要顯式 block 才能撐滿，否則 inline 會留下行高空隙 */
+.surf-bg {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.surf-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* 壓一層漸層讓白字在任何一張圖上都讀得到 */
+.surf-scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(5, 9, 12, 0.55), rgba(5, 9, 12, 0.25) 45%, rgba(5, 9, 12, 0.8));
+  pointer-events: none;
+}
+
+.surf-copy {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 1.25rem;
+  max-width: 46rem;
+}
+.surf-eyebrow {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  letter-spacing: 0.32em;
+  color: var(--surf-gold);
+  margin: 0 0 1rem;
+}
+.surf-line {
+  font-size: clamp(1.05rem, 2.6vw, 1.6rem);
+  line-height: 1.7;
+  margin: 0 0 0.75rem;
+  color: var(--surf-fog);
+  text-wrap: balance;
+}
+.surf-line--dim { color: var(--surf-dim); }
+
+/* S0 ------------------------------------------------------------------ */
+.surf-title {
+  font-family: var(--font-heading);
+  /* 與首頁 hero 同一套算式：字寬約為字級的 4.3 倍（SURF 四字元），
+     除以 4.6 留安全邊際，320px 起單行不斷字 */
+  font-size: clamp(4rem, calc((100vw - 2rem) / 4.6), 13rem);
+  line-height: 0.86;
+  letter-spacing: -0.03em;
+  /* line-height 小於 1 時行框比字身矮，後面的副標會貼上字母下緣。
+     補一段等比外距把它推開，隨字級縮放才不會在手機上又黏回去 */
+  margin: 0 0 0.32em;
+}
+/* 遮罩揭露：外層裁切，內層以 transform 位移，不逐幀改 clip-path */
+.surf-mask { display: block; overflow: hidden; }
+.surf-mask > span { display: block; }
+
+.surf-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-family: var(--font-heading);
+  font-size: 0.68rem;
+  letter-spacing: 0.3em;
+  color: var(--surf-dim);
+}
+
+/* S3 橫向捲動 --------------------------------------------------------- */
+.surf-s3 { position: relative; }
+.surf-s3-viewport {
+  position: relative;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+/* 單張寬幅平移：圖以高度撐滿視口、寬度自動，2.4:1 的比例讓它比視口寬，
+   捲動時整張水平推移。畫面連續，沒有三格並排的分割感 */
+.surf-s3-track {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+/* S3 不是 .surf-scene 的 flex 容器，文字要自己定位。
+   父層是被 pin 的 .surf-s3-viewport，所以 inset:0 等同視口範圍。
+   上下留白讓開頂部的返回鍵與底部的 HUD */
+.surf-s3-copy {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 6rem 1.5rem 5rem;
+  pointer-events: none;
+}
+/* 限制行寬讓它確實換行：窄螢幕上單行幾乎滿版，再疊上水平漂移就會被切掉 */
+.surf-s3-copy .surf-line {
+  max-width: 17rem;
+}
+@media (min-width: 641px) {
+  .surf-s3-copy .surf-line {
+    max-width: 28rem;
+  }
+}
+.surf-s3-copy .surf-line,
+.surf-s3-copy .surf-eyebrow {
+  text-shadow: 0 2px 14px rgba(5, 9, 12, 0.95);
+}
+
+.surf-s3-track picture,
+.surf-s3-track img {
+  height: 100svh;
+  width: auto;
+  max-width: none;
+  display: block;
+}
+
+/* S4 浪唇前景層 ------------------------------------------------------- */
+/* 原本用圓形遮罩擴張，實際跑出來只是一個突兀的圓，讀不出「浪罩下來」。
+   改用去背的浪唇當前景：與底圖速度不同，靠遮擋關係造出真的景深。 */
+.surf-scene::after { z-index: 1; }
+.surf-s4 .surf-copy { z-index: 3; }
+/* 浪唇的白色泡沫會蓋在文字後面，純白字會整個消失。
+   用深色投影拉出邊界，比加半透明底板乾淨，也不會擋住浪的紋理 */
+.surf-s4 .surf-line,
+.surf-s4 .surf-eyebrow {
+  text-shadow: 0 2px 14px rgba(5, 9, 12, 0.95), 0 0 42px rgba(5, 9, 12, 0.8);
+}
+
+.surf-s4-lip {
+  position: absolute;
+  z-index: 2;
+  /* 比視口大一圈，位移時邊緣才不會露出畫面外的空白 */
+  left: -10%;
+  width: 120%;
+  bottom: -8%;
+  /* 高度改用視口比例而非圖片長寬比：原本 height:auto 在窄螢幕上算出來
+     只有約 96vw 高，蓋不滿 100svh 的場景，就露出一條橫帶 */
+  height: 76%;
+  display: block;
+  pointer-events: none;
+  /* 去背圖只有左上角透明，上緣仍是不透明的浪體，直接切會是一刀直邊。
+     用遮罩讓上緣淡出，任何視口比例下都不會出現硬邊 */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 22%);
+}
+.surf-s4-lip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  display: block;
+}
+
+/* S6 ------------------------------------------------------------------ */
+.surf-back {
+  display: inline-block;
+  margin-top: 1.75rem;
+  padding: 0.7rem 1.6rem;
+  border: 1px solid var(--surf-gold);
+  color: var(--surf-gold);
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.surf-back:hover,
+.surf-back:focus-visible {
+  background: var(--surf-gold);
+  color: var(--surf-ink);
+}
+.surf-root :focus-visible { outline: 2px solid var(--surf-gold); outline-offset: 3px; }
+
+/* 固定 HUD：跨越八個獨立 ScrollTrigger 維持單一狀態，由 onUpdate 驅動。
+   同時解決「捲到一半不知道自己在哪、還有多長」的問題 */
+.surf-hud {
+  position: fixed;
+  left: 1.25rem;
+  bottom: 1.5rem;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-heading);
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  color: rgba(232, 240, 243, 0.75);
+  pointer-events: none;
+}
+.surf-hud-ep { min-width: 8.5rem; }
+.surf-hud-rail {
+  width: min(30vw, 12rem);
+  height: 2px;
+  background: rgba(232, 240, 243, 0.22);
+  overflow: hidden;
+}
+.surf-hud-fill {
+  height: 100%;
+  width: 100%;
+  background: var(--surf-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.surf-credit {
+  padding: 3rem 1.25rem 4rem;
+  text-align: center;
+  color: var(--surf-dim);
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surf-back { transition: none; }
+}
