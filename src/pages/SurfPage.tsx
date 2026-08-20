@@ -84,12 +84,16 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
     scrollTrigger: { trigger: ".surf-s0", start: "top top", end: "+=240", scrub: true },
   });
 
+  // 覆蓋規則：底圖任何時刻的 scale 都必須大於「最大位移 + 旋轉所需的額外
+  // 覆蓋」，否則圖會被推出自身範圍、露出頁面底色。旋轉 θ 度時額外需要約
+  // cos θ + (高/寬)·sin θ。以下每一幕的數字都依此保留餘裕。
+
   // ── S1 Paddle Out：空拍俯視，緩慢旋轉 + 拉遠成全景 ────────
   gsap.fromTo(
     ".surf-s1 .surf-bg",
-    { scale: 1.5, rotation: -4 },
+    { scale: 1.55, rotation: -4 },
     {
-      scale: 1.05,
+      scale: 1.16,
       rotation: 2,
       ease: "none",
       scrollTrigger: { trigger: ".surf-s1", start: "top bottom", end: "bottom top", scrub: true },
@@ -167,7 +171,13 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
     scrub: true,
     animation: gsap
       .timeline()
-      .fromTo(".surf-s4 .surf-bg", { scale: 1.14, yPercent: -3 }, { scale: 1, yPercent: 3, ease: "none" }, 0)
+      .fromTo(
+        ".surf-s4 .surf-bg",
+        // 結尾原本是 scale 1 配 yPercent 3，位移沒有縮放餘裕可用，會露邊
+        { scale: 1.2, yPercent: -3 },
+        { scale: 1.1, yPercent: 3, ease: "none" },
+        0,
+      )
       .fromTo(
         ".surf-s4-lip",
         { yPercent: 108, opacity: 0, scale: 1.18 },
@@ -190,8 +200,9 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
       .timeline()
       .fromTo(
         ".surf-s5 .surf-bg",
-        { yPercent: -12, scale: 1.04, rotation: 3 },
-        { yPercent: 16, scale: 1.42, rotation: -2, ease: "none" },
+        // 位移 ±8%、旋轉 3 度 → 全程 scale 需 ≥ 1.14，起始給到 1.24 留餘裕
+        { yPercent: -8, scale: 1.24, rotation: 3 },
+        { yPercent: 8, scale: 1.62, rotation: -2, ease: "none" },
         0,
       )
       .fromTo(".surf-s5-veil", { opacity: 0 }, { opacity: 0.78, ease: "none" }, 0)
@@ -220,8 +231,11 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
       .timeline()
       .fromTo(
         ".surf-s6 .surf-bg",
-        { yPercent: 16, scale: 1.26, rotationX: 18, opacity: 0.3, transformOrigin: "50% 100%" },
-        { yPercent: -4, scale: 1.06, rotationX: 0, opacity: 1, ease: "none", duration: 0.62 },
+        // transformOrigin 必須是中心：用底部原點時縮放只往上長、下緣位置不動，
+        // scale 在底部完全沒留餘裕，yPercent 一往上移就露出下緣。
+        // rotationX 18 度配 perspective 還會讓上緣透視收縮約 15%，故起始 scale 給到 1.55
+        { yPercent: 8, scale: 1.55, rotationX: 16, opacity: 0.3, transformOrigin: "50% 50%" },
+        { yPercent: -4, scale: 1.22, rotationX: 0, opacity: 1, ease: "none", duration: 0.62 },
         0,
       )
       .fromTo(
@@ -244,8 +258,9 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
       .timeline()
       .fromTo(
         ".surf-s7 .surf-bg",
-        { yPercent: -8, scale: 1.16 },
-        { yPercent: 6, scale: 1.04, ease: "none", duration: 1 },
+        // 位移 ±6% → 全程 scale 需 ≥ 1.12；原本結尾 1.04 覆蓋不了，上緣會露黑邊
+        { yPercent: -6, scale: 1.24 },
+        { yPercent: 6, scale: 1.14, ease: "none", duration: 1 },
         0,
       )
       .fromTo(
