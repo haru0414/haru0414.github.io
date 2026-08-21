@@ -87,6 +87,9 @@
     --color-badge-red: #c0362c; /* 白字 ≈ 4.9:1 */
     --color-badge-teal: #2f5c68; /* 白字 ≈ 7:1 */
     --color-on-poster: #1a2332; /* poster 黃底上的固定深字 */
+    /* panel 深底上的固定淺字。不能用 --color-paper——它在深色模式會變成
+       深色（#222a38），疊在同樣深的 panel 上就讀不到了 */
+    --color-on-panel: #f5f0e4;
   }
 
   /* 深色模式（漫畫夜讀版）：建立層次 —— 頁面最深、卡片抬高一階、

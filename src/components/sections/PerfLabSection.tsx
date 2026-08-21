@@ -76,7 +76,7 @@ export default function PerfLabSection() {
                   style={{
                     fontFamily: "monospace",
                     backgroundColor: "var(--color-panel)",
-                    color: "var(--color-paper)",
+                    color: "var(--color-on-panel)",
                   }}
                 >
                   {tag}

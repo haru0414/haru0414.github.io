@@ -140,7 +140,7 @@ export default function MemoDemo() {
               style={{
                 fontFamily: "monospace",
                 backgroundColor: "var(--color-panel)",
-                color: "var(--color-paper)",
+                color: "var(--color-on-panel)",
               }}
             >
               useMemo
