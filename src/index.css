@@ -49,6 +49,28 @@
   --shadow-manga-hover: 9px 9px 0px 0px #1A2332;
 }
 
+/* PERF LAB 的捲動載入列表：新資料逐筆淡入 */
+@keyframes perf-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  @keyframes perf-row-in {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
 @layer base {
   /* 語意化色票（淺色預設）：
      bg = 頁面背景、surface = 卡片表面、muted = 說明文字 */

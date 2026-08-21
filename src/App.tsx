@@ -7,6 +7,7 @@ import AboutSection from "./components/sections/AboutSection";
 import PortfolioSection from "./components/sections/PortfolioSection";
 import SkillsSection from "./components/sections/SkillsSection";
 import LabSection from "./components/sections/LabSection";
+import PerfLabSection from "./components/sections/PerfLabSection";
 import ContactSection from "./components/sections/ContactSection";
 import ScrollCat from "./components/play/ScrollCat";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -253,6 +254,7 @@ function App() {
         <HeroSection />
         <AboutSection />
         <PortfolioSection />
+        <PerfLabSection />
         <LabSection />
         <SkillsSection />
         <ContactSection />
