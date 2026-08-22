@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { RotateCw } from "lucide-react";
 
 const NAMES = [
   "build", "prerender", "optimize-images", "lint",
@@ -59,7 +60,7 @@ function RowBase({ task, onRerun }: RowProps) {
       </span>
       <span className="min-w-0 flex-1 truncate">{task.name}</span>
       <span className="shrink-0 text-[10px]" style={{ color: "var(--color-teal)" }} aria-hidden="true">
-        ↻
+        <RotateCw size={11} aria-hidden="true" />
       </span>
       <span className="w-14 shrink-0 text-right tabular-nums">{task.ms} ms</span>
       {/* 這個數字由 effect 直接寫入，是真的渲染次數 */}

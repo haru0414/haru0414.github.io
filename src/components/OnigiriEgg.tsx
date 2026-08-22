@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import catCover from "../assets/images/onigiri/cover.webp";
 
@@ -58,7 +59,7 @@ export default function OnigiriEgg({ onClose }: OnigiriEggProps) {
             style={{ fontFamily: "var(--font-heading)" }}
             aria-label={t("egg.close")}
           >
-            ✕
+            <X size={14} aria-hidden="true" />
           </button>
         </div>
         <img

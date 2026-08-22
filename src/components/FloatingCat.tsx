@@ -1,25 +1,35 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
 import { changeLanguage } from "../i18n";
 import catCover from "../assets/images/onigiri/cover.webp";
 import PetBowl from "./play/PetBowl";
+import { ArrowUp, Moon, PawPrint, Sun } from "lucide-react";
 
 // 浮動「常駐監工」多功能鈕：點飯糰貼紙展開選單，
 // 收納主題切換（夜讀／日讀版）與回到頂部，避免與頂部導覽列重疊。
+/**
+ * 主題狀態直接訂閱 <html> 的 class，而不是另外存一份 state 再用 effect 校正。
+ * 那種寫法會多觸發一次渲染，也違反「不要在 effect 裡同步 setState」的規則。
+ */
+const htmlTheme = {
+  subscribe(onChange: () => void) {
+    const ob = new MutationObserver(onChange);
+    ob.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => ob.disconnect();
+  },
+  get: (): "light" | "dark" =>
+    document.documentElement.classList.contains("dark") ? "dark" : "light",
+  getServer: (): "light" | "dark" => "light",
+};
+
 export default function FloatingCat() {
   const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  // 初次 render 一律 light，與 prerender 快照一致（避免 hydration mismatch）；
-  // mount 後再用 effect 校正成 <html> 上的實際主題
-  const [theme, setTheme] = useState<"light" | "dark">("light");
   const rootRef = useRef<HTMLDivElement>(null);
+  // 主題的真實來源是 <html> 上的 class，直接訂閱它而不另外存一份 state。
+  // getServerSnapshot 回 light，與 prerender 快照一致（避免 hydration mismatch）
+  const theme = useSyncExternalStore(htmlTheme.subscribe, htmlTheme.get, htmlTheme.getServer);
   const isDark = theme === "dark";
-
-  useEffect(() => {
-    if (document.documentElement.classList.contains("dark")) {
-      setTheme("dark");
-    }
-  }, []);
 
   // 開啟時：點面板外或按 Esc 都關閉
   useEffect(() => {
@@ -42,7 +52,7 @@ export default function FloatingCat() {
 
   const toggleTheme = () => {
     const next = isDark ? "light" : "dark";
-    setTheme(next);
+    // 只改 class，訂閱者會自動收到通知，不必再同步一份 state
     document.documentElement.classList.toggle("dark", next === "dark");
     try {
       localStorage.setItem("theme", next);
@@ -108,7 +118,8 @@ export default function FloatingCat() {
                 ONIGIRI
               </span>
               <span className="text-[10px] text-white/70">
-                {t("menu.role")} 🐾
+                {t("menu.role")}
+                <PawPrint size={13} className="ml-1 inline-block align-[-1px]" aria-hidden="true" />
               </span>
             </div>
           </div>
@@ -121,7 +132,7 @@ export default function FloatingCat() {
             style={{ fontFamily: "var(--font-heading)" }}
           >
             <span className="text-base w-5 text-center">
-              {isDark ? "☀︎" : "☾"}
+              {isDark ? <Sun size={15} aria-hidden="true" /> : <Moon size={15} aria-hidden="true" />}
             </span>
             {isDark ? t("menu.light") : t("menu.dark")}
           </button>
@@ -148,7 +159,7 @@ export default function FloatingCat() {
               borderColor: "var(--color-ink)",
             }}
           >
-            <span className="text-base w-5 text-center">↑</span>
+            <span className="flex w-5 justify-center"><ArrowUp size={14} aria-hidden="true" /></span>
             {t("menu.top")}
           </button>
 

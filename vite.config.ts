@@ -1,10 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+// @ts-expect-error 純 JS plugin，無型別宣告
+import markdown from "./scripts/vite-plugin-markdown.mjs";
 
 // https://vite.dev/config/
 export default defineConfig(({ isSsrBuild }) => ({
-  plugins: [react(), tailwindcss()],
+  plugins: [markdown(), react(), tailwindcss()],
   build: {
     rollupOptions: {
       output: {

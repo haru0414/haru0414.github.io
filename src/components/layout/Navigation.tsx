@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 // id 對應頁面區塊、navKey 對應 i18n 字典裡 nav.* 的鍵
 const sections = [
@@ -49,7 +50,10 @@ export default function Navigation() {
 
   return (
     <>
-      <nav className="fixed top-6 left-0 right-0 z-50 flex justify-center pointer-events-none">
+      <nav
+        aria-label={t("a11y.mainNav")}
+        className="fixed top-6 left-0 right-0 z-50 flex justify-center pointer-events-none"
+      >
         <div
           className="bg-white border-2 px-6 py-3 flex items-center gap-3 pointer-events-auto rounded-full"
           style={{
@@ -124,6 +128,16 @@ export default function Navigation() {
               )}
             </div>
           ))}
+
+          {/* 外部路由，與站點捲動是不同機制，用分隔線與字樣區隔開 */}
+          <span className="mx-1 h-4 w-0.5" style={{ backgroundColor: "var(--color-ink)", opacity: 0.3 }} aria-hidden="true" />
+          <Link
+            to="/blog"
+            className="px-1 text-[11px] tracking-[0.1em] no-underline transition-colors hover:text-(--color-nekoma)"
+            style={{ fontFamily: "var(--font-heading)", color: "var(--color-ink)" }}
+          >
+            NOTES
+          </Link>
         </div>
       </nav>
     </>

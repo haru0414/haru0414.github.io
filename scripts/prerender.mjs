@@ -25,7 +25,7 @@ const escAttr = (s = "") =>
 const escText = (s = "") =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-function buildHtml({ html, title, description, canonical }) {
+function buildHtml({ html, title, description, canonical, jsonLd, image }) {
   let out = template.replace(
     '<div id="root"></div>',
     `<div id="root">${html}</div>`,
@@ -49,6 +49,22 @@ function buildHtml({ html, title, description, canonical }) {
   }
   // canonical link
   setAttr(/(<link rel="canonical" href=")([^"]*)(")/, canonical);
+
+  // 每篇文章可以有自己的分享圖。沒設就沿用站台預設圖，
+  // 社群平台一律要絕對網址，相對路徑抓不到
+  if (image) {
+    setAttr(/(<meta\s+property="og:image"\s+content=")([^"]*)(")/, image);
+    setAttr(/(<meta\s+name="twitter:image"\s+content=")([^"]*)(")/, image);
+  }
+
+  // 結構化資料：讓搜尋引擎知道這是誰寫的、是什麼類型的內容。
+  // 注入靜態 HTML 而非由 React 渲染——爬蟲讀的是這份檔案
+  if (jsonLd) {
+    out = out.replace(
+      "</head>",
+      `    <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>\n  </head>`,
+    );
+  }
   return out;
 }
 
@@ -68,6 +84,24 @@ for (const route of routes) {
   writeFileSync(file, out);
   count++;
 }
+
+// sitemap.xml：路由清單由 entry-server 匯出，不必另外維護一份，
+// 新增頁面或文章時不會忘記更新
+const ORIGIN = "https://www.haruli.com";
+const today = new Date().toISOString().slice(0, 10);
+const urls = routes
+  .map((r) => {
+    const loc = r === "/" ? `${ORIGIN}/` : `${ORIGIN}${r}/`;
+    // 首頁最常變動，文章次之，狀態頁最低
+    const priority = r === "/" ? "1.0" : r.startsWith("/blog") ? "0.8" : "0.6";
+    return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <priority>${priority}</priority>\n  </url>`;
+  })
+  .join("\n");
+writeFileSync(
+  join(DIST, "sitemap.xml"),
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
+);
+console.log(`✅ sitemap.xml：${routes.length} 個網址`);
 
 // GitHub Pages 對未知路徑的 fallback：用「空 root」模板（非 prerender 版），
 // 載入時走 client createRoot 乾淨渲染當前路由，避免與首頁 SSR 內容 hydration

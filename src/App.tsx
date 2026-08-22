@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState, useRef } from "react";
+import { useEffect, useLayoutEffect, useState, useRef, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Navigation from "./components/layout/Navigation";
@@ -20,18 +20,33 @@ import ProjectDetailPage from "./pages/ProjectDetailPage";
 // 同步 import 的理由同上：/surf 也要進 prerender
 import SurfPage from "./pages/SurfPage";
 import LabPage from "./pages/LabPage";
+import BlogPage from "./pages/BlogPage";
+import BlogPostPage from "./pages/BlogPostPage";
 import ErrorBoundary, { ErrorScreen } from "./components/ErrorBoundary";
+
+// 訂閱指標型態。用 useSyncExternalStore 而非「effect 內 setState」：
+// 後者會多觸發一次渲染，也違反 React 的規則；這個寫法還順帶支援
+// 裝置中途改變（例如接上滑鼠的平板）
+const coarsePointer = {
+  subscribe(onChange: () => void) {
+    const mq = window.matchMedia("(pointer: coarse)");
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  },
+  get: () => window.matchMedia("(pointer: coarse)").matches,
+  // SSR 期間沒有指標可問，維持與原本一致的桌機預設
+  getServer: () => false,
+};
 
 // Custom Cursor Component - Using refs for smooth performance
 function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const [isHovering, setIsHovering] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(true);
-
-  useEffect(() => {
-    // Check if device supports hover (desktop)
-    setIsDesktop(!window.matchMedia("(pointer: coarse)").matches);
-  }, []);
+  const isDesktop = !useSyncExternalStore(
+    coarsePointer.subscribe,
+    coarsePointer.get,
+    coarsePointer.getServer,
+  );
 
   useEffect(() => {
     if (!isDesktop) return;
@@ -381,6 +396,11 @@ export function AppShell() {
           <Route path="/project/:id" element={<ProjectDetailPage />} />
           <Route path="/surf" element={<SurfPage />} />
           <Route path="/lab" element={<LabPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          {/* 看板路由必須排在文章路由之前，否則 /blog/board/x 會被
+              當成 slug 為 "board" 的文章 */}
+          <Route path="/blog/board/:board" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
           {/* 500 畫面的 demo 路由：它平常只有真的壞掉才看得到，
               開一個入口才能當作品給人看，也才檢查得到樣式 */}
           <Route path="/500" element={<ErrorScreen />} />
