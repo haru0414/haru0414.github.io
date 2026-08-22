@@ -1,0 +1,1 @@
+(function(){"use strict";function r(n){let t=0;for(let e=2;e<=n;e++){let o=!0;for(let s=2;s*s<=e;s++)if(e%s===0){o=!1;break}o&&t++}return t}self.onmessage=n=>{const t=performance.now(),e=r(n.data);self.postMessage({result:e,ms:performance.now()-t})}})();
