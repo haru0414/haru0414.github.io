@@ -14,6 +14,7 @@ export const routes: string[] = [
   ...projects.map((p) => `/project/${p.id}`),
   "/surf",
   "/500",
+  "/lab",
 ];
 
 function metaFor(url: string) {
@@ -34,6 +35,14 @@ function metaFor(url: string) {
       description:
         "以 GSAP ScrollTrigger 編排的單頁捲動敘事：七幕分鏡走完一次出海，桌機另接 Lenis 平滑捲動。攝影素材採 Unsplash 免費授權。",
       canonical: `${ORIGIN}/surf/`,
+    };
+  }
+  if (url === "/lab") {
+    return {
+      title: "PERF LAB｜可操作的前端效能實作 Haru Li",
+      description:
+        "useMemo 快取、捲動延遲載入、Suspense 等待資料——三個可以自己操作的前端效能實作，數字當場量出來。",
+      canonical: `${ORIGIN}/lab/`,
     };
   }
   if (url === "/500") {

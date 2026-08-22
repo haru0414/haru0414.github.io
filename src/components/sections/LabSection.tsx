@@ -6,6 +6,7 @@ import CrayonDoodle from "../crayon/CrayonDoodle";
 // 非商業案的實驗與狀態頁。獨立成一區而非混進專案列表：
 // 專案區是求職主訴求，把 demo 混進去會稀釋它。
 const ENTRIES = [
+  { to: "/lab", key: "perf", badge: "PLAYGROUND", code: "PERF", accent: "#6366f1" },
   { to: "/surf", key: "surf", badge: "EXPERIMENT", code: "SURF", accent: "var(--color-teal)" },
   { to: "/404-demo", key: "notFound", badge: "STATE", code: "404", accent: "var(--color-nekoma)" },
   { to: "/500", key: "error", badge: "STATE", code: "500", accent: "var(--color-poster)" },
@@ -54,7 +55,7 @@ export default function LabSection() {
           {t("lab.intro")}
         </p>
 
-        <div className="grid w-full max-w-4xl gap-6 sm:grid-cols-3">
+        <div className="grid w-full max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {ENTRIES.map((e, i) => (
             <Link
               key={e.to}
