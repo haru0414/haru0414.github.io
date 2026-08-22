@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import CrayonDoodle from "../crayon/CrayonDoodle";
+import { DEMOS } from "../perf/registry";
 
 // 非商業案的實驗與狀態頁。獨立成一區而非混進專案列表：
 // 專案區是求職主訴求，把 demo 混進去會稀釋它。
@@ -89,7 +90,7 @@ export default function LabSection() {
                 </span>
                 <h3 className="text-base font-medium">{t(`lab.${e.key}.title`)}</h3>
                 <p className="text-sm leading-relaxed" style={{ color: "var(--color-muted)" }}>
-                  {t(`lab.${e.key}.desc`)}
+                  {t(`lab.${e.key}.desc`, { n: DEMOS.length })}
                 </p>
                 <span
                   className="mt-auto pt-2 text-[11px] tracking-[0.15em] underline underline-offset-4"

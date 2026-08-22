@@ -215,7 +215,7 @@ const zh = {
       intro: "商業案之外的東西：一頁式捲動敘事，以及平常只有走錯路或出錯才看得到的兩個畫面。",
       enter: "ENTER →",
       back: "返回作品集",
-      perf: { title: "效能實驗室", desc: "十個可以自己操作的前端效能實作，數字當場量出來。" },
+      perf: { title: "效能實驗室", desc: "{{n}} 個可以自己操作的前端效能實作，數字當場量出來。" },
       surf: { title: "浪的七幕", desc: "GSAP ScrollTrigger 七幕捲動敘事，桌機另接 Lenis 平滑捲動。" },
       notFound: { title: "迷路的飯糰", desc: "404 頁。做成一格漫畫分鏡，貓的腳印停在這裡。" },
       error: { title: "打瞌睡的伺服器", desc: "500 頁。與 404 同一視覺家族，飯糰睡著了。" },

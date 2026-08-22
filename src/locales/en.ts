@@ -217,7 +217,7 @@ const en = {
       intro: "Work outside the commercial projects: a scroll-driven story page, plus two screens you normally only see when something goes wrong.",
       enter: "ENTER →",
       back: "back to portfolio",
-      perf: { title: "Performance lab", desc: "Ten frontend performance techniques you can drive yourself, measured live." },
+      perf: { title: "Performance lab", desc: "{{n}} frontend performance techniques you can drive yourself, measured live." },
       surf: { title: "Seven beats of a wave", desc: "A seven-beat GSAP ScrollTrigger narrative, with Lenis smooth scrolling on desktop." },
       notFound: { title: "Onigiri, lost", desc: "The 404 page, drawn as a single manga panel where the paw prints stop." },
       error: { title: "The napping server", desc: "The 500 page, same visual family as the 404 — Onigiri fell asleep." },

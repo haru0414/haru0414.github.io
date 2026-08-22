@@ -41,8 +41,8 @@ function ScanRow({
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex items-center gap-2">
-        <span className="w-24 shrink-0 text-[10px]" style={{ fontFamily: "monospace", color }}>
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+        <span className="shrink-0 text-[10px] sm:w-24" style={{ fontFamily: "monospace", color }}>
           {label}
         </span>
         <div className="flex flex-1 gap-0.5">
@@ -61,7 +61,7 @@ function ScanRow({
           ))}
         </div>
       </div>
-      <span className="text-[10px]" style={{ color: "var(--color-muted)", paddingLeft: "6.5rem" }}>
+      <span className="text-[10px] sm:pl-[6.5rem]" style={{ color: "var(--color-muted)" }}>
         {note}
       </span>
     </div>
@@ -75,7 +75,9 @@ const SNIPPETS = [
     color: "var(--color-nekoma)",
     lines: [
       "orders.map(o =>",
-      "  users.find(u => u.id === o.userId)",
+      "  users.find(",
+      "    u => u.id === o.userId",
+      "  )",
       ")",
     ],
   },
@@ -86,7 +88,9 @@ const SNIPPETS = [
       "const index = new Map(",
       "  users.map(u => [u.id, u])",
       ")",
-      "orders.map(o => index.get(o.userId))",
+      "orders.map(o =>",
+      "  index.get(o.userId)",
+      ")",
     ],
   },
 ] as const;
@@ -94,7 +98,10 @@ const SNIPPETS = [
 function CodeCompare() {
   const { t } = useTranslation();
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
+    // 用容器查詢而非視窗斷點：這塊的可用寬度取決於外層 demo 欄，
+    // 而那一欄的寬度隨文章版面變化。用 lg/xl 這類視窗斷點總會在某個
+    // 尺寸剛好切成兩欄卻不夠寬（1024 就是這樣被截斷的）
+    <div className="@3xl:grid-cols-2 grid gap-3">
       {SNIPPETS.map(({ key, color, lines }) => (
         <div key={key} className="flex flex-col gap-1.5">
           <span className="text-[10px]" style={{ fontFamily: "monospace", color }}>
@@ -209,7 +216,7 @@ export default function LookupDemo() {
   ] as const;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="@container flex flex-col gap-4">
       <div
         className="flex flex-col gap-3 border-2 p-4"
         style={{ backgroundColor: "var(--color-surface)", borderColor: "var(--color-ink)" }}
@@ -233,7 +240,7 @@ export default function LookupDemo() {
           {rows.map(({ key, res, color }) => (
             <div key={key} className="flex flex-col gap-1">
               <div className="flex items-center gap-2 text-[11px]">
-                <span className="w-28 shrink-0" style={{ fontFamily: "monospace", color }}>
+                <span className="w-20 shrink-0 sm:w-28" style={{ fontFamily: "monospace", color }}>
                   {t(`perf.lookup.${key}`)}
                 </span>
                 <span
@@ -249,7 +256,7 @@ export default function LookupDemo() {
                   {res ? `${res.ms.toFixed(1)} ms` : "—"}
                 </span>
               </div>
-              <span className="pl-28 text-[10px] tabular-nums" style={{ color: "var(--color-muted)" }}>
+              <span className="pl-20 text-[10px] tabular-nums sm:pl-28" style={{ color: "var(--color-muted)" }}>
                 {res ? t("perf.lookup.ops", { n: res.ops.toLocaleString() }) : ""}
               </span>
             </div>
