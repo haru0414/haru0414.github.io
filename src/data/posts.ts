@@ -6,19 +6,45 @@
  *
  * 新增一篇文章 = 新增一個 .md 檔，不必動程式碼。
  */
-/** 沒有專屬封面時的預設縮圖 */
-export const DEFAULT_COVER = "/blog/default-cover.webp";
+/**
+ * 一張圖的所有輸出格式，由建置期的 markdown plugin 解析。
+ *
+ * avif / webp 是 srcset 字串；沒跑過 `npm run images:blog` 的圖會是空字串，
+ * 這時 <ResponsiveImg> 就退回單純的 <img>。
+ */
+export type ResponsiveImage = {
+  /** 不支援 srcset 時的 <img src> */
+  src: string;
+  avif: string;
+  webp: string;
+  width: number | null;
+  height: number | null;
+  /** 社群分享卡用的實體檔案（爬蟲對 AVIF 支援參差，一律給 WebP） */
+  og: string;
+};
+
+/**
+ * 沒有專屬封面時的預設縮圖。
+ *
+ * 變體清單寫死在這裡，因為它不屬於任何一篇文章、沒有 frontmatter 可解析。
+ * 換圖時記得重跑 `npm run images:blog` 並對照這裡的寬度。
+ */
+const DEFAULT_COVER_WIDTHS = [160, 400, 768];
+export const DEFAULT_COVER: ResponsiveImage = {
+  src: "/blog/default-cover-768.webp",
+  avif: DEFAULT_COVER_WIDTHS.map((w) => `/blog/default-cover-${w}.avif ${w}w`).join(", "),
+  webp: DEFAULT_COVER_WIDTHS.map((w) => `/blog/default-cover-${w}.webp ${w}w`).join(", "),
+  width: 800,
+  height: 800,
+  og: "/blog/default-cover-768.webp",
+};
 
 type Loaded = {
   meta: Record<string, string>;
   html: string;
   headings: { id: string; text: string }[];
   chars: number;
-  /** 封面圖，用於社群分享卡與列表縮圖。放在 public/ 底下的絕對路徑 */
-  cover: string | null;
-  /** 列表縮圖。沒設封面時退回飯糰預設圖，列表才不會一格有圖一格空著 */
-  thumb: string;
-  coverAlt: string;
+  cover: ResponsiveImage | null;
 };
 
 // eager：prerender 需要同步取得全部文章（產生列表頁與每篇的靜態 HTML）
@@ -37,16 +63,18 @@ export type Post = {
   minutes: number;
   headings: { id: string; text: string }[];
   chars: number;
-  /** 封面圖，用於社群分享卡與列表縮圖。放在 public/ 底下的絕對路徑 */
+  /** 社群分享卡用的封面路徑。沒設封面時為 null，改用站台預設 og 圖 */
   cover: string | null;
+  /** 文章頁頂端的封面圖 */
+  coverImage: ResponsiveImage | null;
   /** 列表縮圖。沒設封面時退回飯糰預設圖，列表才不會一格有圖一格空著 */
-  thumb: string;
+  thumbImage: ResponsiveImage;
   coverAlt: string;
 };
 
 export const posts: Post[] = Object.entries(files)
   .map(([path, mod]) => {
-    const { meta, html, headings, chars } = mod;
+    const { meta, html, headings, chars, cover } = mod;
     return {
       slug: meta.slug || path.split("/").pop()!.replace(/\.md$/, ""),
       title: meta.title ?? "(未命名)",
@@ -56,8 +84,10 @@ export const posts: Post[] = Object.entries(files)
       html,
       headings,
       chars,
-      cover: meta.cover ?? null,
-      thumb: meta.cover ?? DEFAULT_COVER,
+      // og:image 要指向確定被部署的檔案——原圖放在 _source/ 不會進 dist
+      cover: cover?.og ?? null,
+      coverImage: cover,
+      thumbImage: cover ?? DEFAULT_COVER,
       coverAlt: meta.coverAlt ?? meta.title ?? "",
       // 中文沒有空格分詞，用字元數估算比 split(" ") 準得多
       minutes: Math.max(1, Math.round(chars / 450)),

@@ -8,6 +8,7 @@ import catCover from "../assets/images/onigiri/cover.webp";
 import { boardSlug, getPost, posts } from "../data/posts";
 import NotFoundPage from "./NotFoundPage";
 import "./blog.css";
+import ResponsiveImg from "../components/ResponsiveImg";
 
 export default function BlogPostPage() {
   const { t } = useTranslation();
@@ -173,14 +174,12 @@ export default function BlogPostPage() {
           </header>
 
           {/* 內容來自自家 repo 的 markdown 檔，非使用者輸入 */}
-          {post.cover && (
-            <img
-              src={post.cover}
+          {post.coverImage && (
+            <ResponsiveImg
+              image={post.coverImage}
               alt={post.coverAlt}
-              width={1200}
-              height={630}
-              loading="eager"
-              decoding="async"
+              sizes="(min-width: 1024px) 520px, calc(100vw - 2rem)"
+              eager
               className="mb-6 w-full border-2 object-cover"
               style={{ borderColor: "var(--color-ink)", aspectRatio: "1200 / 630" }}
             />

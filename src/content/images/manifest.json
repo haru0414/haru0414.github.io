@@ -1,0 +1,20 @@
+{
+  "/blog/cat.jpg": {
+    "width": 1000,
+    "height": 1000,
+    "widths": [
+      160,
+      400,
+      768
+    ]
+  },
+  "/blog/default-cover.webp": {
+    "width": 800,
+    "height": 800,
+    "widths": [
+      160,
+      400,
+      768
+    ]
+  }
+}

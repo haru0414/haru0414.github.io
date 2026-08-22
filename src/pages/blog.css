@@ -98,6 +98,25 @@
   font-size: 0.8rem;
 }
 
+/* 內文圖片。只限制上限，不強制撐滿——行內的小圖示照自己的尺寸顯示 */
+.blog-prose img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 自成一段的圖才當作插圖：撐滿欄寬並加外框。哪張算插圖由建置期的
+   markdown plugin 標記，CSS 分辨不出來（:only-child 不數文字節點）。
+   picture 預設是 inline，要設成 block 才不會留下行高空隙 */
+.blog-prose .prose-figure {
+  display: block;
+  width: 100%;
+  border: 2px solid var(--color-ink);
+}
+.blog-prose picture.prose-figure > img {
+  display: block;
+  width: 100%;
+}
+
 .blog-prose blockquote {
   border-left: 3px solid var(--color-nekoma);
   padding-left: 1rem;

@@ -6,6 +6,7 @@ import CrayonDoodle from "../components/crayon/CrayonDoodle";
 import { Search } from "lucide-react";
 import { AuthorCard } from "../components/blog/BlogSidebar";
 import { allBoards, boardFromSlug, boardSlug, posts } from "../data/posts";
+import ResponsiveImg from "../components/ResponsiveImg";
 
 const PER_PAGE = 10;
 
@@ -127,11 +128,10 @@ export default function BlogPage() {
                           borderColor: "color-mix(in srgb, var(--color-ink) 22%, transparent)",
                         }}
                       >
-                        <img
-                          src={post.thumb}
+                        <ResponsiveImg
+                          image={post.thumbImage}
                           alt=""
-                          loading="lazy"
-                          decoding="async"
+                          sizes="(min-width: 640px) 60px, 52px"
                           className="h-full w-full object-cover"
                         />
                       </span>

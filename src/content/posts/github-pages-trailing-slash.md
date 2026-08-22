@@ -3,6 +3,8 @@ title: 一個不存在的 bug，和一個真的 bug
 date: 2026-08-20
 summary: GitHub Pages 對子路由會 301 加上尾斜線。這件事同時讓我漏掉一個真的 bug，又追了一個假的效能問題——兩者是同一件事的一體兩面。
 tags: GitHub Pages, 除錯, 效能
+cover:/blog/cat.jpg
+coverAlt:貓貓封面圖
 ---
 
 替作品集加了一頁 GSAP 捲動敘事之後，我量到首屏傳輸量 767 KB，其中 **424 KB 是首頁才會用到的素材**——關於頁的人像照、貓咪動畫的 sprite。那些東西在衝浪頁上根本不會顯示。

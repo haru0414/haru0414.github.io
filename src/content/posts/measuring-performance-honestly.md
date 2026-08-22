@@ -3,6 +3,8 @@ title: 做十個效能 demo，發現量測本身也會騙人
 date: 2026-08-22
 summary: 為作品集做了十個可以自己操作的前端效能展示。過程中換了三種量測方式才拿到能用的數字，也砍掉兩個做出來但差距不夠說服人的題目。
 tags: 效能, React, 量測
+cover:/blog/cat.jpg
+coverAlt:貓貓封面圖
 ---
 
 我想在作品集裡放一區「可以自己點的效能展示」——數字當場跑出來，不是截圖。做完十個之後，最大的收穫不是那些技法，而是**量測本身有多容易出錯**。
@@ -44,7 +46,7 @@ React 在正式建置會把 profiling 相關的程式碼移除。對一個要部
 ```tsx
 const measure = () => {
   const t0 = performance.now();
-  flushSync(() => setTick(v => v + 1));
+  flushSync(() => setTick((v) => v + 1));
   const ms = performance.now() - t0;
   setLast(ms);
 };
@@ -62,10 +64,15 @@ const measure = () => {
 
 ```js
 // 慢：每寫一次就讀一次，逼瀏覽器當場算完版面
-els.forEach(el => { el.style.marginLeft = x + 'px'; void el.offsetHeight; });
+els.forEach((el) => {
+  el.style.marginLeft = x + "px";
+  void el.offsetHeight;
+});
 
 // 快：全部寫完才讀一次
-els.forEach(el => { el.style.marginLeft = x + 'px'; });
+els.forEach((el) => {
+  el.style.marginLeft = x + "px";
+});
 void root.offsetHeight;
 ```
 
