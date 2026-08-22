@@ -4,7 +4,7 @@ import LazyDemo from "./LazyDemo";
 import SuspenseDemo from "./SuspenseDemo";
 import VirtualDemo from "./VirtualDemo";
 import WorkerDemo from "./WorkerDemo";
-import TransitionDemo from "./TransitionDemo";
+import LookupDemo from "./LookupDemo";
 import MemoChildDemo from "./MemoChildDemo";
 import RateLimitDemo from "./RateLimitDemo";
 import LayoutCostDemo from "./LayoutCostDemo";
@@ -31,7 +31,7 @@ export const DEMOS: Demo[] = [
   { slug: "suspense", tag: "Suspense", i18n: "suspense", Component: SuspenseDemo },
   { slug: "virtual-scroll", tag: "虛擬捲動", i18n: "virtual", Component: VirtualDemo },
   { slug: "web-worker", tag: "Web Worker", i18n: "worker", Component: WorkerDemo },
-  { slug: "use-transition", tag: "useTransition", i18n: "transition", Component: TransitionDemo },
+  { slug: "lookup", tag: "Map vs find", i18n: "lookup", Component: LookupDemo },
   { slug: "react-memo", tag: "React.memo", i18n: "memoChild", Component: MemoChildDemo },
   { slug: "rate-limit", tag: "debounce / throttle", i18n: "rate", Component: RateLimitDemo },
   { slug: "layout-cost", tag: "強制同步版面", i18n: "layout", Component: LayoutCostDemo },
