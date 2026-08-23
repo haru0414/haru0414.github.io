@@ -220,24 +220,17 @@
     color: var(--color-ink);
   }
 
-  /* Custom Scrollbar。width 只管直向捲軸，橫向的粗細是 height——只設 width
-     的話橫向捲軸會落回瀏覽器預設尺寸，Safari 上會畫到元素外面、蓋住下一段
-     文字（程式碼區塊有 overflow-x:auto，最容易中） */
-  ::-webkit-scrollbar {
+  /* Custom Scrollbar。只給整頁的捲軸——這是站台外框的裝飾，不是給內層元素的。
+     不加 html 前綴的話它會套到每一個可捲動元素（程式碼區塊、表格…），
+     而 Safari 對被自訂樣式的內層捲軸會算錯位置，畫到元素框外蓋住下一段文字。
+     內層一律交還給瀏覽器原生捲軸，它知道該畫在哪。 */
+  html::-webkit-scrollbar {
     width: 12px;
-    height: 12px;
     background: var(--color-paper);
-  }
-
-  /* 分隔線畫在捲軸與內容之間，所以直向靠左、橫向靠上 */
-  ::-webkit-scrollbar:vertical {
     border-left: 2px solid var(--color-ink);
   }
-  ::-webkit-scrollbar:horizontal {
-    border-top: 2px solid var(--color-ink);
-  }
 
-  ::-webkit-scrollbar-thumb {
+  html::-webkit-scrollbar-thumb {
     background: var(--color-nekoma);
     border: 2px solid var(--color-ink);
   }
