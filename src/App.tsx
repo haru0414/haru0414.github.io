@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useLayoutEffect, useState, useRef, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Navigation from "./components/layout/Navigation";
@@ -19,18 +19,34 @@ import CrayonDefs from "./components/crayon/CrayonDefs";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
 // 同步 import 的理由同上：/surf 也要進 prerender
 import SurfPage from "./pages/SurfPage";
+import LabPage from "./pages/LabPage";
+import BlogPage from "./pages/BlogPage";
+import BlogPostPage from "./pages/BlogPostPage";
 import ErrorBoundary, { ErrorScreen } from "./components/ErrorBoundary";
+
+// 訂閱指標型態。用 useSyncExternalStore 而非「effect 內 setState」：
+// 後者會多觸發一次渲染，也違反 React 的規則；這個寫法還順帶支援
+// 裝置中途改變（例如接上滑鼠的平板）
+const coarsePointer = {
+  subscribe(onChange: () => void) {
+    const mq = window.matchMedia("(pointer: coarse)");
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  },
+  get: () => window.matchMedia("(pointer: coarse)").matches,
+  // SSR 期間沒有指標可問，維持與原本一致的桌機預設
+  getServer: () => false,
+};
 
 // Custom Cursor Component - Using refs for smooth performance
 function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const [isHovering, setIsHovering] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(true);
-
-  useEffect(() => {
-    // Check if device supports hover (desktop)
-    setIsDesktop(!window.matchMedia("(pointer: coarse)").matches);
-  }, []);
+  const isDesktop = !useSyncExternalStore(
+    coarsePointer.subscribe,
+    coarsePointer.get,
+    coarsePointer.getServer,
+  );
 
   useEffect(() => {
     if (!isDesktop) return;
@@ -270,16 +286,104 @@ function HomePage() {
 
 // router 內的整棵樹，抽出來讓 client(HashRouter)與 build 期 SSR(MemoryRouter)
 // 共用，確保 prerender 的 HTML 與 client hydration 完全一致
+// SSR 期間沒有 layout 可量，退回 useEffect 避免 React 警告
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
+/**
+ * 換頁時把捲動位置歸零。React Router 不會自動做這件事，先前只有 /surf 與
+ * 專案詳情頁各自處理，/lab、/500、404 都會繼承前一頁的位置。
+ *
+ * 用 layout effect 而非一般 effect：後者在繪製之後才跑，使用者會看到畫面
+ * 先停在舊位置再跳上去。
+ *
+ * /surf 例外——它要記住來源位置好在離開時還原，自己在 useSurfScroll 內處理。
+ * 由它返回時，其 cleanup 的 rAF 會在這個 layout effect 之後才執行，
+ * 所以還原不會被這裡蓋掉。
+ */
+// 記住首頁被離開時的捲動位置，返回時回到原處。只記首頁：其他頁都是
+// 「點進去就從頭看」，記住位置反而奇怪
+let homeScrollY = 0;
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  const prevPath = useRef<string | null>(null);
+
+  // 在首頁時持續記錄位置。不能等到換頁當下才讀——目標頁若比首頁矮（例如
+  // 500 頁只有一個視窗高），瀏覽器會先把 scrollY 裁切掉，讀到的就是 0
+  useEffect(() => {
+    if (pathname.replace(/\/+$/, "") !== "") return;
+    const save = () => {
+      // 換頁時 layout effect 會先把畫面歸零，而這個監聽器要到 passive effect
+      // 的 cleanup 才移除——那一下的 scroll 事件會把記住的位置蓋成 0。
+      // 以當下的網址再確認一次，離開首頁後就不再寫入
+      if (window.location.pathname.replace(/\/+$/, "") !== "") return;
+      homeScrollY = window.scrollY;
+    };
+    save();
+    window.addEventListener("scroll", save, { passive: true });
+    return () => window.removeEventListener("scroll", save);
+  }, [pathname]);
+
+  useIsomorphicLayoutEffect(() => {
+    const path = pathname.replace(/\/+$/, "") || "/";
+    const from = prevPath.current;
+    prevPath.current = path;
+
+
+    // 回到首頁：還原到當初點進去的地方，而不是跳回最上面
+    if (path === "/" && from !== null && homeScrollY > 0) {
+      const y = homeScrollY;
+      const html = document.documentElement;
+      const prev = html.style.scrollBehavior;
+      html.style.scrollBehavior = "auto";
+      // 等版面高度定案再定位——首頁尚未渲染完時直接設會被裁切
+      const raf = requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: y, left: 0, behavior: "instant" });
+          html.style.scrollBehavior = prev;
+        }),
+      );
+      return () => cancelAnimationFrame(raf);
+    }
+
+    if (path === "/surf") return;
+    // index.css 對 html 設了 scroll-behavior: smooth，window.scrollTo 會遵守它，
+    // 變成「平滑捲動上去」而不是「開啟就在最上面」。改用 instant 明確要求瞬間定位。
+    const jump = () => {
+      const html = document.documentElement;
+      const prev = html.style.scrollBehavior;
+      html.style.scrollBehavior = "auto";
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      html.style.scrollBehavior = prev;
+    };
+
+    jump();
+    // 內容較多的頁面（/lab 有十個 demo）在掛載期間高度持續變動，期間可能被
+    // 其他機制帶著捲動。接下來幾幀再定位一次——新的 scrollTo 會中斷任何
+    // 進行中的平滑捲動，這也是這裡不只呼叫一次的原因
+    let n = 0;
+    let raf = requestAnimationFrame(function again() {
+      jump();
+      if (++n < 4) raf = requestAnimationFrame(again);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [pathname]);
+  return null;
+}
+
 export function AppShell() {
   // /surf 是獨立的深色電影感 demo 頁，全站的漫畫風掛件都不該出現在上面。
   // FloatingCat 內含右下角飼料碗選單（PetBowl），一併關掉。
   // 用 useLocation 而非 CSS 隱藏：這些元件都有捲動 / 滑鼠監聽，
   // 只是視覺藏起來仍會跟 ScrollTrigger 搶主執行緒。
   const { pathname } = useLocation();
-  const isSurf = pathname === "/surf";
+  // 必須去掉尾斜線再比對：GitHub Pages 對 /surf 會 301 導向 /surf/，
+  // 線上的 pathname 帶尾斜線，用完全相等判斷會漏掉，飼料碗就跑出來了
+  const isSurf = pathname.replace(/\/+$/, "") === "/surf";
 
   return (
     <>
+      <ScrollToTop />
       <CrayonDefs />
       <SeoMeta />
       {!isSurf && <CustomCursor />}
@@ -291,6 +395,12 @@ export function AppShell() {
           <Route path="/" element={<HomePage />} />
           <Route path="/project/:id" element={<ProjectDetailPage />} />
           <Route path="/surf" element={<SurfPage />} />
+          <Route path="/lab" element={<LabPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          {/* 看板路由必須排在文章路由之前，否則 /blog/board/x 會被
+              當成 slug 為 "board" 的文章 */}
+          <Route path="/blog/board/:board" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
           {/* 500 畫面的 demo 路由：它平常只有真的壞掉才看得到，
               開一個入口才能當作品給人看，也才檢查得到樣式 */}
           <Route path="/500" element={<ErrorScreen />} />

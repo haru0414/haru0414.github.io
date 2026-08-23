@@ -30,10 +30,12 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
   // 跨越八個獨立 ScrollTrigger 維持單一狀態，是純 CSS scroll-driven
   // animation 做不到的事，也是這頁最能說明 ScrollTrigger 價值的一段
   const epEl = document.querySelector<HTMLElement>(".surf-hud-ep");
+  // start:0 + end:"max" 涵蓋整個可捲動範圍。不能用 trigger + "bottom bottom"：
+  // HUD 建立在各幕 pin 之前，範圍算完後 pin 才把頁面撐長，作用區間會提早結束
   gsap.to(".surf-hud-fill", {
     scaleX: 1,
     ease: "none",
-    scrollTrigger: { trigger: ".surf-root", start: "top top", end: "bottom bottom", scrub: 0.3 },
+    scrollTrigger: { start: 0, end: "max", scrub: 0.3 },
   });
   // 用單一 onUpdate 主動判斷「目前哪一幕佔住視口中線」，而不是逐幕掛
   // onEnter/onEnterBack。跳躍式捲動時所有被跨過的 trigger 都會觸發，
@@ -46,9 +48,8 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
 
   let lastLabel = "";
   ScrollTrigger.create({
-    trigger: ".surf-root",
-    start: "top top",
-    end: "bottom bottom",
+    start: 0,
+    end: "max",
     onUpdate: () => {
       if (!epEl) return;
       const mid = window.innerHeight / 2;
@@ -83,12 +84,16 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
     scrollTrigger: { trigger: ".surf-s0", start: "top top", end: "+=240", scrub: true },
   });
 
+  // 覆蓋規則：底圖任何時刻的 scale 都必須大於「最大位移 + 旋轉所需的額外
+  // 覆蓋」，否則圖會被推出自身範圍、露出頁面底色。旋轉 θ 度時額外需要約
+  // cos θ + (高/寬)·sin θ。以下每一幕的數字都依此保留餘裕。
+
   // ── S1 Paddle Out：空拍俯視，緩慢旋轉 + 拉遠成全景 ────────
   gsap.fromTo(
     ".surf-s1 .surf-bg",
-    { scale: 1.5, rotation: -4 },
+    { scale: 1.55, rotation: -4 },
     {
-      scale: 1.05,
+      scale: 1.16,
       rotation: 2,
       ease: "none",
       scrollTrigger: { trigger: ".surf-s1", start: "top bottom", end: "bottom top", scrub: true },
@@ -166,7 +171,13 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
     scrub: true,
     animation: gsap
       .timeline()
-      .fromTo(".surf-s4 .surf-bg", { scale: 1.14, yPercent: -3 }, { scale: 1, yPercent: 3, ease: "none" }, 0)
+      .fromTo(
+        ".surf-s4 .surf-bg",
+        // 結尾原本是 scale 1 配 yPercent 3，位移沒有縮放餘裕可用，會露邊
+        { scale: 1.2, yPercent: -3 },
+        { scale: 1.1, yPercent: 3, ease: "none" },
+        0,
+      )
       .fromTo(
         ".surf-s4-lip",
         { yPercent: 108, opacity: 0, scale: 1.18 },
@@ -176,61 +187,88 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
       .fromTo(".surf-s4 .surf-copy", { opacity: 0, y: 20 }, { opacity: 1, y: 0, ease: "none", duration: 0.3 }, 0.62),
   });
 
-  // ── S5 Wipeout：旋轉 + 縮放模擬翻滾失衡 ──────────────────
-  gsap.fromTo(
-    ".surf-s5 .surf-bg",
-    { rotation: 6, scale: 1.3, yPercent: -6 },
-    {
-      rotation: -5,
-      scale: 1.12,
-      yPercent: 6,
-      ease: "none",
-      scrollTrigger: { trigger: ".surf-s5", start: "top bottom", end: "bottom top", scrub: true },
-    },
-  );
-  gsap.from(".surf-s5 .surf-line", {
-    opacity: 0,
-    y: 30,
-    rotation: -3,
-    stagger: 0.12,
-    scrollTrigger: { trigger: ".surf-s5", start: "top 60%", end: "center center", scrub: true },
+  // ── S5 Wipeout：持續下沉 ─────────────────────────────────
+  // 釘住並拉長行程，底圖一路放大下沉、暗幕漸深；文字以更快的速度往上跑出
+  // 畫面。速度差就是「你在下沉、水面在遠離」的來源
+  ScrollTrigger.create({
+    trigger: ".surf-s5",
+    start: "top top",
+    end: "+=210%",
+    pin: true,
+    scrub: true,
+    animation: gsap
+      .timeline()
+      .fromTo(
+        ".surf-s5 .surf-bg",
+        // 位移 ±8%、旋轉 3 度 → 全程 scale 需 ≥ 1.14，起始給到 1.24 留餘裕
+        { yPercent: -8, scale: 1.24, rotation: 3 },
+        { yPercent: 8, scale: 1.62, rotation: -2, ease: "none" },
+        0,
+      )
+      .fromTo(".surf-s5-veil", { opacity: 0 }, { opacity: 0.78, ease: "none" }, 0)
+      // 文字比底圖快一倍以上地往上離場，讀完就沉下去了
+      .fromTo(
+        ".surf-s5 .surf-copy",
+        { yPercent: 45 },
+        { yPercent: -110, ease: "none" },
+        0,
+      )
+      .fromTo(".surf-s5 .surf-line", { opacity: 0 }, { opacity: 1, stagger: 0.12, duration: 0.25 }, 0.05)
+      .to(".surf-s5 .surf-line", { opacity: 0, duration: 0.2 }, 0.72),
   });
 
-  // ── S6 Surface：反向上浮 + 由暗轉亮 ──────────────────────
-  gsap.fromTo(
-    ".surf-s6 .surf-bg",
-    { yPercent: 6, scale: 1.1, opacity: 0.45 },
-    {
-      yPercent: -6,
-      scale: 1.1,
-      opacity: 1,
-      ease: "none",
-      scrollTrigger: { trigger: ".surf-s6", start: "top bottom", end: "center center", scrub: true },
-    },
-  );
-  gsap.from(".surf-s6 .surf-line", {
-    opacity: 0,
-    y: 22,
-    stagger: 0.2,
-    scrollTrigger: { trigger: ".surf-s6", start: "top 65%", end: "center center", scrub: true },
+  // ── S6 Surface：破水而出，鏡頭仰角轉正 ────────────────────
+  // 全頁唯一的 3D 變換：rotationX 由正值收到 0，配合 .surf-s6 的
+  // perspective 與底部 origin，讀起來就是抬頭破出水面那一下。
+  // 釘住是為了給仰起這個動作足夠的行程，沒有 pin 的話一個視窗就跑完了
+  ScrollTrigger.create({
+    trigger: ".surf-s6",
+    start: "top top",
+    end: "+=150%",
+    pin: true,
+    scrub: true,
+    animation: gsap
+      .timeline()
+      .fromTo(
+        ".surf-s6 .surf-bg",
+        // transformOrigin 必須是中心：用底部原點時縮放只往上長、下緣位置不動，
+        // scale 在底部完全沒留餘裕，yPercent 一往上移就露出下緣。
+        // rotationX 18 度配 perspective 還會讓上緣透視收縮約 15%，故起始 scale 給到 1.55
+        { yPercent: 8, scale: 1.55, rotationX: 16, opacity: 0.3, transformOrigin: "50% 50%" },
+        { yPercent: -4, scale: 1.22, rotationX: 0, opacity: 1, ease: "none", duration: 0.62 },
+        0,
+      )
+      .fromTo(
+        ".surf-s6 .surf-line",
+        { opacity: 0, y: 22 },
+        { opacity: 1, y: 0, stagger: 0.18, ease: "none", duration: 0.3 },
+        0.5,
+      ),
   });
 
   // ── S7 Sunset：收尾，最平靜 ──────────────────────────────
-  gsap.fromTo(
-    ".surf-s7 .surf-bg",
-    { yPercent: -6, scale: 1.12 },
-    {
-      yPercent: 6,
-      scale: 1.12,
-      ease: "none",
-      scrollTrigger: { trigger: ".surf-s7", start: "top bottom", end: "bottom top", scrub: true },
-    },
-  );
-  gsap.from(".surf-s7 .surf-copy > *", {
-    opacity: 0,
-    y: 26,
-    stagger: 0.14,
-    scrollTrigger: { trigger: ".surf-s7", start: "top 65%", end: "center center", scrub: true },
+  // 同樣釘住：這是結尾，需要停留的時間，掃過去就沒有收束感
+  ScrollTrigger.create({
+    trigger: ".surf-s7",
+    start: "top top",
+    end: "+=140%",
+    pin: true,
+    scrub: true,
+    animation: gsap
+      .timeline()
+      .fromTo(
+        ".surf-s7 .surf-bg",
+        // 位移 ±6% → 全程 scale 需 ≥ 1.12；原本結尾 1.04 覆蓋不了，上緣會露黑邊
+        { yPercent: -6, scale: 1.24 },
+        { yPercent: 6, scale: 1.14, ease: "none", duration: 1 },
+        0,
+      )
+      .fromTo(
+        ".surf-s7 .surf-copy > *",
+        { opacity: 0, y: 26 },
+        { opacity: 1, y: 0, stagger: 0.16, ease: "none", duration: 0.35 },
+        0.25,
+      ),
   });
 };
 
@@ -313,6 +351,7 @@ export default function SurfPage() {
 
       <section className="surf-scene surf-s5">
         <SurfImage className="surf-bg" name="s5-wipeout" alt="從水面下往上看的視角，光線穿過翻攪的海水" />
+        <div className="surf-s5-veil" aria-hidden="true" />
         <div className="surf-copy">
           <p className="surf-eyebrow">EP.05 WIPEOUT</p>
           <p className="surf-line">然後就下去了。</p>

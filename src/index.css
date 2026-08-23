@@ -49,6 +49,47 @@
   --shadow-manga-hover: 9px 9px 0px 0px #1A2332;
 }
 
+/* PERF LAB 的 React.memo demo：子元件每次實際重新渲染就閃一下 */
+@keyframes perf-flash {
+  from {
+    background-color: color-mix(in srgb, var(--color-nekoma) 55%, transparent);
+    border-color: var(--color-nekoma);
+  }
+  to {
+    background-color: var(--color-bg);
+    border-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
+  }
+}
+
+/* PERF LAB 的 Worker demo：主執行緒被佔住時這個動畫會凍住 */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* PERF LAB 的捲動載入列表：新資料逐筆淡入 */
+@keyframes perf-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  @keyframes perf-row-in {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
 @layer base {
   /* 語意化色票（淺色預設）：
      bg = 頁面背景、surface = 卡片表面、muted = 說明文字 */
@@ -65,6 +106,9 @@
     --color-badge-red: #c0362c; /* 白字 ≈ 4.9:1 */
     --color-badge-teal: #2f5c68; /* 白字 ≈ 7:1 */
     --color-on-poster: #1a2332; /* poster 黃底上的固定深字 */
+    /* panel 深底上的固定淺字。不能用 --color-paper——它在深色模式會變成
+       深色（#222a38），疊在同樣深的 panel 上就讀不到了 */
+    --color-on-panel: #f5f0e4;
   }
 
   /* 深色模式（漫畫夜讀版）：建立層次 —— 頁面最深、卡片抬高一階、
@@ -149,7 +193,14 @@
 
   html, body, #root {
     @apply w-full min-h-full;
-    overflow-x: hidden;
+    /* 用 clip 而非 hidden：依規範只要一軸不是 visible，另一軸的 visible
+       就會被算成 auto，html 因此成為捲動容器，裡面的 position: sticky
+       會失效（/lab 的側邊導覽就是這樣黏不住）。clip 一樣擋橫向溢出，
+       但不建立捲動容器 */
+    overflow-x: clip;
+    /* 關閉捲動錨定：頁面在掛載過程中高度會變（/lab 有十個 demo 陸續就緒），
+       瀏覽器會為了維持視覺錨點把捲動位置補回去，換頁歸零就被抵銷掉 */
+    overflow-anchor: none;
   }
 
   body {

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { PawPrint } from "lucide-react";
 import photo1 from "../../assets/images/photo_1.webp";
 import photo2 from "../../assets/images/photo_2.webp";
 import catCover from "../../assets/images/onigiri/cover.webp";
@@ -381,7 +382,8 @@ export default function AboutSection() {
                   ONIGIRI
                 </h3>
                 <p className="text-xs text-gray-500 mt-1">
-                  {t("menu.role")} 🐾
+                  {t("menu.role")}
+                  <PawPrint size={13} className="ml-1 inline-block align-[-1px]" aria-hidden="true" />
                 </p>
               </div>
             </div>

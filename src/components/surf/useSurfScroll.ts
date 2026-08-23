@@ -1,5 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import type { RefObject } from "react";
+
+// SSR 期間沒有 layout 可量，退回 useEffect 避免 React 警告
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 type Gsap = typeof import("gsap")["gsap"];
 type ScrollTriggerType = typeof import("gsap/ScrollTrigger")["ScrollTrigger"];
@@ -22,17 +26,30 @@ export function useSurfScroll(
   rootRef: RefObject<HTMLElement | null>,
   setup: SurfSetup,
 ) {
-  useEffect(() => {
-    const html = document.documentElement;
-    html.classList.add("surf-mode");
-
-    // React Router 不會自動重置捲動位置，從首頁捲到一半點進來會直接落在
-    // 頁面中段（ProjectDetailPage:19 也是自己處理）。必須在 ScrollTrigger
-    // 初始化「之前」歸零，否則各 trigger 會以錯誤的起始位置計算。
+  // 捲動位置管理獨立成 layout effect：必須在瀏覽器繪製「之前」歸零，
+  // 放在一般 useEffect 會先畫出停在舊位置的畫面再跳，使用者看得到那一下。
+  useIsomorphicLayoutEffect(() => {
+    // 掛載當下 scrollY 仍是前一頁的位置，先記下來供返回時還原
+    const returnY = window.scrollY;
     window.scrollTo(0, 0);
+
     // 瀏覽器的捲動還原機制會在 reload 後把位置搶回去，暫時關掉
     const prevRestoration = history.scrollRestoration;
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+    return () => {
+      if ("scrollRestoration" in history) history.scrollRestoration = prevRestoration;
+      // 離開時停在約 11000px，回到較短的首頁會被裁切到底部。
+      // 等下一頁畫完再還原——雙層 rAF 確保版面高度已定案，否則會被 clamp。
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => window.scrollTo(0, returnY));
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    const html = document.documentElement;
+    html.classList.add("surf-mode");
 
     let dispose = () => {};
     let cancelled = false;
@@ -79,7 +96,13 @@ export function useSurfScroll(
         }
       }
 
+      // ScrollTrigger.refresh() 會嘗試維持既有捲動位置，配上前述的
+      // scroll anchoring 補償，進站歸零可能被還原。建立 trigger 前再歸零一次，
+      // 讓所有 trigger 都以 0 為基準計算
+      window.scrollTo(0, 0);
       const ctx = gsap.context(() => setup(gsap, ScrollTrigger), rootRef.current ?? undefined);
+      ScrollTrigger.refresh();
+      window.scrollTo(0, 0);
 
       dispose = () => {
         ctx.revert();
@@ -94,7 +117,6 @@ export function useSurfScroll(
       cancelled = true;
       dispose();
       html.classList.remove("surf-mode");
-      if ("scrollRestoration" in history) history.scrollRestoration = prevRestoration;
     };
     // setup 由呼叫端以模組層級常數傳入，不隨 render 變動
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { projects } from "../data/projects";
@@ -12,15 +11,6 @@ export default function ProjectDetailPage() {
   // 上一篇 / 下一篇（環狀：最後一篇接回第一篇，方便連續瀏覽）
   const prev = projects[(index - 1 + projects.length) % projects.length];
   const next = projects[(index + 1) % projects.length];
-  const [isVisible, setIsVisible] = useState(false);
-
-  // 依 id 重跑：切換上一篇/下一篇時回到頂部並重播進場動畫
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    setIsVisible(false);
-    const timer = setTimeout(() => setIsVisible(true), 50);
-    return () => clearTimeout(timer);
-  }, [id]);
 
   const backToList = () => navigate("/", { state: { scrollTo: "episodes" } });
 
@@ -53,10 +43,12 @@ export default function ProjectDetailPage() {
       {/* Halftone bg */}
       <div className="absolute inset-0 z-0 opacity-5 halftone" />
 
+      {/* 進場動畫改用純 CSS 並以 id 當 key：切換上一篇/下一篇時元素重建，
+          動畫自然重播。原本用 state + setTimeout 需要在 effect 裡 setState，
+          那既多一次渲染也違反 React 規則。捲動歸零已由 App 的 ScrollToTop 處理 */}
       <div
-        className={`relative z-10 container mx-auto px-4 py-12 max-w-4xl transform transition-all duration-700 ${
-          isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-        }`}
+        key={id}
+        className="rise-in relative z-10 container mx-auto px-4 py-12 max-w-4xl"
       >
         {/* Back Button */}
         <button
