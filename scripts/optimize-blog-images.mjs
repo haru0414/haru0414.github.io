@@ -4,7 +4,8 @@
  * 用法：把原圖丟進 src/content/images/_source/，然後 `npm run images:blog`。
  *
  * 原圖刻意不放 public/——那整個資料夾會被原封不動複製進 dist，
- * 未壓縮的大檔就會跟著部署上線。
+ * 未壓縮的大檔就會跟著部署上線。放在 src/ 底下則兩全：進版控（換機器
+ * 也重產得出來），但沒有被 import 就不會進 bundle。
  * 每張圖會輸出 AVIF + WebP 各三種寬度到 public/blog/，
  * markdown 照常寫 ![說明](/blog/檔名.jpg)——建置期的 plugin 會偵測到
  * 這些變體並自動改用 <picture> + srcset。

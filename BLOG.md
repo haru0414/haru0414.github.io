@@ -140,9 +140,11 @@ npm run images:blog
 **產圖後要重啟 dev server。** plugin 在每次轉換 `.md` 時重讀圖片清單，但 Vite 不會
 因為清單變動就重跑轉換。`npm run images:blog` 之後看不到新圖，重啟就好。
 
-**`src/content/images/_source/` 不進版控。** 原圖只留在你本機（`.gitignore` 有排除），
-進版控的是 `public/blog/` 的輸出檔和 `src/content/images/manifest.json`。
-**manifest 一定要 commit**，否則別台機器建置時圖片會退回沒有 srcset 的版本。
+**原圖進版控，但不會被部署。** `src/content/images/_source/` 在 `src/` 底下，
+沒有被任何程式 `import` 的檔案不會進 bundle，`public/` 那種整包複製也碰不到它——
+所以換機器 clone 下來還原得出全部素材，訪客卻不會下載到任何一張原圖。
+`src/content/images/manifest.json` 同樣要 commit，否則別台機器建置時圖片會退回
+沒有 srcset 的版本。
 
 **原圖不要直接放 `public/blog/`。** 那個資料夾會被整包複製進 `dist` 部署出去，
 未壓縮的大檔會跟著上線。放 `_source/` 就不會。

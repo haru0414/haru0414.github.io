@@ -1,5 +1,8 @@
 // /surf 頁素材：把 _source/ 的 2400px 原圖轉成 AVIF + WebP 三檔寬度（響應式 srcset 用）。
-// 原圖不進 git（見 .gitignore），要重新取得時用下方 SOURCES 的 Unsplash ID 重抓。
+// 原圖進版控但不會被部署——_source/ 在 src/ 底下，沒有被 import 的檔案
+// 不會進 bundle，public/ 那種整包複製也碰不到它。
+// 下方 SOURCES 的 Unsplash ID 保留著，需要重新取得或換圖時可以重抓；
+// 但 s4-barrel-cut 是自行去背的，重抓不回來，只能靠版控。
 // 用法：node scripts/optimize-surf-images.mjs
 import sharp from "sharp";
 import { fileURLToPath } from "node:url";
