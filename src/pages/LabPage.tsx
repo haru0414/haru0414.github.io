@@ -121,7 +121,7 @@ export default function LabPage() {
           </nav>
 
           <div className="flex min-w-0 flex-1 flex-col gap-10">
-            {DEMOS.map(({ slug, tag, i18n, Component }, i) => (
+            {DEMOS.map(({ slug, tag, i18n, post, Component }, i) => (
               <article
                 key={slug}
                 id={slug}
@@ -163,6 +163,20 @@ export default function LabPage() {
                   >
                     {t(`perf.${i18n}.hint`)}
                   </p>
+                  {/* 這裡只放得下操作說明。完整的來由、量測與原理寫在文章裡 */}
+                  <Link
+                    to={`/blog/${post}`}
+                    className="interactive mt-2 inline-flex w-fit items-center gap-1.5 border-2 px-3 py-1.5 text-[11px] tracking-[0.1em] no-underline transition-transform hover:-translate-y-0.5"
+                    style={{
+                      fontFamily: "var(--font-heading)",
+                      backgroundColor: "var(--color-surface)",
+                      borderColor: "var(--color-ink)",
+                      color: "var(--color-ink)",
+                      boxShadow: "var(--shadow-manga-sm)",
+                    }}
+                  >
+                    {t("perf.readPost")} →
+                  </Link>
                 </header>
 
                 <div className="min-w-0">

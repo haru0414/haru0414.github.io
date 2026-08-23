@@ -115,6 +115,8 @@ const BOARD_SLUGS: Record<string, string> = {
   除錯: "debugging",
   CSS: "css",
   Safari: "safari",
+  瀏覽器: "browser",
+  JavaScript: "javascript",
 };
 
 const autoSlug = (tag: string) =>

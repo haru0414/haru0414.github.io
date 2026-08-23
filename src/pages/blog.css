@@ -98,6 +98,32 @@
   font-size: 0.8rem;
 }
 
+/* 內文表格。窄螢幕放不下時讓表格自己橫向捲，不要把整頁撐寬 */
+.blog-prose table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.blog-prose th,
+.blog-prose td {
+  border: 1px solid color-mix(in srgb, var(--color-ink) 25%, transparent);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+.blog-prose th {
+  background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  font-family: var(--font-heading);
+  font-weight: normal;
+  white-space: nowrap;
+}
+/* 數字欄位對齊：等寬數字讓上下位數對得起來 */
+.blog-prose td {
+  font-variant-numeric: tabular-nums;
+}
+
 /* 內文圖片。只限制上限，不強制撐滿——行內的小圖示照自己的尺寸顯示 */
 .blog-prose img {
   max-width: 100%;
