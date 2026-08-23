@@ -220,14 +220,17 @@
     color: var(--color-ink);
   }
 
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar {
+  /* Custom Scrollbar。只給整頁的捲軸——這是站台外框的裝飾，不是給內層元素的。
+     不加 html 前綴的話它會套到每一個可捲動元素（程式碼區塊、表格…），
+     而 Safari 對被自訂樣式的內層捲軸會算錯位置，畫到元素框外蓋住下一段文字。
+     內層一律交還給瀏覽器原生捲軸，它知道該畫在哪。 */
+  html::-webkit-scrollbar {
     width: 12px;
     background: var(--color-paper);
     border-left: 2px solid var(--color-ink);
   }
 
-  ::-webkit-scrollbar-thumb {
+  html::-webkit-scrollbar-thumb {
     background: var(--color-nekoma);
     border: 2px solid var(--color-ink);
   }

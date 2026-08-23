@@ -14,6 +14,7 @@ const ORIGIN = "https://www.haruli.com";
 // build 期要 prerender 的所有路由（首頁 + 每個專案頁 + /surf 實驗頁）
 export const routes: string[] = [
   "/",
+  "/work",
   ...projects.map((p) => `/project/${p.id}`),
   "/surf",
   "/500",
@@ -88,8 +89,8 @@ function metaFor(url: string) {
     const tag = boardFromSlug(board[1]);
     if (tag) {
       return {
-        title: `${tag}｜開發筆記 Haru Li`,
-        description: `標籤「${tag}」底下的開發筆記。`,
+        title: `${tag}｜部落格 Haru Li`,
+        description: `標籤「${tag}」底下的文章。`,
         canonical: `${ORIGIN}/blog/board/${board[1]}/`,
       };
     }
@@ -108,9 +109,17 @@ function metaFor(url: string) {
   }
   if (url === "/blog") {
     return {
-      title: "NOTES｜開發筆記 Haru Li",
+      title: "BLOG｜部落格 Haru Li",
       description: "前端開發過程中的紀錄：踩過的坑、量測的結果、以及那些「教科書寫得對但實際上沒那麼簡單」的事。",
       canonical: `${ORIGIN}/blog/`,
+    };
+  }
+  if (url === "/work") {
+    return {
+      title: "WORK｜商業專案作品集 Haru Li",
+      description:
+        "電商平台、官網架構遷移、後台系統、金流整合與即時通訊——八件商業專案的完整索引，可依技術棧篩選。",
+      canonical: `${ORIGIN}/work/`,
     };
   }
   if (url === "/lab") {

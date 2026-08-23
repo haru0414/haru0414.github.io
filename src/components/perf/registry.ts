@@ -17,23 +17,25 @@ import ImageFormatDemo from "./ImageFormatDemo";
  * - slug：錨點與網址片段，要穩定（別人可能存了連結）
  * - tag：畫面上顯示的技法名稱
  * - i18n：文案取 `perf.<i18n>.title` / `.desc` / `.hint`
+ * - post：對應文章的 slug（src/content/posts/<post>.md），卡片會連過去
  */
 export type Demo = {
   slug: string;
   tag: string;
   i18n: string;
+  post: string;
   Component: ComponentType;
 };
 
 export const DEMOS: Demo[] = [
-  { slug: "use-memo", tag: "useMemo", i18n: "memo", Component: MemoDemo },
-  { slug: "lazy-load", tag: "React.lazy", i18n: "lazy", Component: LazyDemo },
-  { slug: "suspense", tag: "Suspense", i18n: "suspense", Component: SuspenseDemo },
-  { slug: "virtual-scroll", tag: "虛擬捲動", i18n: "virtual", Component: VirtualDemo },
-  { slug: "web-worker", tag: "Web Worker", i18n: "worker", Component: WorkerDemo },
-  { slug: "lookup", tag: "Map vs find", i18n: "lookup", Component: LookupDemo },
-  { slug: "react-memo", tag: "React.memo", i18n: "memoChild", Component: MemoChildDemo },
-  { slug: "rate-limit", tag: "debounce / throttle", i18n: "rate", Component: RateLimitDemo },
-  { slug: "layout-cost", tag: "強制同步版面", i18n: "layout", Component: LayoutCostDemo },
-  { slug: "image-format", tag: "AVIF / srcset", i18n: "image", Component: ImageFormatDemo },
+  { slug: "use-memo", tag: "useMemo", i18n: "memo", post: "usememo-caching-expensive-work", Component: MemoDemo },
+  { slug: "lazy-load", tag: "React.lazy", i18n: "lazy", post: "lazy-loading-on-scroll", Component: LazyDemo },
+  { slug: "suspense", tag: "Suspense", i18n: "suspense", post: "suspense-waiting-for-data", Component: SuspenseDemo },
+  { slug: "virtual-scroll", tag: "虛擬捲動", i18n: "virtual", post: "virtual-scrolling-ten-thousand-rows", Component: VirtualDemo },
+  { slug: "web-worker", tag: "Web Worker", i18n: "worker", post: "web-worker-off-main-thread", Component: WorkerDemo },
+  { slug: "lookup", tag: "Map vs find", i18n: "lookup", post: "map-vs-find-in-loops", Component: LookupDemo },
+  { slug: "react-memo", tag: "React.memo", i18n: "memoChild", post: "react-memo-and-usecallback", Component: MemoChildDemo },
+  { slug: "rate-limit", tag: "debounce / throttle", i18n: "rate", post: "debounce-vs-throttle", Component: RateLimitDemo },
+  { slug: "layout-cost", tag: "強制同步版面", i18n: "layout", post: "layout-thrashing-read-write-order", Component: LayoutCostDemo },
+  { slug: "image-format", tag: "AVIF / srcset", i18n: "image", post: "avif-webp-and-srcset", Component: ImageFormatDemo },
 ];

@@ -7,7 +7,7 @@ import { DEMOS } from "../perf/registry";
 // 非商業案的實驗與狀態頁。獨立成一區而非混進專案列表：
 // 專案區是求職主訴求，把 demo 混進去會稀釋它。
 const ENTRIES = [
-  { to: "/blog", key: "blog", badge: "WRITING", code: "NOTES", accent: "var(--color-nekoma)" },
+  { to: "/blog", key: "blog", badge: "WRITING", code: "BLOG", accent: "var(--color-nekoma)" },
   { to: "/lab", key: "perf", badge: "PLAYGROUND", code: "PERF", accent: "#6366f1" },
   { to: "/surf", key: "surf", badge: "EXPERIMENT", code: "SURF", accent: "var(--color-teal)" },
   { to: "/404-demo", key: "notFound", badge: "STATE", code: "404", accent: "var(--color-nekoma)" },

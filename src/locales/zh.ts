@@ -15,6 +15,36 @@ const zh = {
       career: "經歷",
       contact: "聯絡",
     },
+    // 站台頁首。顯示文字是拉丁字碼，這裡的中文走 aria-label
+    work: {
+      intro:
+        "商業專案的完整索引。首頁只放了精選幾件，這裡是全部——可以依技術棧篩選，點進去看每一件的實作細節。",
+      filterLabel: "技術",
+      all: "全部",
+      count: "{{n}} 件",
+      view: "看細節",
+      live: "線上瀏覽",
+    },
+    siteNav: {
+      label: "站台導覽",
+      work: "作品",
+      lab: "效能實驗室",
+      blog: "部落格",
+      contact: "聊聊",
+      current: "目前頁面",
+      open: "開啟選單",
+      close: "關閉選單",
+    },
+    footer: {
+      explore: "探索",
+      latest: "最新文章",
+      contact: "聯絡",
+      surf: "浪的七幕",
+      resume: "履歷 PDF",
+      email: "寄信給我",
+      built: "本站以 React 19 + Vite 建置",
+      rights: "© {{year}} Haru Li",
+    },
     error: {
       tag: "ERROR 500",
       bubble: "呼……伺服器睡著了",
@@ -98,11 +128,12 @@ const zh = {
       intro:
         "可以自己操作的前端效能實作。數字是當場跑出來的，不是截圖——調參數就會變。之後會陸續增加。",
       navLabel: "實作項目導覽",
+      readPost: "看這篇的來由與原理",
       memo: {
         title: "快取昂貴的運算",
         desc: "同一份運算（計算範圍內的質數個數），用開關切換走不走 useMemo 快取，再量同一次重新渲染的耗時。",
         hint: "先在 ON 的狀態按幾次，再切到 OFF 按幾次，兩條長條就會拉開。計時用 flushSync 逼 React 同步跑完渲染後在事件處理函式裡量——React 的 Profiler 在正式建置會被移除，量不到東西。",
-                renderNo: "渲染次數",
+        renderNo: "渲染次數",
         lastRender: "本次重新渲染",
         result: "質數個數",
         range: "運算範圍",
@@ -117,8 +148,8 @@ const zh = {
         end: "已載入全部 {{n}} 筆",
         count: "{{n}} / {{total}} 筆",
         reset: "重置再看一次",
-                elapsed: "模組抵達耗時 {{ms}} ms",
-                      },
+        elapsed: "模組抵達耗時 {{ms}} ms",
+      },
       virtual: {
         title: "只畫看得到的那幾筆",
         desc: "兩側資料完全一樣，都是 10,000 筆在記憶體裡。左邊全部畫進 DOM，右邊只畫可視範圍的約 20 筆，靠位移把它們對到正確位置。",
@@ -136,7 +167,10 @@ const zh = {
         desc: "同一段質數運算，一邊跑在主執行緒、一邊跑在 Web Worker。運算量與結果完全相同，差別只在「跑在哪條執行緒上」。",
         hint: "盯著上面那個轉圈。按「主執行緒」它會整個凍住，按「Worker」它一路轉不停——那個停頓就是使用者感受到的當機。",
         watch: "盯著這個轉圈，然後按下方按鈕",
-        busy: { main: "主執行緒計算中——轉圈停住了", worker: "Worker 計算中——轉圈照常" },
+        busy: {
+          main: "主執行緒計算中——轉圈停住了",
+          worker: "Worker 計算中——轉圈照常",
+        },
         run: { main: "在主執行緒算", worker: "在 Worker 算" },
         where: { main: "主執行緒", worker: "Web Worker" },
         workload: "工作量（質數搜尋範圍）",
@@ -151,8 +185,10 @@ const zh = {
         scanTitle: "示意：這筆訂單要找 user-{{id}}",
         scanFind: "從頭一格一格比對，已比 {{n}} 次",
         scanMap: "索引直接命中，1 次",
-        findWhy: "users 是陣列，只能從頭一個一個比對到找著為止。每筆訂單都重來一次。",
-        mapWhy: "先花一次把陣列整理成「id → 使用者」的對照表，之後給 id 就直接取出。像電話簿先按姓氏排好，查的時候直接翻到。",
+        findWhy:
+          "users 是陣列，只能從頭一個一個比對到找著為止。每筆訂單都重來一次。",
+        mapWhy:
+          "先花一次把陣列整理成「id → 使用者」的對照表，之後給 id 就直接取出。像電話簿先按姓氏排好，查的時候直接翻到。",
         find: "map + find",
         map: "先建 Map 索引",
         size: "資料量",
@@ -179,13 +215,14 @@ const zh = {
         title: "讀寫順序決定成本",
         desc: "兩種模式做的事完全一樣：把每個方塊的 margin 改掉，也都讀了版面。差別只在讀寫的順序——一種寫完立刻讀，一種全部寫完才讀一次。",
         hint: "寫完就讀（如 offsetHeight、getBoundingClientRect）會逼瀏覽器當場把版面算完才能回答，在迴圈裡做就是每一輪都同步重排一次。一幀的預算約 16ms，超過就撐不住流暢。量測期間畫面會明顯凍住——那正是使用者感受到的當機。這個坑常出現在「遍歷元素、邊量邊改」的程式裡，改法是把讀和寫分開成兩批。",
-                boxes: "{{n}} 個方塊同時更新",
+        boxes: "{{n}} 個方塊同時更新",
         mode: { batched: "批次寫入", thrashing: "讀寫交錯" },
         start: "開始動畫",
         stop: "停止",
         perFrame: "ms／幀（版面計算）",
-        warning: "切到「讀寫交錯」後整頁會明顯卡頓——那正是這個 demo 要讓你感受的東西，不是頁面壞了。停止鍵仍然有效，只是回應會慢半拍，多按一下就會停。想少卡一點可以先按停止再切換模式。"
-              },
+        warning:
+          "切到「讀寫交錯」後整頁會明顯卡頓——那正是這個 demo 要讓你感受的東西，不是頁面壞了。停止鍵仍然有效，只是回應會慢半拍，多按一下就會停。想少卡一點可以先按停止再切換模式。",
+      },
       image: {
         title: "同一張圖能差多少",
         desc: "這是 /surf 實際使用的素材，不是另外做的教學範例。同一張圖輸出成 AVIF 與 WebP、各兩種寬度，位元組是當場抓下來量的。",
@@ -224,15 +261,17 @@ const zh = {
       minutes: "約 {{n}} 分鐘",
       backToList: "回到文章列表",
       pager: "文章切換：上一篇 / 下一篇",
-      authorBio: "前端工程師，寫這裡主要是為了整理自己踩過的坑。內容偏向實作細節與量測結果。",
+      authorBio:
+        "前端工程師，寫這裡主要是為了整理自己踩過的坑。內容偏向實作細節與量測結果。",
       viewPortfolio: "看作品集",
       count: "{{n}} 篇",
       featured: "最新一篇",
-      footerNote: "這裡的文章都寫在自家 repo 的 markdown 檔裡，發文就是新增一個檔案。",
+      footerNote:
+        "這裡的文章都寫在自家 repo 的 markdown 檔裡，發文就是新增一個檔案。",
       searchPlaceholder: "搜尋標題、摘要或標籤",
       empty: "沒有符合「{{q}}」的主題。",
       pagination: "分頁",
-      boardTitle: "開發筆記",
+      boardTitle: "部落格",
       boardDesc: "標籤「{{tag}}」底下的主題。",
       navSite: "站台導覽",
       navBreadcrumb: "所在位置",
@@ -242,7 +281,8 @@ const zh = {
       colLength: "字數",
       colDate: "發表",
       chars: "字",
-      listNote: "共 {{n}} 篇。留言功能未開放，有想聊的可以從作品集的聯絡方式找我。",
+      listNote:
+        "共 {{n}} 篇。留言功能未開放，有想聊的可以從作品集的聯絡方式找我。",
       floor: "主樓",
       postCount: "發表 {{n}} 篇",
       tags: "標籤",
@@ -254,14 +294,30 @@ const zh = {
       next: "下一篇",
     },
     lab: {
-      intro: "商業案之外的東西：一頁式捲動敘事，以及平常只有走錯路或出錯才看得到的兩個畫面。",
+      intro:
+        "商業案之外的東西：一頁式捲動敘事，以及平常只有走錯路或出錯才看得到的兩個畫面。",
       enter: "ENTER →",
       back: "返回作品集",
-      blog: { title: "開發筆記", desc: "踩過的坑與量測結果，寫下來給未來的自己。" },
-      perf: { title: "效能實驗室", desc: "{{n}} 個可以自己操作的前端效能實作，數字當場量出來。" },
-      surf: { title: "浪的七幕", desc: "GSAP ScrollTrigger 七幕捲動敘事，桌機另接 Lenis 平滑捲動。" },
-      notFound: { title: "迷路的飯糰", desc: "404 頁。做成一格漫畫分鏡，貓的腳印停在這裡。" },
-      error: { title: "打瞌睡的伺服器", desc: "500 頁。與 404 同一視覺家族，飯糰睡著了。" },
+      blog: {
+        title: "部落格",
+        desc: "踩過的坑與量測結果，寫下來給未來的自己。",
+      },
+      perf: {
+        title: "效能實驗室",
+        desc: "{{n}} 個可以自己操作的前端效能實作，數字當場量出來。",
+      },
+      surf: {
+        title: "浪的七幕",
+        desc: "GSAP ScrollTrigger 七幕捲動敘事，桌機另接 Lenis 平滑捲動。",
+      },
+      notFound: {
+        title: "迷路的飯糰",
+        desc: "404 頁。做成一格漫畫分鏡，貓的腳印停在這裡。",
+      },
+      error: {
+        title: "打瞌睡的伺服器",
+        desc: "500 頁。與 404 同一視覺家族，飯糰睡著了。",
+      },
     },
     detail: {
       openNewTab: "在新分頁開啟",

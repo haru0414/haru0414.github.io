@@ -16,7 +16,7 @@ export default function HeroSection() {
   return (
     <section
       id="start"
-      className="section min-h-screen flex flex-col justify-center items-center pt-20"
+      className="section min-h-screen flex flex-col justify-center items-center pt-8"
     >
       {/* Halftone Background */}
       <div className="absolute inset-0 z-0 opacity-10 halftone" />
