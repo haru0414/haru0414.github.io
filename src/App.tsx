@@ -17,6 +17,7 @@ import CrayonDefs from "./components/crayon/CrayonDefs";
 // 必須能渲染出完整內容；lazy 會在 SSR 只渲染 Suspense fallback、導致 hydration
 // 邊界不一致（React #419）。
 import ProjectDetailPage from "./pages/ProjectDetailPage";
+import WorkPage from "./pages/WorkPage";
 // 同步 import 的理由同上：/surf 也要進 prerender
 import SurfPage from "./pages/SurfPage";
 import LabPage from "./pages/LabPage";
@@ -304,6 +305,7 @@ export function AppShell() {
               /surf 刻意排在外面：它是全螢幕的沉浸式敘事頁，不該有外框 */}
           <Route element={<SiteLayout />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/work" element={<WorkPage />} />
             <Route path="/project/:id" element={<ProjectDetailPage />} />
             <Route path="/lab" element={<LabPage />} />
             <Route path="/blog" element={<BlogPage />} />

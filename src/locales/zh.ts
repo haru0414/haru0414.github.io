@@ -16,6 +16,15 @@ const zh = {
       contact: "聯絡",
     },
     // 站台頁首。顯示文字是拉丁字碼，這裡的中文走 aria-label
+    work: {
+      intro:
+        "商業專案的完整索引。首頁只放了精選幾件，這裡是全部——可以依技術棧篩選，點進去看每一件的實作細節。",
+      filterLabel: "技術",
+      all: "全部",
+      count: "{{n}} 件",
+      view: "看細節",
+      live: "線上瀏覽",
+    },
     siteNav: {
       label: "站台導覽",
       work: "作品",

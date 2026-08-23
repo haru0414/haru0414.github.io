@@ -31,20 +31,6 @@ export default function LabPage() {
   return (
     <main className="min-h-screen" style={{ backgroundColor: "var(--color-bg)" }}>
       <div className="container mx-auto px-4 py-16 md:py-24">
-        <Link
-          to="/"
-          className="interactive mb-10 inline-flex items-center gap-2 border-2 px-4 py-2 text-xs tracking-[0.14em] no-underline transition-transform hover:-translate-y-0.5"
-          style={{
-            fontFamily: "var(--font-heading)",
-            backgroundColor: "var(--color-surface)",
-            borderColor: "var(--color-ink)",
-            color: "var(--color-ink)",
-            boxShadow: "var(--shadow-manga-sm)",
-          }}
-        >
-          ← {t("lab.back")}
-        </Link>
-
         <header className="mb-14 flex flex-col items-start gap-4">
           <div className="relative">
             <CrayonDoodle
@@ -76,21 +62,6 @@ export default function LabPage() {
             aria-label={t("perf.navLabel")}
             className="lg:sticky lg:top-8 lg:w-52 lg:shrink-0"
           >
-            {/* 頁首那顆返回鍵會隨捲動離開視野，這裡再放一顆常駐的 */}
-            <Link
-              to="/"
-              className="interactive mb-3 inline-flex items-center gap-1.5 border-2 px-3 py-1.5 text-[11px] tracking-[0.1em] no-underline transition-transform hover:-translate-y-0.5"
-              style={{
-                fontFamily: "var(--font-heading)",
-                backgroundColor: "var(--color-surface)",
-                borderColor: "var(--color-ink)",
-                color: "var(--color-ink)",
-                boxShadow: "var(--shadow-manga-sm)",
-              }}
-            >
-              ← {t("lab.back")}
-            </Link>
-
             <ol className="m-0 flex list-none flex-wrap gap-2 p-0 lg:flex-col lg:gap-0">
               {DEMOS.map(({ slug, tag }, i) => (
                 <li key={slug} className="lg:border-l-2" style={{ borderColor: "var(--color-ink)" }}>

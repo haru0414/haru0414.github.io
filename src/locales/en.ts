@@ -15,6 +15,15 @@ const en = {
       contact: "Contact",
     },
     // Site header. Visible labels are latin codes; these strings are the aria-labels.
+    work: {
+      intro:
+        "The full index of commercial projects. The homepage shows a selection; this is all of them — filter by stack, or open one for the implementation details.",
+      filterLabel: "Stack",
+      all: "All",
+      count: "{{n}} projects",
+      view: "Details",
+      live: "Live site",
+    },
     siteNav: {
       label: "Site navigation",
       work: "Work",

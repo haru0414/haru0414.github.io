@@ -12,8 +12,7 @@ import { Menu, X } from "lucide-react";
  * 也避開標題字型對中文的 fallback；本地化名稱走 aria-label。
  */
 const ITEMS = [
-  // TODO(第二批)：/work 列表頁做好後改成 to: "/work"
-  { to: "/#episodes", code: "WORK", key: "work", match: "/work" },
+  { to: "/work", code: "WORK", key: "work", match: "/work" },
   { to: "/lab", code: "LAB", key: "lab", match: "/lab" },
   { to: "/blog", code: "BLOG", key: "blog", match: "/blog" },
 ];
