@@ -113,6 +113,8 @@ const BOARD_SLUGS: Record<string, string> = {
   量測: "measurement",
   "GitHub Pages": "github-pages",
   除錯: "debugging",
+  CSS: "css",
+  Safari: "safari",
 };
 
 const autoSlug = (tag: string) =>
