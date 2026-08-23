@@ -15,6 +15,27 @@ const zh = {
       career: "經歷",
       contact: "聯絡",
     },
+    // 站台頁首。顯示文字是拉丁字碼，這裡的中文走 aria-label
+    siteNav: {
+      label: "站台導覽",
+      work: "作品",
+      lab: "效能實驗室",
+      blog: "部落格",
+      contact: "聊聊",
+      current: "目前頁面",
+      open: "開啟選單",
+      close: "關閉選單",
+    },
+    footer: {
+      explore: "探索",
+      latest: "最新文章",
+      contact: "聯絡",
+      surf: "浪的七幕",
+      resume: "履歷 PDF",
+      email: "寄信給我",
+      built: "本站以 React 19 + Vite 建置",
+      rights: "© {{year}} Haru Li",
+    },
     error: {
       tag: "ERROR 500",
       bubble: "呼……伺服器睡著了",
@@ -93,6 +114,7 @@ const zh = {
       intro:
         "可以自己操作的前端效能實作。數字是當場跑出來的，不是截圖——調參數就會變。之後會陸續增加。",
       navLabel: "實作項目導覽",
+      readPost: "看這篇的來由與原理",
       memo: {
         title: "快取昂貴的運算",
         desc: "同一份運算（計算範圍內的質數個數），用開關切換走不走 useMemo 快取，再量同一次重新渲染的耗時。",
@@ -235,7 +257,7 @@ const zh = {
       searchPlaceholder: "搜尋標題、摘要或標籤",
       empty: "沒有符合「{{q}}」的主題。",
       pagination: "分頁",
-      boardTitle: "開發筆記",
+      boardTitle: "部落格",
       boardDesc: "標籤「{{tag}}」底下的主題。",
       navSite: "站台導覽",
       navBreadcrumb: "所在位置",
@@ -263,7 +285,7 @@ const zh = {
       enter: "ENTER →",
       back: "返回作品集",
       blog: {
-        title: "開發筆記",
+        title: "部落格",
         desc: "踩過的坑與量測結果，寫下來給未來的自己。",
       },
       perf: {

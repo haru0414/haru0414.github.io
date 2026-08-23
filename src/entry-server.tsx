@@ -88,8 +88,8 @@ function metaFor(url: string) {
     const tag = boardFromSlug(board[1]);
     if (tag) {
       return {
-        title: `${tag}｜開發筆記 Haru Li`,
-        description: `標籤「${tag}」底下的開發筆記。`,
+        title: `${tag}｜部落格 Haru Li`,
+        description: `標籤「${tag}」底下的文章。`,
         canonical: `${ORIGIN}/blog/board/${board[1]}/`,
       };
     }
@@ -108,7 +108,7 @@ function metaFor(url: string) {
   }
   if (url === "/blog") {
     return {
-      title: "NOTES｜開發筆記 Haru Li",
+      title: "BLOG｜部落格 Haru Li",
       description: "前端開發過程中的紀錄：踩過的坑、量測的結果、以及那些「教科書寫得對但實際上沒那麼簡單」的事。",
       canonical: `${ORIGIN}/blog/`,
     };

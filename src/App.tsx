@@ -1,7 +1,8 @@
-import { useEffect, useLayoutEffect, useState, useRef, useSyncExternalStore } from "react";
+import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import Navigation from "./components/layout/Navigation";
+import SiteLayout from "./components/layout/SiteLayout";
+import HomeSectionRail from "./components/layout/HomeSectionRail";
 import HeroSection from "./components/sections/HeroSection";
 import AboutSection from "./components/sections/AboutSection";
 import PortfolioSection from "./components/sections/PortfolioSection";
@@ -10,7 +11,6 @@ import LabSection from "./components/sections/LabSection";
 import ContactSection from "./components/sections/ContactSection";
 import ScrollCat from "./components/play/ScrollCat";
 import NotFoundPage from "./pages/NotFoundPage";
-import FloatingCat from "./components/FloatingCat";
 import SeoMeta from "./components/SeoMeta";
 import CrayonDefs from "./components/crayon/CrayonDefs";
 // 詳情頁同步 import（非 lazy）：專案頁已在建置時 prerender，renderToString
@@ -23,115 +23,6 @@ import LabPage from "./pages/LabPage";
 import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import ErrorBoundary, { ErrorScreen } from "./components/ErrorBoundary";
-
-// 訂閱指標型態。用 useSyncExternalStore 而非「effect 內 setState」：
-// 後者會多觸發一次渲染，也違反 React 的規則；這個寫法還順帶支援
-// 裝置中途改變（例如接上滑鼠的平板）
-const coarsePointer = {
-  subscribe(onChange: () => void) {
-    const mq = window.matchMedia("(pointer: coarse)");
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  },
-  get: () => window.matchMedia("(pointer: coarse)").matches,
-  // SSR 期間沒有指標可問，維持與原本一致的桌機預設
-  getServer: () => false,
-};
-
-// Custom Cursor Component - Using refs for smooth performance
-function CustomCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const [isHovering, setIsHovering] = useState(false);
-  const isDesktop = !useSyncExternalStore(
-    coarsePointer.subscribe,
-    coarsePointer.get,
-    coarsePointer.getServer,
-  );
-
-  useEffect(() => {
-    if (!isDesktop) return;
-
-    let animationFrameId: number;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      // Cancel previous animation frame for smooth updates
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-
-      animationFrameId = requestAnimationFrame(() => {
-        if (cursorRef.current) {
-          const size = isHovering ? 40 : 20;
-          cursorRef.current.style.transform = `translate(${e.clientX - size / 2}px, ${e.clientY - size / 2}px)`;
-          cursorRef.current.style.opacity = "1";
-        }
-      });
-    };
-
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.tagName === "BUTTON" ||
-        target.tagName === "A" ||
-        target.closest("button") ||
-        target.closest("a") ||
-        target.classList.contains("interactive")
-      ) {
-        setIsHovering(true);
-      }
-    };
-
-    const handleMouseOut = () => {
-      setIsHovering(false);
-    };
-
-    const handleMouseLeave = () => {
-      if (cursorRef.current) {
-        cursorRef.current.style.opacity = "0";
-      }
-    };
-
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    document.addEventListener("mouseover", handleMouseOver, { passive: true });
-    document.addEventListener("mouseout", handleMouseOut, { passive: true });
-    document.addEventListener("mouseleave", handleMouseLeave, {
-      passive: true,
-    });
-
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      window.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseover", handleMouseOver);
-      document.removeEventListener("mouseout", handleMouseOut);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [isDesktop, isHovering]);
-
-  if (!isDesktop) {
-    return null;
-  }
-
-  return (
-    <div
-      ref={cursorRef}
-      className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full border-2"
-      style={{
-        width: isHovering ? 40 : 20,
-        height: isHovering ? 40 : 20,
-        backgroundColor: isHovering
-          ? "var(--color-poster)"
-          : "var(--color-nekoma)",
-        borderColor: "var(--color-ink)",
-        opacity: 0,
-        willChange: "transform",
-        transition: "width 0.15s, height 0.15s, background-color 0.15s",
-        mixBlendMode: "difference",
-      }}
-    />
-  );
-}
 
 // Parallax Background Elements
 function ParallaxElements({ scrollProgress }: { scrollProgress: number }) {
@@ -261,8 +152,8 @@ function App() {
       {/* Parallax Background */}
       <ParallaxElements scrollProgress={scrollProgress} />
 
-      {/* Navigation */}
-      <Navigation />
+      {/* 首頁專用的區塊指示器。站台導覽在 SiteHeader */}
+      <HomeSectionRail />
 
       {/* Main Content */}
       <main id="main" tabIndex={-1} className="relative z-10 outline-none">
@@ -305,7 +196,7 @@ const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffec
 let homeScrollY = 0;
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const prevPath = useRef<string | null>(null);
 
   // 在首頁時持續記錄位置。不能等到換頁當下才讀——目標頁若比首頁矮（例如
@@ -324,7 +215,35 @@ function ScrollToTop() {
     return () => window.removeEventListener("scroll", save);
   }, [pathname]);
 
+  // 帶錨點的連結（頁首的「聊聊」、頁尾的「作品」都是 /#區塊）。
+  // 必須跟下面的歸零邏輯分開處理，否則兩邊會互相打架——歸零那段連捲四幀，
+  // 單純呼叫 scrollIntoView 會被它蓋掉。目標區塊可能還沒掛載，所以要重試。
+  //
+  // 用 instant 而非 smooth：跨頁的錨點動輒要捲幾千 px，動畫既慢又讓人失去
+  // 方向感；這也跟下面「換頁就直接在正確位置」的處理一致。
+  useEffect(() => {
+    if (!hash) return;
+    let attempt = 0;
+    let timer = 0;
+    const tryScroll = () => {
+      const el = document.getElementById(hash.slice(1));
+      if (el) {
+        el.scrollIntoView({ behavior: "instant" });
+      } else if (++attempt < 20) {
+        timer = window.setTimeout(tryScroll, 50);
+      }
+    };
+    // 讓歸零那四幀先跑完再開始找，不然會捲到一半被拉回頂端
+    timer = window.setTimeout(tryScroll, 120);
+    return () => window.clearTimeout(timer);
+  }, [pathname, hash]);
+
   useIsomorphicLayoutEffect(() => {
+    // 有錨點時交給上面那段處理，這裡不要歸零
+    if (hash) {
+      prevPath.current = pathname.replace(/\/+$/, "") || "/";
+      return;
+    }
     const path = pathname.replace(/\/+$/, "") || "/";
     const from = prevPath.current;
     prevPath.current = path;
@@ -367,45 +286,39 @@ function ScrollToTop() {
       if (++n < 4) raf = requestAnimationFrame(again);
     });
     return () => cancelAnimationFrame(raf);
-  }, [pathname]);
+  }, [pathname, hash]);
   return null;
 }
 
 export function AppShell() {
-  // /surf 是獨立的深色電影感 demo 頁，全站的漫畫風掛件都不該出現在上面。
-  // FloatingCat 內含右下角飼料碗選單（PetBowl），一併關掉。
-  // 用 useLocation 而非 CSS 隱藏：這些元件都有捲動 / 滑鼠監聽，
-  // 只是視覺藏起來仍會跟 ScrollTrigger 搶主執行緒。
-  const { pathname } = useLocation();
-  // 必須去掉尾斜線再比對：GitHub Pages 對 /surf 會 301 導向 /surf/，
-  // 線上的 pathname 帶尾斜線，用完全相等判斷會漏掉，飼料碗就跑出來了
-  const isSurf = pathname.replace(/\/+$/, "") === "/surf";
-
   return (
     <>
       <ScrollToTop />
       <CrayonDefs />
       <SeoMeta />
-      {!isSurf && <CustomCursor />}
-      {!isSurf && <FloatingCat />}
       {/* 攔住 render 期例外。這站是靜態站沒有伺服器 500，等價的線上故障
           就是元件拋錯導致整頁空白——沒有這層就連「出錯了」都不會顯示 */}
       <ErrorBoundary>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/project/:id" element={<ProjectDetailPage />} />
+          {/* 站台外框（頁首、頁尾、漫畫風掛件）由 SiteLayout 提供。
+              /surf 刻意排在外面：它是全螢幕的沉浸式敘事頁，不該有外框 */}
+          <Route element={<SiteLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/project/:id" element={<ProjectDetailPage />} />
+            <Route path="/lab" element={<LabPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            {/* 看板路由必須排在文章路由之前，否則 /blog/board/x 會被
+                當成 slug 為 "board" 的文章 */}
+            <Route path="/blog/board/:board" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogPostPage />} />
+            {/* 500 畫面的 demo 路由：它平常只有真的壞掉才看得到，
+                開一個入口才能當作品給人看，也才檢查得到樣式 */}
+            <Route path="/500" element={<ErrorScreen />} />
+            {/* 未知路徑顯示 404 迷路貓（搭配 GitHub Pages 的 404.html fallback） */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+
           <Route path="/surf" element={<SurfPage />} />
-          <Route path="/lab" element={<LabPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          {/* 看板路由必須排在文章路由之前，否則 /blog/board/x 會被
-              當成 slug 為 "board" 的文章 */}
-          <Route path="/blog/board/:board" element={<BlogPage />} />
-          <Route path="/blog/:slug" element={<BlogPostPage />} />
-          {/* 500 畫面的 demo 路由：它平常只有真的壞掉才看得到，
-              開一個入口才能當作品給人看，也才檢查得到樣式 */}
-          <Route path="/500" element={<ErrorScreen />} />
-          {/* 未知路徑顯示 404 迷路貓（搭配 GitHub Pages 的 404.html fallback） */}
-          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </ErrorBoundary>
     </>

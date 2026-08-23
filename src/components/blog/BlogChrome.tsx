@@ -19,7 +19,7 @@ export default function BlogChrome({ children }: { children: ReactNode }) {
             className="text-lg no-underline"
             style={{ fontFamily: "var(--font-heading)", color: "var(--color-ink)" }}
           >
-            NOTES
+            BLOG
           </Link>
           <nav
             aria-label={t("blog.navSite")}

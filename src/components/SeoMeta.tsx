@@ -51,12 +51,12 @@ export default function SeoMeta() {
     } else if (boardMatch) {
       const tag = boardFromSlug(boardMatch[1]);
       if (tag) {
-        title = `${tag}｜開發筆記 Haru Li`;
-        description = `標籤「${tag}」底下的開發筆記。`;
+        title = `${tag}｜部落格 Haru Li`;
+        description = `標籤「${tag}」底下的文章。`;
         canonical = `${ORIGIN}/blog/board/${boardMatch[1]}/`;
       }
     } else if (path === "/blog") {
-      title = "NOTES｜開發筆記 Haru Li";
+      title = "BLOG｜部落格 Haru Li";
       description = "前端開發過程中的紀錄：踩過的坑、量測的結果，以及那些教科書寫得對但實際上沒那麼簡單的事。";
       canonical = `${ORIGIN}/blog/`;
     } else if (path === "/lab") {

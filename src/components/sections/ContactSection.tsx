@@ -37,7 +37,7 @@ export default function ContactSection() {
   ];
 
   return (
-    <footer
+    <section
       ref={sectionRef}
       id="next"
       className="py-24 relative overflow-hidden border-t-4"
@@ -232,6 +232,6 @@ export default function ContactSection() {
           />
         </div>
       </div>
-    </footer>
+    </section>
   );
 }
