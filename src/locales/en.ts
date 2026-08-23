@@ -257,7 +257,7 @@ const en = {
       minutes: "{{n}} min read",
       backToList: "back to all posts",
       pager: "post navigation: previous / next",
-      authorBio: "Frontend engineer. I write here mainly to organise the traps I have fallen into — mostly implementation detail and measurements.",
+      authorBio: "Full-stack engineer. I write here mainly to organise the traps I have fallen into — mostly implementation detail and measurements.",
       viewPortfolio: "view portfolio",
       count: "{{n}} posts",
       featured: "latest",
