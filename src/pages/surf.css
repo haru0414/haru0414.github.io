@@ -198,7 +198,12 @@ html.surf-mode #root {
 
 .surf-s3-track picture,
 .surf-s3-track img {
-  height: 100svh;
+  /* 圖是 2.4:1，寬度由高度反推。視口比它更扁時（寬高比 > 2.4）算出來的寬度
+     會小於視口寬，右邊就露出底色——2000x712 的視窗只會鋪到 1709px。
+     這時改由寬度反推高度，並多留 15%：既蓋滿寬度，水平位移也還有行程可跑
+     （行程是 scrollWidth - innerWidth，剛好蓋滿的話會變成 0，整幕就不動了）。
+     溢出的高度由 .surf-s3-viewport 的 overflow:hidden 上下對稱裁掉。 */
+  height: max(100svh, calc(100vw / 2.4 * 1.15));
   width: auto;
   max-width: none;
   display: block;
