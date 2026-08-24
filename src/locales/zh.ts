@@ -18,12 +18,13 @@ const zh = {
     // 站台頁首。顯示文字是拉丁字碼，這裡的中文走 aria-label
     work: {
       intro:
-        "商業專案的完整索引。首頁只放了精選幾件，這裡是全部——可以依技術棧篩選，點進去看每一件的實作細節。",
+        "商業專案與個人 Side Project 的完整索引。首頁只放了精選幾件，這裡是全部——可以依技術棧篩選，點進去看每一件的實作細節。",
       filterLabel: "技術",
       all: "全部",
       count: "{{n}} 件",
       view: "看細節",
       live: "線上瀏覽",
+      side: "個人專案",
     },
     siteNav: {
       label: "站台導覽",
@@ -352,6 +353,32 @@ const zh = {
       "08": {
         desc: "企業官方網站，著重整體網站設計與頁面 UI 實作，並完成基本 SEO 欄位檢查與優化",
         full: "負責企業官方網站的網站設計與前端頁面 UI 實作，無特定前端框架依賴，聚焦於版面視覺、互動細節與切版品質。依設計需求完成各頁面排版與響應式呈現，確保桌機、平板、手機各裝置正常顯示。同時進行基本 SEO 欄位檢查與優化，包含 title、meta description、Open Graph、語意化標籤與圖片 alt 等，提升搜尋引擎收錄與社群分享呈現品質。",
+      },
+      "09": {
+        desc: "個人 Side Project：React Native + Expo 旅遊記錄 App，Offline-First 架構、Supabase 雲端後端，完整走過 EAS Build 到 TestFlight 上架",
+        full: "以 AI 工具輔助開發的個人 Side Project，從設計、前端到資料庫全由自己一手包辦，目標是把 iOS 上架流程走完一遍，並透過 TestFlight 在實際旅遊時真的拿來用。獨立完成 UI/UX 設計（Neo-Brutalism ✕ 昭和復古風格）、前端邏輯與雲端後端整合。技術棧為 React Native 0.83.2 + Expo SDK 55 + TypeScript，狀態管理用 Zustand，後端採 Supabase（PostgreSQL + Auth + Storage），本地資料庫用 Expo SQLite。設計 Offline-First 架構，以本地 SQLite 搭配同步佇列與自動重試機制，確保旅途中沒有網路時仍能正常記錄。整合 Google OAuth / Apple Sign In、Expo Push Notifications（共編事件通知）、Sentry 錯誤追蹤與 Google Directions API。功能面實作邀請碼共編行程、多照片拼貼分享卡片、互動式世界地圖與 Haptic 觸覺回饋。部署端完整走過 EAS Build、Provisioning Profile 與 TestFlight 內測發佈等 iOS 流程。",
+        shots: {
+          "0": {
+            label: "登入頁",
+            desc: "支援 Google 登入與 Apple Sign In，兩者都走 Supabase Auth。",
+          },
+          "1": {
+            label: "世界地圖",
+            desc: "首頁以插針記錄造訪過的城市與國家收集進度；有行程正在進行時，整頁會自動切換成當下的旅程行程表。",
+          },
+          "2": {
+            label: "打卡記錄",
+            desc: "照片壓縮後上傳 Supabase Storage，串接 Google 景點 API 快速帶入地點資訊，離線時先寫進本地 SQLite 排隊等同步。",
+          },
+          "3": {
+            label: "行程計畫",
+            desc: "依規劃中 / 進行中 / 已完成顯示不同狀態與出發倒數，可用邀請碼邀請同行者共編行程。",
+          },
+          "4": {
+            label: "個人檔案",
+            desc: "個人資料更新、洲別收集進度、同步狀態、登出與 App 說明。",
+          },
+        },
       },
     },
   },

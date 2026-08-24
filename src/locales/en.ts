@@ -17,12 +17,13 @@ const en = {
     // Site header. Visible labels are latin codes; these strings are the aria-labels.
     work: {
       intro:
-        "The full index of commercial projects. The homepage shows a selection; this is all of them — filter by stack, or open one for the implementation details.",
+        "The full index of commercial work and personal side projects. The homepage shows a selection; this is all of them — filter by stack, or open one for the implementation details.",
       filterLabel: "Stack",
       all: "All",
       count: "{{n}} projects",
       view: "Details",
       live: "Live site",
+      side: "Side project",
     },
     siteNav: {
       label: "Site navigation",
@@ -331,6 +332,32 @@ const en = {
       "08": {
         desc: "Corporate website focused on overall site design, page UI implementation, and basic SEO field checks and optimization.",
         full: "Responsible for the site design and frontend UI of a corporate website, with no specific framework dependency, focusing on visual layout, interaction details, and markup quality. Completed page layouts and responsive rendering across desktop, tablet, and mobile. Also performed basic SEO field checks and optimization for title, meta description, Open Graph, semantic tags, and image alt text to improve search indexing and social sharing quality.",
+      },
+      "09": {
+        desc: "Personal side project: a React Native + Expo travel journal app with an offline-first architecture, a Supabase backend, and a full EAS Build to TestFlight release.",
+        full: "A personal side project built with AI-assisted development, handling design, frontend, and database single-handedly. The goal was to walk through the entire iOS release process and actually use the app on real trips via TestFlight. Covered the UI/UX design end to end (Neo-Brutalism ✕ Showa retro), the frontend logic, and the cloud backend integration. Built on React Native 0.83.2 + Expo SDK 55 + TypeScript, with Zustand for state, Supabase (PostgreSQL + Auth + Storage) for the backend, and Expo SQLite locally. Designed an offline-first architecture where local SQLite is paired with a sync queue and automatic retries, so journaling keeps working without a connection while travelling. Integrated Google OAuth / Apple Sign In, Expo Push Notifications (shared-itinerary events), Sentry error tracking, and the Google Directions API. Feature work included invite-code collaborative itineraries, multi-photo collage share cards, an interactive world map, and haptic feedback. On the delivery side, went through EAS Build, provisioning profiles, and TestFlight beta releases.",
+        shots: {
+          "0": {
+            label: "Login",
+            desc: "Google and Apple Sign In, both handled through Supabase Auth.",
+          },
+          "1": {
+            label: "World map",
+            desc: "The home map pins every city and country visited and tracks collection progress; while a trip is in progress the whole screen switches to that day's live itinerary.",
+          },
+          "2": {
+            label: "Travel log",
+            desc: "Photos are compressed before uploading to Supabase Storage, with the Google Places API filling in location details. Offline, entries land in local SQLite and queue up for sync.",
+          },
+          "3": {
+            label: "Trip planning",
+            desc: "Cards reflect planning / active / completed state with a countdown to departure, and an invite code lets travel companions co-edit the itinerary.",
+          },
+          "4": {
+            label: "Profile",
+            desc: "Account details, continent collection progress, sync status, sign-out, and the app intro.",
+          },
+        },
       },
     },
   },

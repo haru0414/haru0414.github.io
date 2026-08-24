@@ -60,8 +60,8 @@ export default function SeoMeta() {
       description = "前端開發過程中的紀錄：踩過的坑、量測的結果，以及那些教科書寫得對但實際上沒那麼簡單的事。";
       canonical = `${ORIGIN}/blog/`;
     } else if (path === "/work") {
-      title = "WORK｜商業專案作品集 Haru Li";
-      description = "電商平台、官網架構遷移、後台系統、金流整合與即時通訊——八件商業專案的完整索引，可依技術棧篩選。";
+      title = "WORK｜專案作品集 Haru Li";
+      description = "電商平台、官網架構遷移、後台系統、金流整合、即時通訊與一支 React Native 旅遊 App——商業專案與個人 Side Project 的完整索引，可依技術棧篩選。";
       canonical = `${ORIGIN}/work/`;
     } else if (path === "/lab") {
       title = "PERF LAB｜可操作的前端效能實作 Haru Li";

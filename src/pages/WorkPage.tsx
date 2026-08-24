@@ -94,12 +94,13 @@ export default function WorkPage() {
                   boxShadow: "var(--shadow-manga)",
                 }}
               >
-                {/* 封面色帶。有截圖的專案放截圖，其餘用專案色＋網點維持一致的分鏡感 */}
+                {/* 封面色帶。網站截圖鋪滿整格；手機直式截圖的長寬比塞不進 16:10，
+                    改成網點底上立一支帶機身外框的手機；沒有截圖的就只留網點 */}
                 <div
                   className="relative aspect-16/10 overflow-hidden border-b-2"
                   style={{ backgroundColor: project.color, borderColor: "var(--color-ink)" }}
                 >
-                  {project.screenshots?.[0] ? (
+                  {project.screenshots?.[0] && !project.portrait ? (
                     <img
                       src={project.screenshots[0]}
                       alt=""
@@ -116,6 +117,27 @@ export default function WorkPage() {
                         backgroundSize: "4px 4px",
                       }}
                     />
+                  )}
+                  {project.screenshots?.[0] && project.portrait && (
+                    <div className="absolute inset-x-0 top-5 flex justify-center">
+                      <div
+                        className="w-[86px] overflow-hidden rounded-[10px] border-[3px]"
+                        style={{
+                          // 同 PhoneGallery：機身色固定深色，否則深色模式下會跟截圖底色融在一起
+                          borderColor: "#17181c",
+                          backgroundColor: "#17181c",
+                          boxShadow: "4px 4px 0 0 rgba(0,0,0,0.4)",
+                        }}
+                      >
+                        <img
+                          src={project.screenshots[0]}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                          className="block h-auto w-full rounded-[7px]"
+                        />
+                      </div>
+                    </div>
                   )}
                   <span
                     className="absolute left-0 top-0 border-b-2 border-r-2 px-2 py-1 text-xs"
@@ -137,6 +159,19 @@ export default function WorkPage() {
                   >
                     {project.year}
                   </span>
+                  {project.side && (
+                    <span
+                      className="absolute bottom-0 left-0 border-r-2 border-t-2 px-2 py-1 text-[11px] tracking-[0.1em]"
+                      style={{
+                        fontFamily: "var(--font-heading)",
+                        backgroundColor: "var(--color-poster)",
+                        color: "var(--color-on-poster)",
+                        borderColor: "var(--color-ink)",
+                      }}
+                    >
+                      {t("work.side")}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex flex-1 flex-col gap-3 p-4">

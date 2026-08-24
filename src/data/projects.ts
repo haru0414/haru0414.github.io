@@ -1,6 +1,11 @@
 import ndayScreenshot from "../assets/images/website/www.nday.com.tw_.webp";
 import jiahescreenshot from "../assets/images/website/www.jiahe.net.tw_.webp";
 import asteriskScreenshot from "../assets/images/website/www.asterisk-tech.com_.webp";
+import travcatLogin from "../assets/images/travcat/01-login.webp";
+import travcatMap from "../assets/images/travcat/02-map.webp";
+import travcatLog from "../assets/images/travcat/03-log.webp";
+import travcatPlan from "../assets/images/travcat/04-plan.webp";
+import travcatProfile from "../assets/images/travcat/05-profile.webp";
 
 // 只放結構性 / 非翻譯資料；標題為風格化英文保留。
 // 描述（desc / full）依 id 放在 i18n：t(`projects.${id}.desc` | `.full`)。
@@ -11,6 +16,10 @@ export interface ProjectData {
   color: string;
   techStack: string[];
   screenshots?: string[];
+  // 個人專案。未標記者一律為商業專案，卡片與詳細頁會多掛一枚 SIDE PROJECT 標籤
+  side?: true;
+  // 截圖為手機直式。詳細頁改走直式畫廊，說明取 i18n 的 projects.<id>.shots.<i>
+  portrait?: true;
   githubUrl?: string;
   liveUrl?: string;
 }
@@ -117,5 +126,31 @@ export const projects: ProjectData[] = [
     techStack: ["HTML", "CSS", "JavaScript", "RWD", "UI Design", "SEO"],
     liveUrl: "https://www.asterisk-tech.com/",
     screenshots: [asteriskScreenshot],
+  },
+  {
+    id: "09",
+    title: "TRAVCAT",
+    year: "2026",
+    color: "#b8574c",
+    side: true,
+    portrait: true,
+    techStack: [
+      "React Native",
+      "Expo",
+      "TypeScript",
+      "Supabase",
+      "PostgreSQL",
+      "Zustand",
+      "Expo SQLite",
+      "Sentry",
+      "iOS",
+    ],
+    screenshots: [
+      travcatLogin,
+      travcatMap,
+      travcatLog,
+      travcatPlan,
+      travcatProfile,
+    ],
   },
 ];

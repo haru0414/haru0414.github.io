@@ -116,9 +116,9 @@ function metaFor(url: string) {
   }
   if (url === "/work") {
     return {
-      title: "WORK｜商業專案作品集 Haru Li",
+      title: "WORK｜專案作品集 Haru Li",
       description:
-        "電商平台、官網架構遷移、後台系統、金流整合與即時通訊——八件商業專案的完整索引，可依技術棧篩選。",
+        "電商平台、官網架構遷移、後台系統、金流整合、即時通訊與一支 React Native 旅遊 App——商業專案與個人 Side Project 的完整索引，可依技術棧篩選。",
       canonical: `${ORIGIN}/work/`,
     };
   }

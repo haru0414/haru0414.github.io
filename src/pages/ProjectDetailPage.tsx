@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { projects } from "../data/projects";
+import PhoneGallery from "../components/ui/PhoneGallery";
 
 export default function ProjectDetailPage() {
   const { t } = useTranslation();
@@ -87,6 +88,18 @@ export default function ProjectDetailPage() {
             >
               {project.year}
             </span>
+            {project.side && (
+              <span
+                className="px-3 py-1 text-xs border"
+                style={{
+                  fontFamily: "var(--font-heading)",
+                  backgroundColor: "var(--color-surface)",
+                  borderColor: "var(--color-ink)",
+                }}
+              >
+                {t("work.side")}
+              </span>
+            )}
           </div>
 
           <h1
@@ -224,10 +237,19 @@ export default function ProjectDetailPage() {
           </div>
         )}
 
-        {/* Screenshots (for projects without liveUrl) */}
+        {/* Screenshots (for projects without liveUrl)。手機直式截圖的長寬比與網站截圖
+            差太多，硬套兩欄會被拉成細長條，所以另走一組可切換的手機畫廊 */}
         {!project.liveUrl &&
           project.screenshots &&
-          project.screenshots.length > 0 && (
+          project.screenshots.length > 0 &&
+          (project.portrait ? (
+            <PhoneGallery
+              projectId={project.id}
+              title={project.title}
+              screenshots={project.screenshots}
+              accent={project.color}
+            />
+          ) : (
             <div className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-4">
               {project.screenshots.map((src, i) => (
                 <div
@@ -250,7 +272,7 @@ export default function ProjectDetailPage() {
                 </div>
               ))}
             </div>
-          )}
+          ))}
 
         {/* Description */}
         <div
