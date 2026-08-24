@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import type { Shot } from "../../data/projects";
 
 // 手機直式截圖的展示：左邊一支大畫面，右邊是該畫面的標題與說明，
 // 底下的縮圖列可切換。文案取 i18n 的 projects.<projectId>.shots.<i>.{label,desc}
@@ -15,7 +16,7 @@ export default function PhoneGallery({
 }: {
   projectId: string;
   title: string;
-  screenshots: string[];
+  screenshots: Shot[];
   accent: string;
 }) {
   const { t } = useTranslation();
@@ -58,10 +59,10 @@ export default function PhoneGallery({
           >
             <img
               key={active}
-              src={screenshots[active]}
+              src={screenshots[active].src}
               alt={`${title} — ${t(key(active, "label"))}`}
-              width={720}
-              height={1559}
+              width={screenshots[active].w}
+              height={screenshots[active].h}
               decoding="async"
               className="rise-in block h-auto w-full rounded-[1.6rem]"
             />
@@ -94,7 +95,7 @@ export default function PhoneGallery({
               className="mt-8 flex gap-3 overflow-x-auto pt-5 md:mt-auto"
               style={{ borderTop: "2px solid var(--color-ink)" }}
             >
-              {screenshots.map((src, i) => {
+              {screenshots.map((shot, i) => {
                 const on = i === active;
                 return (
                   <button
@@ -113,10 +114,10 @@ export default function PhoneGallery({
                     }}
                   >
                     <img
-                      src={src}
+                      src={shot.src}
                       alt=""
-                      width={720}
-                      height={1559}
+                      width={shot.w}
+                      height={shot.h}
                       loading="lazy"
                       decoding="async"
                       className="block h-auto w-full"

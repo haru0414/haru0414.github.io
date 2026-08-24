@@ -9,13 +9,23 @@ import travcatProfile from "../assets/images/travcat/05-profile.webp";
 
 // 只放結構性 / 非翻譯資料；標題為風格化英文保留。
 // 描述（desc / full）依 id 放在 i18n：t(`projects.${id}.desc` | `.full`)。
+
+// 截圖連同原生尺寸一起放。<img> 少了 width/height 瀏覽器就預留不出版位，
+// 圖載入的瞬間會把下面的內容往下推（CLS）；尺寸放在這裡三個用到截圖的
+// 地方（/work 卡片、詳細頁、PhoneGallery）才不會各自寫死一組數字
+export interface Shot {
+  src: string;
+  w: number;
+  h: number;
+}
+
 export interface ProjectData {
   id: string;
   title: string;
   year: string;
   color: string;
   techStack: string[];
-  screenshots?: string[];
+  screenshots?: Shot[];
   // 個人專案。未標記者一律為商業專案，卡片與詳細頁會多掛一枚 SIDE PROJECT 標籤
   side?: true;
   // 截圖為手機直式。詳細頁改走直式畫廊，說明取 i18n 的 projects.<id>.shots.<i>
@@ -60,7 +70,7 @@ export const projects: ProjectData[] = [
       "Nginx",
     ],
     liveUrl: "https://www.nday.com.tw/",
-    screenshots: [ndayScreenshot],
+    screenshots: [{ src: ndayScreenshot, w: 1400, h: 831 }],
   },
   {
     id: "03",
@@ -116,7 +126,7 @@ export const projects: ProjectData[] = [
     color: "#84846a",
     techStack: ["Astro", "React.js", "Git", "Swiper", "GA4 / GTM", "SEO"],
     liveUrl: "https://www.jiahe.net.tw/",
-    screenshots: [jiahescreenshot],
+    screenshots: [{ src: jiahescreenshot, w: 1400, h: 831 }],
   },
   {
     id: "08",
@@ -125,7 +135,7 @@ export const projects: ProjectData[] = [
     color: "#e11d48",
     techStack: ["HTML", "CSS", "JavaScript", "RWD", "UI Design", "SEO"],
     liveUrl: "https://www.asterisk-tech.com/",
-    screenshots: [asteriskScreenshot],
+    screenshots: [{ src: asteriskScreenshot, w: 1400, h: 995 }],
   },
   {
     id: "09",
@@ -145,12 +155,8 @@ export const projects: ProjectData[] = [
       "Sentry",
       "iOS",
     ],
-    screenshots: [
-      travcatLogin,
-      travcatMap,
-      travcatLog,
-      travcatPlan,
-      travcatProfile,
-    ],
+    screenshots: [travcatLogin, travcatMap, travcatLog, travcatPlan, travcatProfile].map(
+      (src) => ({ src, w: 720, h: 1559 }),
+    ),
   },
 ];

@@ -168,13 +168,13 @@ export default function ProjectDetailPage() {
                   className="divide-y-2"
                   style={{ borderColor: "var(--color-ink)" }}
                 >
-                  {project.screenshots.map((src, i) => (
+                  {project.screenshots.map((shot, i) => (
                     <img
                       key={i}
-                      src={src}
+                      src={shot.src}
                       alt={`${project.title} screenshot ${i + 1}`}
-                      width={3098}
-                      height={1838}
+                      width={shot.w}
+                      height={shot.h}
                       loading="lazy"
                       decoding="async"
                       className="w-full h-auto block"
@@ -251,7 +251,7 @@ export default function ProjectDetailPage() {
             />
           ) : (
             <div className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-4">
-              {project.screenshots.map((src, i) => (
+              {project.screenshots.map((shot, i) => (
                 <div
                   key={i}
                   className="border-2 overflow-hidden"
@@ -261,10 +261,10 @@ export default function ProjectDetailPage() {
                   }}
                 >
                   <img
-                    src={src}
+                    src={shot.src}
                     alt={`${project.title} screenshot ${i + 1}`}
-                    width={3098}
-                    height={1838}
+                    width={shot.w}
+                    height={shot.h}
                     loading="lazy"
                     decoding="async"
                     className="w-full h-auto object-cover"

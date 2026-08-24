@@ -52,7 +52,13 @@ export default function ImageFormatDemo() {
       >
         <div className="aspect-[3/2] overflow-hidden border-2" style={{ borderColor: "color-mix(in srgb, var(--color-ink) 25%, transparent)" }}>
           {preview ? (
-            <img src={preview} alt={t("perf.image.alt")} className="h-full w-full object-cover" />
+            <img
+              src={preview}
+              alt={t("perf.image.alt")}
+              width={1920}
+              height={1280}
+              className="h-full w-full object-cover"
+            />
           ) : null}
         </div>
 

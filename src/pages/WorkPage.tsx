@@ -102,8 +102,10 @@ export default function WorkPage() {
                 >
                   {project.screenshots?.[0] && !project.portrait ? (
                     <img
-                      src={project.screenshots[0]}
+                      src={project.screenshots[0].src}
                       alt=""
+                      width={project.screenshots[0].w}
+                      height={project.screenshots[0].h}
                       loading="lazy"
                       decoding="async"
                       className="h-full w-full object-cover object-top"
@@ -130,8 +132,10 @@ export default function WorkPage() {
                         }}
                       >
                         <img
-                          src={project.screenshots[0]}
+                          src={project.screenshots[0].src}
                           alt=""
+                          width={project.screenshots[0].w}
+                          height={project.screenshots[0].h}
                           loading="lazy"
                           decoding="async"
                           className="block h-auto w-full rounded-[7px]"
