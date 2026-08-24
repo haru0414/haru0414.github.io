@@ -6,6 +6,11 @@ import { DEMOS } from "../components/perf/registry";
 
 // 效能實作展示頁。由 registry 驅動：新增 demo 只要在那裡加一筆，
 // 這頁的錨點導覽、編號與版面都會自動跟上。
+
+// 站台頁首是 sticky top-0，高 h-14 + 2px 邊框 = 58px。sticky 導覽與錨點
+// 捲動都要讓開這段，否則會被壓在頁首底下。數值對齊 scroll-mt-20 / lg:top-20
+const HEADER_OFFSET = 80;
+
 export default function LabPage() {
   const { t } = useTranslation();
   const [active, setActive] = useState(DEMOS[0]?.slug ?? "");
@@ -60,7 +65,7 @@ export default function LabPage() {
           {/* 錨點導覽。demo 變多時這裡是找路的入口 */}
           <nav
             aria-label={t("perf.navLabel")}
-            className="lg:sticky lg:top-8 lg:w-52 lg:shrink-0"
+            className="lg:sticky lg:top-20 lg:w-52 lg:shrink-0"
           >
             <ol className="m-0 flex list-none flex-wrap gap-2 p-0 lg:flex-col lg:gap-0">
               {DEMOS.map(({ slug, tag }, i) => (
@@ -71,7 +76,7 @@ export default function LabPage() {
                       // 第一項回到頁面最頂端（含標題區），其餘捲到該區塊。
                       // 用原生 anchor 的話 01 只會停在它自己的位置，看起來像沒反應
                       e.preventDefault();
-                      const target = i === 0 ? 0 : (document.getElementById(slug)?.offsetTop ?? 0) - 32;
+                      const target = i === 0 ? 0 : (document.getElementById(slug)?.offsetTop ?? 0) - HEADER_OFFSET;
                       window.scrollTo({ top: target, behavior: "smooth" });
                       setActive(slug);
                     }}
@@ -96,7 +101,7 @@ export default function LabPage() {
               <article
                 key={slug}
                 id={slug}
-                className="grid scroll-mt-8 gap-6 border-2 p-6 md:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] md:gap-8 md:p-8"
+                className="grid scroll-mt-20 gap-6 border-2 p-6 md:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] md:gap-8 md:p-8"
                 style={{
                   backgroundColor: "var(--color-bg)",
                   borderColor: "var(--color-ink)",

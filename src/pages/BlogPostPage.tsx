@@ -191,7 +191,7 @@ export default function BlogPostPage() {
           </article>
 
           {/* 側邊欄：目錄、作者、其他文章 */}
-          <aside className="flex w-full flex-col gap-5 lg:sticky lg:top-8 lg:w-64 lg:shrink-0">
+          <aside className="flex w-full flex-col gap-5 lg:sticky lg:top-20 lg:w-64 lg:shrink-0">
             <TableOfContents post={post} active={activeHeading} />
             <AuthorCard />
             <RecentPosts exclude={post.slug} />
