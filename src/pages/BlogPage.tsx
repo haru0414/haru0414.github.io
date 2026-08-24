@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import Link from "../components/LocaleLink";
 import BlogChrome from "../components/blog/BlogChrome";
 import CrayonDoodle from "../components/crayon/CrayonDoodle";
 import { Search } from "lucide-react";
@@ -52,7 +53,7 @@ export default function BlogPage() {
           />
           {board ? (
             <>
-              <Link to="/blog" className="no-underline hover:underline" style={{ color: "var(--color-muted)" }}>
+              <Link to="/blog/" className="no-underline hover:underline" style={{ color: "var(--color-muted)" }}>
                 {t("blog.allBoards")}
               </Link>
               <CrayonDoodle
@@ -115,7 +116,7 @@ export default function BlogPage() {
                 {shown.map((post, i) => (
                   <li key={post.slug} style={{ borderTop: i ? "1px solid color-mix(in srgb, var(--color-ink) 14%, transparent)" : undefined }}>
                     <Link
-                      to={`/blog/${post.slug}`}
+                      to={`/blog/${post.slug}/`}
                       className="flex items-start gap-3 px-3 py-3 no-underline sm:gap-4 transition-colors hover:bg-[color-mix(in_srgb,var(--color-poster)_16%,transparent)]"
                       style={{ color: "var(--color-ink)" }}
                     >
@@ -229,7 +230,7 @@ export default function BlogPage() {
               <ol className="m-0 list-none p-0">
                 <li>
                   <Link
-                    to="/blog"
+                    to="/blog/"
                     aria-current={board === null ? "page" : undefined}
                     className="flex w-full items-center justify-between px-3 py-2 text-[12px] no-underline transition-colors"
                     style={{
@@ -244,7 +245,7 @@ export default function BlogPage() {
                 {allBoards().map(([name, n]) => (
                   <li key={name} style={{ borderTop: "1px solid color-mix(in srgb, var(--color-ink) 12%, transparent)" }}>
                     <Link
-                      to={`/blog/board/${boardSlug(name)}`}
+                      to={`/blog/board/${boardSlug(name)}/`}
                       aria-current={board === name ? "page" : undefined}
                       className="flex w-full items-center justify-between px-3 py-2 text-[12px] no-underline transition-colors"
                       style={{

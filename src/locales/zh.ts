@@ -321,42 +321,99 @@ const zh = {
       hintEmbed: "網站安全政策不允許嵌入預覽，可點擊按鈕前往完整網站",
       pager: "專案切換：上一篇 / 下一篇",
     },
+    // 各頁的 SEO 文案。集中在這裡，prerender（entry-server）與 client 換頁
+    // （SeoMeta）共用同一份，不必兩邊各維護一份中文字串
+    pageSeo: {
+      home: {
+        title: "Haru Li｜Frontend Engineer Portfolio",
+        description:
+          "李哲瑋 Haru Li — 前端工程師，專注 React、Next.js、TypeScript。具備多項商業專案經驗，涵蓋電商平台、官方網站架構遷移、後台系統、金流整合與即時通訊。重視產品思維、系統設計與工程品質。",
+      },
+      work: {
+        title: "WORK｜專案作品集 Haru Li",
+        description:
+          "電商平台、官網架構遷移、後台系統、金流整合、即時通訊與一支 React Native 旅遊 App——商業專案與個人 Side Project 的完整索引，可依技術棧篩選。",
+      },
+      lab: {
+        title: "PERF LAB｜可操作的前端效能實作 Haru Li",
+        description:
+          "useMemo 快取、捲動延遲載入、Suspense 等待資料——三個可以自己操作的前端效能實作，數字當場量出來。",
+      },
+      surf: {
+        title: "SURF｜GSAP 捲動敘事實驗 Haru Li",
+        description:
+          "以 GSAP ScrollTrigger 編排的單頁捲動敘事：七幕分鏡走完一次出海，桌機另接 Lenis 平滑捲動。攝影素材採 Unsplash 免費授權。",
+      },
+      blog: {
+        title: "BLOG｜部落格 Haru Li",
+        description:
+          "前端開發過程中的紀錄：踩過的坑、量測的結果、以及那些「教科書寫得對但實際上沒那麼簡單」的事。",
+      },
+      e500: {
+        title: "500 伺服器打瞌睡了｜Haru Li",
+        description:
+          "500 錯誤頁的畫面設計，與 404 迷路貓為同一視覺家族。此頁開放瀏覽以便檢視設計。",
+      },
+      board: {
+        title: "{{tag}}｜部落格 Haru Li",
+        description: "標籤「{{tag}}」底下的文章。",
+      },
+      suffix: "｜Haru Li",
+    },
     projects: {
+      labels: {
+        problem: "問題",
+        approach: "做法",
+        result: "結果",
+      },
       "01": {
         desc: "Vue 3 + Quasar + TypeScript 電商平台，完整響應式設計、Pinia 狀態管理、Axios API 封裝、reCAPTCHA、SSR + SEO",
-        full: "與另一名前端工程師協作開發電商平台，使用 Vue 3 Composition API + Quasar Framework + TypeScript。整合 Pinia 狀態管理與 Vue Router 路由規劃，完整 RWD 設計支援手機、平板、桌機。實作模組涵蓋商品瀏覽、購物車流程、會員中心（訂單 / 收藏 / 個人資料）、經銷商查詢、FAQ 與聯絡表單。以 SSR 架構確保 SEO 最佳化，支援主流瀏覽器並通過 W3C 驗證。",
+        problem: "與另一名前端工程師協作，要在同一套前端裡撐起商品瀏覽、購物車流程、會員中心（訂單 / 收藏 / 個人資料）、經銷商查詢、FAQ 與聯絡表單等多個模組，且商品內容需要能被搜尋引擎收錄。",
+        approach: "以 Vue 3 Composition API + Quasar Framework + TypeScript 建構，整合 Pinia 狀態管理與 Vue Router 路由規劃。完整 RWD 設計支援手機、平板與桌機，API 層以 Axios 封裝，表單接 reCAPTCHA 防機器人。渲染採 SSR 架構，讓商品頁在第一次回應就帶著內容抵達。",
+        result: "支援主流瀏覽器，並通過 W3C 驗證。",
       },
       "02": {
         desc: "Next.js 14 App Router 架構遷移，多步驟驗屋預約、TapPay 金流、LINE LIFF 登入、GA4 電商事件追蹤",
-        full: "主導前端架構遷移，將 Astro + React 混合架構重構為 Next.js 14 App Router，統一 SSR / SSG 渲染策略。與後端協作開發多步驟驗屋預約系統（Step 1–5），涵蓋報價試算、日期選擇、聯絡資訊填寫至確認下單完整流程。串接 TapPay 金流 SDK 實作信用卡線上付款，整合 LINE LIFF 實作 LINE 登入，配置 GA4 電商事件追蹤（add_to_cart、begin_checkout、purchase）。部署於 GCP + Docker，配置 Nginx 靜態資源快取最佳化效能。",
+        problem: "官網原本是 Astro + React 的混合架構，兩套渲染方式並存讓 SSR / SSG 的邊界難以維護。同時要新增多步驟驗屋預約與線上付款流程。",
+        approach: "主導前端架構遷移，重構為 Next.js 14 App Router 並統一 SSR / SSG 渲染策略。與後端協作開發多步驟驗屋預約系統（Step 1–5），涵蓋報價試算、日期選擇、聯絡資訊填寫至確認下單的完整流程。串接 TapPay 金流 SDK 實作信用卡線上付款，整合 LINE LIFF 實作 LINE 登入，並配置 GA4 電商事件追蹤（add_to_cart、begin_checkout、purchase）。",
+        result: "架構遷移完成，渲染策略收斂為單一套。部署於 GCP + Docker，並以 Nginx 配置靜態資源快取。",
       },
       "03": {
         desc: "React + MUI 後台系統，WebSocket 即時客服聊天室，LINE 貼圖渲染、排班、訂單、會員管理模組",
-        full: "接手並維護既有後台管理系統（React / Next.js / TypeScript / MUI）。核心功能包含即時客服聊天室（WebSocket 實現即時訊息推播），支援 LINE 貼圖渲染、快速回覆範本、多媒體檔案上傳，並處理多種 webhook 事件分發。另維護排班系統、訂單管理、商家後台、會員管理、折扣活動等多個業務核心頁面，支撐千萬級年營業額新創公司的日常營運。",
+        problem: "接手既有的後台管理系統，需要在不中斷營運的前提下維護多個業務核心模組。其中客服聊天室必須即時收發訊息，並處理 LINE 送來的各種事件型別。",
+        approach: "以 React / Next.js / TypeScript / MUI 接手並維護。客服聊天室用 WebSocket 實現即時訊息推播，支援 LINE 貼圖渲染、快速回覆範本與多媒體檔案上傳，並處理多種 webhook 事件分發。另維護排班系統、訂單管理、商家後台、會員管理與折扣活動等多個業務核心頁面。",
+        result: "支撐千萬級年營業額新創公司的日常營運。",
       },
       "04": {
         desc: "醫美診所管理系統，React Hook Form + Zod 多步驟表單、TanStack Query、帳號權限管理、罐頭訊息模組",
-        full: "參與開發現代化醫美診所後台管理系統，負責三個核心功能模組前端設計與實作。預約 / 會診記錄流程：以 React Hook Form + Zod 實作多步驟表單驗證，搭配 TanStack Query 處理非同步資料流。帳號管理模組：建立帳號新增、編輯、權限設定等完整操作介面，實作 CRUD 功能並整合 API。罐頭訊息管理：開發可複用訊息範本的管理功能，支援診所人員快速回覆場景，提升作業效率。",
+        problem: "醫美診所的預約與會診記錄流程欄位多、步驟長，不合法的輸入必須在送出前就攔下來；診所人員也需要能快速回覆的訊息範本。",
+        approach: "負責三個核心功能模組的前端設計與實作。預約 / 會診記錄流程以 React Hook Form + Zod 實作多步驟表單驗證，搭配 TanStack Query 處理非同步資料流。帳號管理模組建立帳號新增、編輯與權限設定的完整操作介面，實作 CRUD 並整合 API。罐頭訊息管理則開發可複用訊息範本的管理功能，對應診所人員快速回覆的場景。",
       },
       "05": {
         desc: "React 19 + Vite 能源 / 環境監控 SPA，自適應縮放（1280px 至 4K），即時節點流量追蹤、品牌設計系統",
-        full: "根據設計稿建構能源 / 環境監控管理系統前端介面，涵蓋即時儀表板、歷史資料查詢、多設備對比分析等功能模組。使用 React 19 + Vite 建構高效能 SPA，實作自適應縮放系統（1280px 至 4K），支援多種螢幕解析度無縫呈現。設計 RESTful API 服務層，統一管理認證 Token 與錯誤攔截，採用 Tailwind CSS 建立品牌設計系統並維持 UI 一致性。兩份專案採用不同呈現重點：能源系統細緻呈現不同地區的資料，環境管理系統則追蹤各節點即時流量。",
+        problem: "能源 / 環境監控介面要同時在 1280px 的筆電與 4K 大螢幕上都能用。兩份系統的資料重點還不一樣：一份要細看不同地區的分布，另一份要追蹤各節點的即時流量。",
+        approach: "依設計稿建構前端介面，涵蓋即時儀表板、歷史資料查詢與多設備對比分析等模組。以 React 19 + Vite 建構 SPA，實作自適應縮放系統（1280px 至 4K）以支援多種螢幕解析度。設計 RESTful API 服務層統一管理認證 Token 與錯誤攔截，並以 Tailwind CSS 建立品牌設計系統維持 UI 一致性。",
       },
       "06": {
         desc: "平板最佳化餐飲 POS 系統，WebSocket 即時訂單更新、條碼掃描、多元支付辨識，高頻操作場景設計",
-        full: "使用 React + Tailwind CSS 建構平板最佳化操作介面，透過 WebSocket 實作訂單與狀態的即時更新。整合條碼掃描，支援多元支付辨識與結帳流程。以高頻操作場景為前提，設計可擴充且易維護的前端架構，確保在快節奏的餐飲環境中維持流暢操作。",
+        problem: "餐飲 POS 的操作頻率高、容錯低，訂單狀態必須在裝置之間即時同步，慢一步就會出餐錯誤。",
+        approach: "以 React + Tailwind CSS 建構平板最佳化的操作介面，透過 WebSocket 實作訂單與狀態的即時更新。整合條碼掃描，支援多元支付辨識與結帳流程。以高頻操作場景為前提，設計可擴充且易維護的前端架構。",
       },
       "07": {
         desc: "療養院官方網站，從零規劃前端架構，Astro + React、Swiper 輪播、RWD、GA4 埋碼追蹤",
-        full: "獨立負責療養院官方網站前端開發，從零規劃整體前端架構，包含頁面路由設計、元件系統建立與全域樣式規範制定。以 Astro + React 組合建構靜態網站，兼顧 SEO 與互動性需求。實作完整 RWD 響應式版型，確保桌機、平板、手機各裝置正常顯示。整合 Swiper 實作輪播互動元件，協作對接後端資料並完成 GA4 埋碼追蹤設定。",
+        problem: "療養院官網要從零開始，沒有既有的前端架構、元件系統或樣式規範可以沿用，同時得兼顧 SEO 與互動性。",
+        approach: "獨立負責前端開發，從零規劃整體架構，包含頁面路由設計、元件系統建立與全域樣式規範制定。以 Astro + React 建構靜態網站，兼顧 SEO 與互動性需求。實作完整 RWD 響應式版型，整合 Swiper 實作輪播互動元件，協作對接後端資料並完成 GA4 埋碼追蹤設定。",
       },
       "08": {
         desc: "企業官方網站，著重整體網站設計與頁面 UI 實作，並完成基本 SEO 欄位檢查與優化",
-        full: "負責企業官方網站的網站設計與前端頁面 UI 實作，無特定前端框架依賴，聚焦於版面視覺、互動細節與切版品質。依設計需求完成各頁面排版與響應式呈現，確保桌機、平板、手機各裝置正常顯示。同時進行基本 SEO 欄位檢查與優化，包含 title、meta description、Open Graph、語意化標籤與圖片 alt 等，提升搜尋引擎收錄與社群分享呈現品質。",
+        problem: "企業官網需要從整體視覺設計到前端實作一併處理，且不依賴任何前端框架。",
+        approach: "負責網站設計與前端頁面 UI 實作，聚焦於版面視覺、互動細節與切版品質，依設計需求完成各頁面排版與響應式呈現。同時進行基本 SEO 欄位檢查與優化，包含 title、meta description、Open Graph、語意化標籤與圖片 alt。",
       },
       "09": {
         desc: "個人 Side Project：React Native + Expo 旅遊記錄 App，Offline-First 架構、Supabase 雲端後端，完整走過 EAS Build 到 TestFlight 上架",
-        full: "以 AI 工具輔助開發的個人 Side Project，從設計、前端到資料庫全由自己一手包辦，目標是把 iOS 上架流程走完一遍，並透過 TestFlight 在實際旅遊時真的拿來用。獨立完成 UI/UX 設計（Neo-Brutalism ✕ 昭和復古風格）、前端邏輯與雲端後端整合。技術棧為 React Native 0.83.2 + Expo SDK 55 + TypeScript，狀態管理用 Zustand，後端採 Supabase（PostgreSQL + Auth + Storage），本地資料庫用 Expo SQLite。設計 Offline-First 架構，以本地 SQLite 搭配同步佇列與自動重試機制，確保旅途中沒有網路時仍能正常記錄。整合 Google OAuth / Apple Sign In、Expo Push Notifications（共編事件通知）、Sentry 錯誤追蹤與 Google Directions API。功能面實作邀請碼共編行程、多照片拼貼分享卡片、互動式世界地圖與 Haptic 觸覺回饋。部署端完整走過 EAS Build、Provisioning Profile 與 TestFlight 內測發佈等 iOS 流程。",
+        problem: "旅行時最想記錄的那一刻，往往正好沒有網路。這是個人 Side Project，目標是把 iOS 上架流程完整走過一遍，並在實際旅遊時真的拿來用。",
+        approach: "以 AI 工具輔助開發，從設計、前端到資料庫全由自己一手包辦，獨立完成 UI/UX 設計（Neo-Brutalism ✕ 昭和復古風格）。技術棧為 React Native 0.83.2 + Expo SDK 55 + TypeScript，狀態管理用 Zustand，後端採 Supabase（PostgreSQL + Auth + Storage），本地資料庫用 Expo SQLite。設計 Offline-First 架構，以本地 SQLite 搭配同步佇列與自動重試機制，確保沒有網路時仍能正常記錄。整合 Google OAuth / Apple Sign In、Expo Push Notifications、Sentry 錯誤追蹤與 Google Directions API，功能面實作邀請碼共編行程、多照片拼貼分享卡片、互動式世界地圖與 Haptic 觸覺回饋。",
+        result: "完整走過 EAS Build、Provisioning Profile 與 TestFlight 內測發佈等 iOS 上架流程，並在實際旅遊中使用。",
         shots: {
           "0": {
             label: "登入頁",

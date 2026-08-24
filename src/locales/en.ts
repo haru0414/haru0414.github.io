@@ -300,42 +300,99 @@ const en = {
         "The site's security policy blocks embedded previews. Use the button to visit the full website.",
       pager: "Project navigation: previous / next",
     },
+    // Per-page SEO copy. Shared by prerender (entry-server) and client-side
+    // navigation (SeoMeta) so the strings live in one place.
+    pageSeo: {
+      home: {
+        title: "Haru Li｜Frontend Engineer Portfolio",
+        description:
+          "CheWei Li (Haru) — frontend engineer working in React, Next.js and TypeScript. Commercial experience across e-commerce platforms, site architecture migrations, admin systems, payment integration and real-time messaging.",
+      },
+      work: {
+        title: "WORK｜Selected Projects by Haru Li",
+        description:
+          "E-commerce platforms, a Next.js architecture migration, admin systems, payment integration, real-time messaging and a React Native travel app — the full index of commercial and side projects, filterable by tech stack.",
+      },
+      lab: {
+        title: "PERF LAB｜Hands-on Frontend Performance Demos",
+        description:
+          "useMemo caching, lazy loading on scroll, Suspense data fetching — hands-on frontend performance demos where the numbers are measured live in your browser.",
+      },
+      surf: {
+        title: "SURF｜A GSAP Scroll Narrative Experiment",
+        description:
+          "A single-page scroll narrative choreographed with GSAP ScrollTrigger: seven scenes through one session at sea, with Lenis smooth scrolling on desktop. Photography licensed free via Unsplash.",
+      },
+      blog: {
+        title: "BLOG｜Notes on Frontend Engineering",
+        description:
+          "Notes from building frontends: the traps, the measurements, and the things textbooks get right but reality complicates. Written in Traditional Chinese.",
+      },
+      e500: {
+        title: "500 Server Asleep｜Haru Li",
+        description:
+          "The visual design of the 500 error screen, from the same family as the lost-cat 404 page. Kept browsable so the design can be reviewed.",
+      },
+      board: {
+        title: "{{tag}}｜Blog Haru Li",
+        description: "Posts tagged “{{tag}}”.",
+      },
+      suffix: "｜Haru Li",
+    },
     projects: {
+      labels: {
+        problem: "The problem",
+        approach: "Approach",
+        result: "Outcome",
+      },
       "01": {
         desc: "Vue 3 + Quasar + TypeScript e-commerce platform with responsive design, Pinia state management, an Axios API layer, reCAPTCHA, SSR, and SEO.",
-        full: "Co-developed an e-commerce platform with another frontend engineer using Vue 3 Composition API + Quasar Framework + TypeScript. Integrated Pinia state management and Vue Router, with full responsive design across mobile, tablet and desktop. Modules covered product browsing, cart flow, member center (orders / favorites / profile), dealer lookup, FAQ and contact forms. Built on SSR for SEO, supporting major browsers and passing W3C validation.",
+        problem: "Working with one other frontend engineer, a single codebase had to carry product browsing, the cart flow, a member center (orders / favorites / profile), dealer lookup, FAQ and contact forms — while product content still needed to be indexable by search engines.",
+        approach: "Built with Vue 3 Composition API + Quasar Framework + TypeScript, with Pinia for state and Vue Router for routing. Full responsive design across mobile, tablet and desktop, an Axios-wrapped API layer, and reCAPTCHA on forms. Rendering runs on SSR so product pages arrive with content in the first response.",
+        result: "Supports all major browsers and passes W3C validation.",
       },
       "02": {
         desc: "Next.js 14 App Router migration with multi-step home-inspection booking, TapPay payments, LINE LIFF login, and GA4 e-commerce tracking.",
-        full: "Led the frontend architecture migration, refactoring a hybrid Astro + React codebase into Next.js 14 App Router with a unified SSR / SSG strategy. Built a multi-step home-inspection booking system (Steps 1–5) with a backend collaborator, covering quote estimation, date selection, contact details, and order confirmation. Integrated the TapPay SDK for online credit card payments and LINE LIFF for LINE login, and configured GA4 e-commerce events (add_to_cart, begin_checkout, purchase). Deployed on GCP + Docker with Nginx static-asset caching for performance.",
+        problem: "The site ran on a hybrid Astro + React setup where two rendering models coexisted, leaving the SSR / SSG boundary hard to maintain. A multi-step home-inspection booking flow and online payment had to be added on top.",
+        approach: "Led the architecture migration, refactoring into Next.js 14 App Router with a single unified SSR / SSG strategy. Built a multi-step home-inspection booking system (Steps 1–5) with a backend collaborator, covering quote estimation, date selection, contact details and order confirmation. Integrated the TapPay SDK for card payments, LINE LIFF for LINE login, and configured GA4 e-commerce tracking (add_to_cart, begin_checkout, purchase).",
+        result: "Migration completed with the rendering strategy consolidated into one. Deployed on GCP + Docker with Nginx configured for static asset caching.",
       },
       "03": {
         desc: "React + MUI admin system with WebSocket live customer support chat, LINE sticker rendering, scheduling, orders, and member management.",
-        full: "Took over and maintained an existing admin system (React / Next.js / TypeScript / MUI). Core features included real-time customer support chat with live message delivery via WebSocket, LINE sticker rendering, quick-reply templates, media uploads, and dispatching for various webhook events. Also maintained scheduling, order management, merchant backend, member management, and promotion modules, supporting the daily operations of a startup with annual revenue in the tens of millions.",
+        problem: "Taking over an existing admin system meant maintaining several business-critical modules without interrupting daily operations. The customer-service chat in particular had to deliver messages in real time and handle every event type LINE sends.",
+        approach: "Took over and maintained the system in React / Next.js / TypeScript / MUI. The live chat uses WebSocket for real-time message push, with LINE sticker rendering, quick-reply templates and multimedia upload, plus dispatch for multiple webhook event types. Also maintained scheduling, order management, the merchant backend, member management and discount campaigns.",
+        result: "Supports the daily operations of a startup with annual revenue in the tens of millions (TWD).",
       },
       "04": {
         desc: "Aesthetic clinic admin system with multi-step forms using React Hook Form + Zod, TanStack Query, role-based access, and canned messages.",
-        full: "Contributed to a modern aesthetic-clinic admin system, owning the frontend design and implementation of three core modules. Booking / consultation records: multi-step form validation with React Hook Form + Zod, backed by TanStack Query for async data flow. Account management: full UI for creating, editing and setting permissions, with CRUD wired to APIs. Canned-message management: reusable message templates that let clinic staff reply quickly and work more efficiently.",
+        problem: "Booking and consultation records at an aesthetic clinic involve long forms with many fields, where invalid input has to be caught before submission. Staff also needed reusable message templates for fast replies.",
+        approach: "Owned the frontend design and implementation of three core modules. The booking / consultation flow uses React Hook Form + Zod for multi-step validation, with TanStack Query handling async data. The account module provides full create, edit and permission-setting interfaces with CRUD wired to the API. The canned-message module manages reusable templates for the clinic staff's quick-reply scenario.",
       },
       "05": {
         desc: "React 19 + Vite energy / environment monitoring SPA with adaptive scaling (1280px to 4K), real-time node traffic tracking, and a brand design system.",
-        full: "Built the frontend for energy / environment monitoring systems from design specs, covering real-time dashboards, historical queries, and multi-device comparison. Used React 19 + Vite for a high-performance SPA with an adaptive scaling system (1280px to 4K) for seamless rendering across resolutions. Designed a RESTful API service layer with unified auth token handling and error interception, and built a brand design system with Tailwind CSS for UI consistency. The two variants emphasized different priorities: the energy system provided granular regional views, while the environment system tracked real-time per-node traffic.",
+        problem: "The energy / environmental monitoring interface had to work on a 1280px laptop and a 4K wall display alike. The two systems also emphasize different data: one reads regional distribution, the other tracks live throughput per node.",
+        approach: "Built the frontend from design specs, covering live dashboards, historical queries and multi-device comparison. Implemented as a React 19 + Vite SPA with an adaptive scaling system (1280px to 4K) for multiple screen resolutions. Designed a RESTful API service layer centralizing auth token handling and error interception, with Tailwind CSS establishing a brand design system for UI consistency.",
       },
       "06": {
         desc: "Tablet-optimized restaurant POS with real-time order updates over WebSocket, barcode scanning, and multi-method payment recognition.",
-        full: "Built a tablet-optimized operating UI with React + Tailwind CSS, with real-time order and status updates over WebSocket. Integrated barcode scanning and supported multi-method payment recognition and checkout. Designed an extensible, maintainable frontend architecture for high-frequency operations, keeping interactions smooth in a fast-paced dining environment.",
+        problem: "A restaurant POS is operated constantly and forgives little: order state has to stay in sync across devices in real time, or the wrong dish goes out.",
+        approach: "Built a tablet-optimized interface with React + Tailwind CSS, using WebSocket for real-time order and status updates. Integrated barcode scanning with support for multiple payment methods through checkout. Designed an extensible, maintainable frontend architecture around a high-frequency operation scenario.",
       },
       "07": {
         desc: "Care home website with frontend architecture from scratch, Astro + React, Swiper carousel, responsive design, and GA4 tracking.",
-        full: "Solely responsible for the frontend of a care home website, planning the full architecture from scratch: routing, component system, and global style conventions. Built a static site with Astro + React, balancing SEO and interactivity. Implemented responsive layouts across desktop, tablet, and mobile, integrated Swiper for carousel interactions, collaborated on backend data integration, and set up GA4 tracking.",
+        problem: "The sanatorium site started from nothing — no existing frontend architecture, component system or style conventions to build on — while still needing both SEO and interactivity.",
+        approach: "Sole owner of the frontend, planning the whole architecture from scratch: route design, component system and global style conventions. Built as a static site with Astro + React to serve SEO and interactivity together. Implemented full responsive layouts, integrated Swiper for carousels, wired up backend data with the team, and completed GA4 tracking setup.",
       },
       "08": {
         desc: "Corporate website focused on overall site design, page UI implementation, and basic SEO field checks and optimization.",
-        full: "Responsible for the site design and frontend UI of a corporate website, with no specific framework dependency, focusing on visual layout, interaction details, and markup quality. Completed page layouts and responsive rendering across desktop, tablet, and mobile. Also performed basic SEO field checks and optimization for title, meta description, Open Graph, semantic tags, and image alt text to improve search indexing and social sharing quality.",
+        problem: "The corporate site needed both the visual design and the frontend build handled together, without relying on any frontend framework.",
+        approach: "Owned the site design and the frontend UI, focusing on layout, interaction detail and markup quality, delivering each page's layout and responsive behavior from the design. Also ran a baseline SEO pass covering title, meta description, Open Graph, semantic markup and image alt text.",
       },
       "09": {
         desc: "Personal side project: a React Native + Expo travel journal app with an offline-first architecture, a Supabase backend, and a full EAS Build to TestFlight release.",
-        full: "A personal side project built with AI-assisted development, handling design, frontend, and database single-handedly. The goal was to walk through the entire iOS release process and actually use the app on real trips via TestFlight. Covered the UI/UX design end to end (Neo-Brutalism ✕ Showa retro), the frontend logic, and the cloud backend integration. Built on React Native 0.83.2 + Expo SDK 55 + TypeScript, with Zustand for state, Supabase (PostgreSQL + Auth + Storage) for the backend, and Expo SQLite locally. Designed an offline-first architecture where local SQLite is paired with a sync queue and automatic retries, so journaling keeps working without a connection while travelling. Integrated Google OAuth / Apple Sign In, Expo Push Notifications (shared-itinerary events), Sentry error tracking, and the Google Directions API. Feature work included invite-code collaborative itineraries, multi-photo collage share cards, an interactive world map, and haptic feedback. On the delivery side, went through EAS Build, provisioning profiles, and TestFlight beta releases.",
+        problem: "The moment you most want to log on a trip is usually the moment you have no signal. A personal side project, built to walk the full iOS release process end to end and then actually use it while traveling.",
+        approach: "AI-assisted development, owning everything from design through frontend to database, including the UI/UX design (Neo-Brutalism ✕ Showa retro). Built on React Native 0.83.2 + Expo SDK 55 + TypeScript with Zustand for state, Supabase (PostgreSQL + Auth + Storage) as the backend and Expo SQLite locally. Designed an offline-first architecture pairing local SQLite with a sync queue and automatic retry so logging keeps working without a connection. Integrated Google OAuth / Apple Sign In, Expo Push Notifications, Sentry error tracking and the Google Directions API, plus invite-code trip co-editing, multi-photo collage share cards, an interactive world map and haptic feedback.",
+        result: "Walked the full iOS release path — EAS Build, provisioning profiles and TestFlight beta distribution — and used it on real trips.",
         shots: {
           "0": {
             label: "Login",

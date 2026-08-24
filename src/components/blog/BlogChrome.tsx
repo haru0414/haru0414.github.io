@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import Link from "../LocaleLink";
 import { posts } from "../../data/posts";
 
 /**
@@ -15,7 +15,7 @@ export default function BlogChrome({ children }: { children: ReactNode }) {
       <header className="blog-topbar">
         <div className="container mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
           <Link
-            to="/blog"
+            to="/blog/"
             className="text-lg no-underline"
             style={{ fontFamily: "var(--font-heading)", color: "var(--color-ink)" }}
           >

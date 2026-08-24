@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import Link from "../LocaleLink";
 import CrayonDoodle from "../crayon/CrayonDoodle";
 import { DEMOS } from "../perf/registry";
 
 // 非商業案的實驗與狀態頁。獨立成一區而非混進專案列表：
 // 專案區是求職主訴求，把 demo 混進去會稀釋它。
 const ENTRIES = [
-  { to: "/blog", key: "blog", badge: "WRITING", code: "BLOG", accent: "var(--color-nekoma)" },
-  { to: "/lab", key: "perf", badge: "PLAYGROUND", code: "PERF", accent: "#6366f1" },
-  { to: "/surf", key: "surf", badge: "EXPERIMENT", code: "SURF", accent: "var(--color-teal)" },
+  { to: "/blog/", key: "blog", badge: "WRITING", code: "BLOG", accent: "var(--color-nekoma)" },
+  { to: "/lab/", key: "perf", badge: "PLAYGROUND", code: "PERF", accent: "#6366f1" },
+  { to: "/surf/", key: "surf", badge: "EXPERIMENT", code: "SURF", accent: "var(--color-teal)" },
   { to: "/404-demo", key: "notFound", badge: "STATE", code: "404", accent: "var(--color-nekoma)" },
-  { to: "/500", key: "error", badge: "STATE", code: "500", accent: "var(--color-poster)" },
+  { to: "/500/", key: "error", badge: "STATE", code: "500", accent: "var(--color-poster)" },
 ] as const;
 
 export default function LabSection() {
@@ -62,6 +62,10 @@ export default function LabSection() {
             <Link
               key={e.to}
               to={e.to}
+              // /404-demo 沒有對應的實體檔案，直連會回真正的 404（那正是它要
+              // 展示的東西）。使用者靠 client-side routing 看得到，但別讓爬蟲
+              // 跟過去把它當成壞掉的連結
+              rel={e.to === "/404-demo" ? "nofollow" : undefined}
               className="group block transform transition-all duration-500"
               style={{
                 opacity: shown ? 1 : 0,

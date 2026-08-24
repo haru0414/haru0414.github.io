@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
-import { changeLanguage } from "../i18n";
+import { useLocation, useNavigate } from "react-router-dom";
+import { localizePath } from "../i18n";
 import catCover from "../assets/images/onigiri/cover.webp";
 import PetBowl from "./play/PetBowl";
 import { ArrowUp, Moon, PawPrint, Sun } from "lucide-react";
@@ -24,6 +25,8 @@ const htmlTheme = {
 
 export default function FloatingCat() {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const { pathname, hash } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   // 主題的真實來源是 <html> 上的 class，直接訂閱它而不另外存一份 state。
@@ -66,10 +69,11 @@ export default function FloatingCat() {
     setIsOpen(false);
   };
 
-  // 中 / 英切換：changeLanguage 會先動態載入語系包再切換，
-  // 並寫回 localStorage，所有用 t() 的元件自動重繪
+  // 中 / 英切換：語言由網址決定，所以這裡是換頁而不是只切 i18n 狀態。
+  // 換頁後 App 的 LangSync 會把語系包載好並切換，所有用 t() 的元件自動重繪
   const toggleLang = () => {
-    changeLanguage(i18n.language === "en" ? "zh" : "en");
+    const next = i18n.language === "en" ? "zh" : "en";
+    navigate(localizePath(pathname, next) + hash, { replace: true });
   };
 
   return (

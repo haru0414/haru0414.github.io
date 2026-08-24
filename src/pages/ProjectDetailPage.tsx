@@ -294,9 +294,30 @@ export default function ProjectDetailPage() {
           >
             DETAIL
           </div>
-          <p className="leading-relaxed text-gray-700 mt-2">
-            {t(`projects.${project.id}.full`)}
-          </p>
+          {/* 問題 / 做法 / 結果。沒有量化成果可寫的專案就不渲染結果段——
+              留一個空標題或「持續優化中」之類的佔位比沒有更糟 */}
+          <div className="mt-2 flex flex-col gap-5">
+            {(["problem", "approach", "result"] as const).map((key) => {
+              const k = `projects.${project.id}.${key}`;
+              // i18next 找不到 key 時原樣回傳 key，用這個判斷這一段存不存在
+              const body = t(k);
+              if (body === k) return null;
+              return (
+                <section key={key}>
+                  <h2
+                    className="mb-2 text-lg"
+                    style={{
+                      fontFamily: "var(--font-heading)",
+                      color: "var(--color-poster)",
+                    }}
+                  >
+                    {t(`projects.labels.${key}`)}
+                  </h2>
+                  <p className="leading-relaxed text-gray-700">{body}</p>
+                </section>
+              );
+            })}
+          </div>
         </div>
 
         {/* Tech Stack */}

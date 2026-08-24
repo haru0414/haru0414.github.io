@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import Link from "../components/LocaleLink";
 import { ExternalLink } from "lucide-react";
 import CrayonDoodle from "../components/crayon/CrayonDoodle";
 import { projects } from "../data/projects";
@@ -209,7 +209,7 @@ export default function WorkPage() {
 
                   <div className="mt-auto flex items-center gap-3 pt-2">
                     <Link
-                      to={`/project/${project.id}`}
+                      to={`/project/${project.id}/`}
                       className="interactive border-2 px-3 py-1.5 text-xs tracking-[0.1em] no-underline transition-transform hover:-translate-y-0.5"
                       style={{
                         fontFamily: "var(--font-heading)",

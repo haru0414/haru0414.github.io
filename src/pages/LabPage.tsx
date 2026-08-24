@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import Link from "../components/LocaleLink";
 import CrayonDoodle from "../components/crayon/CrayonDoodle";
 import { DEMOS } from "../components/perf/registry";
 
@@ -141,7 +141,7 @@ export default function LabPage() {
                   </p>
                   {/* 這裡只放得下操作說明。完整的來由、量測與原理寫在文章裡 */}
                   <Link
-                    to={`/blog/${post}`}
+                    to={`/blog/${post}/`}
                     className="interactive mt-2 inline-flex w-fit items-center gap-1.5 border-2 px-3 py-1.5 text-[11px] tracking-[0.1em] no-underline transition-transform hover:-translate-y-0.5"
                     style={{
                       fontFamily: "var(--font-heading)",

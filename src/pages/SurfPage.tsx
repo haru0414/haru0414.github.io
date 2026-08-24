@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import Link from "../components/LocaleLink";
 import SurfImage from "../components/surf/SurfImage";
 import { useSurfScroll, type SurfSetup } from "../components/surf/useSurfScroll";
 import "./surf.css";

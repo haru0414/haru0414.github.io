@@ -152,6 +152,23 @@ async function enhanceImages(html, publicDir, manifest) {
   });
 }
 
+/**
+ * 文章內文的站內連結補上尾斜線。
+ *
+ * canonical 與 sitemap 都用 /lab/ 這種帶尾斜線的形式，GitHub Pages 也會把
+ * /lab 一律 301 導到 /lab/。作者在 markdown 裡寫的是自然的 /lab，所以在這裡
+ * 統一補，而不是要求每篇文章都記得多打一個斜線。
+ */
+function normalizeInternalLinks(html) {
+  return html.replace(/(<a\s+[^>]*href=")(\/[^"]*)(")/g, (full, pre, href, post) => {
+    const [, path, suffix = ""] = href.match(/^([^#?]*)([#?].*)?$/);
+    if (!path || path === "/" || path.endsWith("/")) return full;
+    // 指向實體檔案的連結（例如 /files/resume.pdf）不能加斜線
+    if (/\.[a-z0-9]+$/i.test(path.slice(path.lastIndexOf("/") + 1))) return full;
+    return `${pre}${path}/${suffix}${post}`;
+  });
+}
+
 export default function markdownPlugin({ publicDir = "public" } = {}) {
   marked.setOptions({ gfm: true, breaks: false });
   return {
@@ -165,7 +182,9 @@ export default function markdownPlugin({ publicDir = "public" } = {}) {
       const manifest = loadManifest();
       const { meta, body } = parseFrontmatter(code);
       const { html: raw, headings } = withHeadingIds(marked.parse(body));
-      const html = await enhanceImages(raw, publicDir, manifest);
+      const html = normalizeInternalLinks(
+        await enhanceImages(raw, publicDir, manifest),
+      );
       // 封面與列表縮圖走同一套解析，只是套用時的 sizes 不同
       const cover = meta.cover ? await resolveImage(meta.cover, publicDir, manifest) : null;
       // 去掉程式碼區塊再算字數：範例程式不該計入閱讀量

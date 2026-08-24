@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import Link from "../LocaleLink";
 import { posts } from "../../data/posts";
 
 const SOCIAL = [
@@ -49,16 +49,16 @@ export default function SiteFooter() {
           <span id="footer-explore" className="mb-1 text-xs tracking-[0.14em]" style={heading}>
             {t("footer.explore")}
           </span>
-          <Link to="/work" className={linkClass} style={{ color: "inherit" }}>
+          <Link to="/work/" className={linkClass} style={{ color: "inherit" }}>
             {t("siteNav.work")}
           </Link>
-          <Link to="/lab" className={linkClass} style={{ color: "inherit" }}>
+          <Link to="/lab/" className={linkClass} style={{ color: "inherit" }}>
             {t("siteNav.lab")}
           </Link>
-          <Link to="/blog" className={linkClass} style={{ color: "inherit" }}>
+          <Link to="/blog/" className={linkClass} style={{ color: "inherit" }}>
             {t("siteNav.blog")}
           </Link>
-          <Link to="/surf" className={linkClass} style={{ color: "inherit" }}>
+          <Link to="/surf/" className={linkClass} style={{ color: "inherit" }}>
             {t("footer.surf")}
           </Link>
         </nav>
@@ -70,7 +70,7 @@ export default function SiteFooter() {
           {latest.map((post) => (
             <Link
               key={post.slug}
-              to={`/blog/${post.slug}`}
+              to={`/blog/${post.slug}/`}
               className={linkClass}
               style={{ color: "inherit" }}
             >

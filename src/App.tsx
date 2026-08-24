@@ -24,6 +24,7 @@ import LabPage from "./pages/LabPage";
 import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import ErrorBoundary, { ErrorScreen } from "./components/ErrorBoundary";
+import i18n, { changeLanguage, langFromPath, stripLang } from "./i18n";
 
 // Parallax Background Elements
 function ParallaxElements({ scrollProgress }: { scrollProgress: number }) {
@@ -203,12 +204,13 @@ function ScrollToTop() {
   // 在首頁時持續記錄位置。不能等到換頁當下才讀——目標頁若比首頁矮（例如
   // 500 頁只有一個視窗高），瀏覽器會先把 scrollY 裁切掉，讀到的就是 0
   useEffect(() => {
-    if (pathname.replace(/\/+$/, "") !== "") return;
+    if (stripLang(pathname).replace(/\/+$/, "") !== "") return;
     const save = () => {
       // 換頁時 layout effect 會先把畫面歸零，而這個監聽器要到 passive effect
       // 的 cleanup 才移除——那一下的 scroll 事件會把記住的位置蓋成 0。
       // 以當下的網址再確認一次，離開首頁後就不再寫入
-      if (window.location.pathname.replace(/\/+$/, "") !== "") return;
+      if (stripLang(window.location.pathname).replace(/\/+$/, "") !== "")
+        return;
       homeScrollY = window.scrollY;
     };
     save();
@@ -242,10 +244,10 @@ function ScrollToTop() {
   useIsomorphicLayoutEffect(() => {
     // 有錨點時交給上面那段處理，這裡不要歸零
     if (hash) {
-      prevPath.current = pathname.replace(/\/+$/, "") || "/";
+      prevPath.current = stripLang(pathname).replace(/\/+$/, "") || "/";
       return;
     }
-    const path = pathname.replace(/\/+$/, "") || "/";
+    const path = stripLang(pathname).replace(/\/+$/, "") || "/";
     const from = prevPath.current;
     prevPath.current = path;
 
@@ -291,9 +293,58 @@ function ScrollToTop() {
   return null;
 }
 
+/**
+ * 同一棵路由樹掛兩次：中文在根路徑，英文在 /en。
+ *
+ * 語言由網址決定而不是 localStorage——搜尋引擎要收錄兩個語言版本，
+ * 前提是它們各自有網址。子路由一律用相對路徑，掛在哪個 base 底下就
+ * 自動變成該語言的網址。
+ */
+function localizedRoutes(base: string) {
+  return (
+    <Route key={base} path={base}>
+      {/* 站台外框（頁首、頁尾、漫畫風掛件）由 SiteLayout 提供。
+          /surf 刻意排在外面：它是全螢幕的沉浸式敘事頁，不該有外框 */}
+      <Route element={<SiteLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="work" element={<WorkPage />} />
+        <Route path="project/:id" element={<ProjectDetailPage />} />
+        <Route path="lab" element={<LabPage />} />
+        <Route path="blog" element={<BlogPage />} />
+        {/* 看板路由必須排在文章路由之前，否則 /blog/board/x 會被
+            當成 slug 為 "board" 的文章 */}
+        <Route path="blog/board/:board" element={<BlogPage />} />
+        <Route path="blog/:slug" element={<BlogPostPage />} />
+        {/* 500 畫面的 demo 路由：它平常只有真的壞掉才看得到，
+            開一個入口才能當作品給人看，也才檢查得到樣式 */}
+        <Route path="500" element={<ErrorScreen />} />
+        {/* 未知路徑顯示 404 迷路貓（搭配 GitHub Pages 的 404.html fallback） */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+
+      <Route path="surf" element={<SurfPage />} />
+    </Route>
+  );
+}
+
+/**
+ * 讓 i18n 的語言跟著網址走。直接輸入 /en/work 或用上一頁 / 下一頁時，
+ * 只有網址會變，得在這裡把語言補上。英文語系包是動態載入的，
+ * changeLanguage 會先確保載入完成再切。
+ */
+function LangSync() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const want = langFromPath(pathname);
+    if (i18n.language !== want) void changeLanguage(want);
+  }, [pathname]);
+  return null;
+}
+
 export function AppShell() {
   return (
     <>
+      <LangSync />
       <ScrollToTop />
       <CrayonDefs />
       <SeoMeta />
@@ -301,26 +352,8 @@ export function AppShell() {
           就是元件拋錯導致整頁空白——沒有這層就連「出錯了」都不會顯示 */}
       <ErrorBoundary>
         <Routes>
-          {/* 站台外框（頁首、頁尾、漫畫風掛件）由 SiteLayout 提供。
-              /surf 刻意排在外面：它是全螢幕的沉浸式敘事頁，不該有外框 */}
-          <Route element={<SiteLayout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/work" element={<WorkPage />} />
-            <Route path="/project/:id" element={<ProjectDetailPage />} />
-            <Route path="/lab" element={<LabPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            {/* 看板路由必須排在文章路由之前，否則 /blog/board/x 會被
-                當成 slug 為 "board" 的文章 */}
-            <Route path="/blog/board/:board" element={<BlogPage />} />
-            <Route path="/blog/:slug" element={<BlogPostPage />} />
-            {/* 500 畫面的 demo 路由：它平常只有真的壞掉才看得到，
-                開一個入口才能當作品給人看，也才檢查得到樣式 */}
-            <Route path="/500" element={<ErrorScreen />} />
-            {/* 未知路徑顯示 404 迷路貓（搭配 GitHub Pages 的 404.html fallback） */}
-            <Route path="*" element={<NotFoundPage />} />
-          </Route>
-
-          <Route path="/surf" element={<SurfPage />} />
+          {localizedRoutes("/")}
+          {localizedRoutes("/en")}
         </Routes>
       </ErrorBoundary>
     </>

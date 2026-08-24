@@ -1,7 +1,7 @@
 import { Component } from "react";
 import type { ErrorInfo, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import Link from "./LocaleLink";
 import CrayonDoodle from "./crayon/CrayonDoodle";
 import sleepCat from "../assets/images/onigiri/sleep-cat.webp";
 

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import { projects } from "../data/projects";
 import { boardFromSlug, posts } from "../data/posts";
+import { langFromPath, localizePath, stripLang, type Lang } from "../i18n";
 
 // 與 entry-server.tsx 一致：指向自訂網域而非 github.io
 const ORIGIN = "https://www.haruli.com";
@@ -18,6 +19,29 @@ function setLink(selector: string, href: string) {
   if (el) el.href = href;
 }
 
+/** 某語言版本的絕對網址，一律帶尾斜線（與 canonical / sitemap 一致） */
+function urlFor(path: string, lang: Lang) {
+  const p = localizePath(path, lang).replace(/\/+$/, "");
+  return `${ORIGIN}${p}/`;
+}
+
+/**
+ * hreflang 由 prerender 寫進靜態 HTML，但 client 換頁時網址變了、
+ * 那幾個標籤還停在上一頁，所以這裡照樣要更新（dev 沒有 prerender，就補建）。
+ */
+function syncAlternate(hreflang: string, href: string) {
+  let el = document.head.querySelector<HTMLLinkElement>(
+    `link[rel="alternate"][hreflang="${hreflang}"]`,
+  );
+  if (!el) {
+    el = document.createElement("link");
+    el.rel = "alternate";
+    el.hreflang = hreflang;
+    document.head.appendChild(el);
+  }
+  el.href = href;
+}
+
 export default function SeoMeta() {
   const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
@@ -26,52 +50,45 @@ export default function SeoMeta() {
     // 每一條路由都要有自己的 meta。先前只處理首頁與專案頁，其餘路由
     // 走 client-side 導航時會被套上首頁標題——prerender 的 HTML 是對的，
     // 但從首頁點進去看到的 document.title 是錯的
-    const path = pathname.replace(/\/+$/, "") || "/";
+    const lang = langFromPath(pathname);
+    const path = stripLang(pathname).replace(/\/+$/, "") || "/";
+    const canonical = urlFor(path, lang);
+    const suffix = t("pageSeo.suffix");
+
     const m = path.match(/^\/project\/([^/]+)/);
     const project = m ? projects.find((p) => p.id === m[1]) : undefined;
     const boardMatch = path.match(/^\/blog\/board\/(.+)$/);
     const b = boardMatch ? null : path.match(/^\/blog\/([^/]+)/);
     const post = b ? posts.find((x) => x.slug === b[1]) : undefined;
 
-    let title = t("seo.title");
-    let description = t("seo.description");
-    let canonical = `${ORIGIN}/`;
+    let title = t("pageSeo.home.title");
+    let description = t("pageSeo.home.description");
     // 沒有專屬封面就回到站台預設圖，不能留空
     let image = `${ORIGIN}/og-image.jpg`;
 
+    const page = (key: string) => {
+      title = t(`pageSeo.${key}.title`);
+      description = t(`pageSeo.${key}.description`);
+    };
+
     if (project) {
-      title = `${project.title}｜Haru Li`;
+      title = `${project.title}${suffix}`;
       description = t(`projects.${project.id}.desc`);
-      canonical = `${ORIGIN}/project/${project.id}/`;
     } else if (post) {
-      title = `${post.title}｜Haru Li`;
+      title = `${post.title}${suffix}`;
       description = post.summary;
-      canonical = `${ORIGIN}/blog/${post.slug}/`;
       if (post.cover) image = `${ORIGIN}${post.cover}`;
     } else if (boardMatch) {
       const tag = boardFromSlug(boardMatch[1]);
       if (tag) {
-        title = `${tag}｜部落格 Haru Li`;
-        description = `標籤「${tag}」底下的文章。`;
-        canonical = `${ORIGIN}/blog/board/${boardMatch[1]}/`;
+        title = t("pageSeo.board.title", { tag });
+        description = t("pageSeo.board.description", { tag });
       }
-    } else if (path === "/blog") {
-      title = "BLOG｜部落格 Haru Li";
-      description = "前端開發過程中的紀錄：踩過的坑、量測的結果，以及那些教科書寫得對但實際上沒那麼簡單的事。";
-      canonical = `${ORIGIN}/blog/`;
-    } else if (path === "/work") {
-      title = "WORK｜專案作品集 Haru Li";
-      description = "電商平台、官網架構遷移、後台系統、金流整合、即時通訊與一支 React Native 旅遊 App——商業專案與個人 Side Project 的完整索引，可依技術棧篩選。";
-      canonical = `${ORIGIN}/work/`;
-    } else if (path === "/lab") {
-      title = "PERF LAB｜可操作的前端效能實作 Haru Li";
-      description = "十個可以自己操作的前端效能實作，數字當場量出來。";
-      canonical = `${ORIGIN}/lab/`;
-    } else if (path === "/surf") {
-      title = "SURF｜GSAP 捲動敘事實驗 Haru Li";
-      description = "以 GSAP ScrollTrigger 編排的單頁捲動敘事，七幕分鏡走完一次出海。";
-      canonical = `${ORIGIN}/surf/`;
-    }
+    } else if (path === "/blog") page("blog");
+    else if (path === "/work") page("work");
+    else if (path === "/lab") page("lab");
+    else if (path === "/surf") page("surf");
+    else if (path === "/500") page("e500");
 
     document.title = title;
     setMeta('meta[name="description"]', description);
@@ -84,6 +101,10 @@ export default function SeoMeta() {
     setMeta('meta[name="twitter:title"]', title);
     setMeta('meta[name="twitter:description"]', description);
     setLink('link[rel="canonical"]', canonical);
+
+    syncAlternate("zh-Hant-TW", urlFor(path, "zh"));
+    syncAlternate("en", urlFor(path, "en"));
+    syncAlternate("x-default", urlFor(path, "zh"));
   }, [t, i18n.language, pathname]);
 
   return null;

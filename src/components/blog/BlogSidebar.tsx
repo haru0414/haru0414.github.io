@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import Link from "../LocaleLink";
 import catCover from "../../assets/images/onigiri/cover.webp";
 import { X } from "lucide-react";
 import { posts, type Post } from "../../data/posts";
@@ -124,7 +124,7 @@ export function RecentPosts({ exclude }: { exclude?: string }) {
         {list.map((p) => (
           <li key={p.slug}>
             <Link
-              to={`/blog/${p.slug}`}
+              to={`/blog/${p.slug}/`}
               className="block text-[12px] leading-snug no-underline hover:underline"
               style={{ color: "var(--color-ink)" }}
             >

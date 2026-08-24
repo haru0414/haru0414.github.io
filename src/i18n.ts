@@ -47,11 +47,6 @@ export async function changeLanguage(lng: string) {
   await i18n.changeLanguage(lng);
 }
 
-// 回訪者若上次選英文，啟動時補載入英文包（首屏可能短暫顯示中文後切換）
-if (isBrowser && i18n.language?.startsWith("en")) {
-  void changeLanguage("en");
-}
-
 // 讓 <html lang> 跟著目前語言走（SEO / 螢幕閱讀器會讀這個）；SSR 無 document
 const syncHtmlLang = (lng: string) => {
   if (typeof document === "undefined") return;
@@ -60,6 +55,30 @@ const syncHtmlLang = (lng: string) => {
 if (isBrowser) {
   syncHtmlLang(i18n.language);
   i18n.on("languageChanged", syncHtmlLang);
+}
+
+// 支援的語言與網址前綴。中文是預設語言，網址不帶前綴；英文一律掛在 /en 底下。
+// 語言由網址決定而非 localStorage——搜尋引擎每個語言版本要有各自的網址才收得到。
+export const LANGS = ["zh", "en"] as const;
+export type Lang = (typeof LANGS)[number];
+
+/** 從網址判斷語言。/en 或 /en/... 為英文，其餘為中文 */
+export function langFromPath(pathname: string): Lang {
+  return pathname === "/en" || pathname.startsWith("/en/") ? "en" : "zh";
+}
+
+/** 去掉語言前綴，回傳中文版的對應路徑（永遠以 / 開頭） */
+export function stripLang(pathname: string): string {
+  if (pathname === "/en") return "/";
+  if (pathname.startsWith("/en/")) return pathname.slice(3) || "/";
+  return pathname || "/";
+}
+
+/** 把任一路徑轉成指定語言的網址 */
+export function localizePath(pathname: string, lang: Lang): string {
+  const base = stripLang(pathname);
+  if (lang === "zh") return base;
+  return base === "/" ? "/en/" : `/en${base}`;
 }
 
 export default i18n;

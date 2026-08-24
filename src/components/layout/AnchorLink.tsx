@@ -1,5 +1,7 @@
 import type { CSSProperties, MouseEvent, ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import Link from "../LocaleLink";
+import { stripLang } from "../../i18n";
 
 type Props = {
   /** 形如 /#next 的路徑，井號後面是目標區塊的 id；沒有井號時等同一般連結 */
@@ -32,8 +34,9 @@ export default function AnchorLink({
 }: Props) {
   const { pathname } = useLocation();
   const [rawPath, id] = to.split("#");
-  const target = rawPath.replace(/\/+$/, "") || "/";
-  const current = pathname.replace(/\/+$/, "") || "/";
+  // 比對時把語言前綴剝掉：在 /en/ 首頁點 /#next 也該算同一頁
+  const target = stripLang(rawPath).replace(/\/+$/, "") || "/";
+  const current = stripLang(pathname).replace(/\/+$/, "") || "/";
 
   const handle = (e: MouseEvent<HTMLAnchorElement>) => {
     onClick?.();

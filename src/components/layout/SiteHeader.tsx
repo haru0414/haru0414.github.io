@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import Link from "../LocaleLink";
+import { stripLang } from "../../i18n";
 import AnchorLink from "./AnchorLink";
 import { Menu, X } from "lucide-react";
 
@@ -12,9 +14,9 @@ import { Menu, X } from "lucide-react";
  * 也避開標題字型對中文的 fallback；本地化名稱走 aria-label。
  */
 const ITEMS = [
-  { to: "/work", code: "WORK", key: "work", match: "/work" },
-  { to: "/lab", code: "LAB", key: "lab", match: "/lab" },
-  { to: "/blog", code: "BLOG", key: "blog", match: "/blog" },
+  { to: "/work/", code: "WORK", key: "work", match: "/work" },
+  { to: "/lab/", code: "LAB", key: "lab", match: "/lab" },
+  { to: "/blog/", code: "BLOG", key: "blog", match: "/blog" },
 ];
 
 export default function SiteHeader() {
@@ -23,7 +25,8 @@ export default function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   // 尾斜線正規化：GitHub Pages 對子路由會 301 加上尾斜線
-  const path = pathname.replace(/\/+$/, "") || "/";
+  // 語言前綴不影響「目前在哪一頁」，/en/work 一樣要讓 WORK 亮起來
+  const path = stripLang(pathname).replace(/\/+$/, "") || "/";
   const isActive = (match: string) =>
     path === match || path.startsWith(`${match}/`);
 

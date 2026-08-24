@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import Link from "../components/LocaleLink";
 import BlogChrome from "../components/blog/BlogChrome";
 import CrayonDoodle from "../components/crayon/CrayonDoodle";
 import { AuthorCard, RecentPosts, TableOfContents } from "../components/blog/BlogSidebar";
@@ -80,7 +81,7 @@ export default function BlogPostPage() {
             strokeWidth={9}
             className="h-3 w-2 shrink-0 opacity-70"
           />
-          <Link to="/blog" className="no-underline hover:underline" style={{ color: "var(--color-muted)" }}>
+          <Link to="/blog/" className="no-underline hover:underline" style={{ color: "var(--color-muted)" }}>
             {t("blog.allBoards")}
           </Link>
           {post.tags[0] && (
@@ -92,7 +93,7 @@ export default function BlogPostPage() {
             className="h-3 w-2 shrink-0 opacity-70"
           />
               <Link
-                to={`/blog/board/${boardSlug(post.tags[0])}`}
+                to={`/blog/board/${boardSlug(post.tags[0])}/`}
                 className="no-underline hover:underline"
                 style={{ color: "var(--color-muted)" }}
               >
@@ -211,7 +212,7 @@ export default function BlogPostPage() {
               p ? (
                 <Link
                   key={p.slug}
-                  to={`/blog/${p.slug}`}
+                  to={`/blog/${p.slug}/`}
                   className="flex flex-col gap-1 border-2 p-3 no-underline transition-transform hover:-translate-y-0.5"
                   style={{
                     backgroundColor: "var(--color-surface)",
