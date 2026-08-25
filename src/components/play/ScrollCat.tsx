@@ -27,8 +27,30 @@ const clamp = (n: number, lo: number, hi: number) =>
 export default function ScrollCat() {
   const { t } = useTranslation();
   const [showEgg, setShowEgg] = useState(false);
+  const [spritesReady, setSpritesReady] = useState(false);
   const outerRef = useRef<HTMLDivElement>(null);
   const poseRef = useRef<HTMLButtonElement>(null);
+
+  // 首屏只會用到睡覺姿態。其餘四張若也出現在 SSR HTML，React 19 會替它們
+  // 全部產生 high-priority image preload，反而讓真正可見的睡覺貓被分掉頻寬。
+  // 等初始頁面載入完成、瀏覽器有空時再掛上動畫幀；使用者開始捲動（interaction）
+  // 前它們通常已進快取，也不會延後初始 LCP。
+  useEffect(() => {
+    let idle = 0;
+    const schedule = () => {
+      idle = window.requestIdleCallback(() => setSpritesReady(true), {
+        timeout: 3000,
+      });
+    };
+
+    if (document.readyState === "complete") schedule();
+    else window.addEventListener("load", schedule, { once: true });
+
+    return () => {
+      window.removeEventListener("load", schedule);
+      if (idle) window.cancelIdleCallback(idle);
+    };
+  }, []);
 
   useEffect(() => {
     const outer = outerRef.current;
@@ -189,6 +211,7 @@ export default function ScrollCat() {
           ref={poseRef}
           type="button"
           data-pose="sleep"
+          data-sprites-ready={spritesReady ? "" : undefined}
           onClick={() => setShowEgg(true)}
           aria-label={t("a11y.meetCat")}
           className="cat-sprites pointer-events-auto cursor-pointer"
@@ -198,41 +221,46 @@ export default function ScrollCat() {
             alt=""
             width={512}
             height={512}
+            fetchPriority="high"
             draggable={false}
             className="cat-sprite cat-sleep"
           />
-          <img
-            src={run1}
-            alt=""
-            width={512}
-            height={512}
-            draggable={false}
-            className="cat-sprite cat-run-1"
-          />
-          <img
-            src={run2}
-            alt=""
-            width={512}
-            height={512}
-            draggable={false}
-            className="cat-sprite cat-run-2"
-          />
-          <img
-            src={run3}
-            alt=""
-            width={512}
-            height={512}
-            draggable={false}
-            className="cat-sprite cat-run-3"
-          />
-          <img
-            src={waitCat}
-            alt=""
-            width={512}
-            height={512}
-            draggable={false}
-            className="cat-sprite cat-wait"
-          />
+          {spritesReady && (
+            <>
+              <img
+                src={run1}
+                alt=""
+                width={512}
+                height={512}
+                draggable={false}
+                className="cat-sprite cat-run-1"
+              />
+              <img
+                src={run2}
+                alt=""
+                width={512}
+                height={512}
+                draggable={false}
+                className="cat-sprite cat-run-2"
+              />
+              <img
+                src={run3}
+                alt=""
+                width={512}
+                height={512}
+                draggable={false}
+                className="cat-sprite cat-run-3"
+              />
+              <img
+                src={waitCat}
+                alt=""
+                width={512}
+                height={512}
+                draggable={false}
+                className="cat-sprite cat-wait"
+              />
+            </>
+          )}
         </button>
       </div>
 

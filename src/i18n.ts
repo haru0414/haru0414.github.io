@@ -1,32 +1,24 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
 import zh from "./locales/zh";
 
 // 預設中文：初始只內建 zh，英文語系包採動態載入（見 ensureLanguage）
 const resources = { zh };
 
-// build 期 SSR 在 Node 執行：沒有 window/localStorage，跳過語言偵測（直接用
-// fallback zh），確保 prerender 的 HTML 與 client 初次 render 一致
+// build 期 SSR 在 Node 執行：沒有 window，先用 zh；entry-server 會在
+// render 每條路由前依網址切到正確語言。Client 則一開始就以網址為準，
+// 避免 /en 的 SSR <html lang="en"> 在主 bundle 執行時被短暫改成
+// zh-TW，造成根節點重繪與延遲 LCP。
 const isBrowser = typeof window !== "undefined";
-
-if (isBrowser) {
-  // 偵測初始語言：只看 localStorage，沒有就用 fallback（中文），不跟瀏覽器走
-  i18n.use(LanguageDetector);
-}
 
 i18n
   // 把 i18next 接到 React（提供 useTranslation / 語言變更自動 re-render）
   .use(initReactI18next)
   .init({
     resources,
+    lng: isBrowser ? langFromPath(window.location.pathname) : "zh",
     fallbackLng: "zh", // 找不到對應語言時退回中文
     supportedLngs: ["zh", "en"],
-    detection: {
-      order: ["localStorage"], // 偵測來源：只用 localStorage
-      caches: ["localStorage"], // 切換語言時寫回 localStorage
-      lookupLocalStorage: "lang", // localStorage 的 key 名稱
-    },
     interpolation: {
       escapeValue: false, // React 本身會防 XSS，不需 i18next 再跳脫
     },

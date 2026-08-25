@@ -458,6 +458,11 @@
   .cat-sprites[data-pose="sleep"] .cat-sleep {
     opacity: 1;
   }
+  /* 動畫幀尚未在 idle 時載入前，即使使用者立刻捲動也維持睡覺姿態，
+     避免 data-pose 已切到 run 但對應圖片還不存在而短暫消失。 */
+  .cat-sprites:not([data-sprites-ready]) .cat-sleep {
+    opacity: 1;
+  }
   .cat-sprites[data-pose="wait"] .cat-wait {
     opacity: 1;
   }
