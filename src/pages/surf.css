@@ -48,9 +48,11 @@ html.surf-mode #root {
   letter-spacing: 0.16em;
   text-decoration: none;
   color: #e8f0f3;
-  background: rgba(5, 9, 12, 0.55);
+  /* 原本是半透明 + backdrop-filter: blur(6px)。它固定在畫面上，底下的滿版
+     大圖整路在做 scale/rotate，等於每一幀都要重新採樣一次模糊背景。
+     改用不透明底色，視覺幾乎相同 */
+  background: rgba(7, 12, 16, 0.92);
   border: 1px solid rgba(232, 240, 243, 0.28);
-  backdrop-filter: blur(6px);
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 .surf-exit:hover,
@@ -324,4 +326,49 @@ html.surf-mode #root {
 
 @media (prefers-reduced-motion: reduce) {
   .surf-back { transition: none; }
+}
+
+/* 幕間交接遮幕 --------------------------------------------------------- */
+/* 顏色刻意等於頁面底色：相鄰兩幕的深色在視口中上下相接，接縫就消失了。
+   z-index 蓋過該幕所有內容（S4 的文字是 z-3），轉場時整幕一起沉下去。
+   淡入與淡出分成兩個元素，是因為同一個元素掛兩條 scrub tween 會互相覆寫
+   opacity——誰後 render 誰贏，動畫就時有時無。 */
+.surf-in,
+.surf-out {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: block;
+  background: var(--surf-ink);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 統一調色層 ----------------------------------------------------------- */
+/* 八張圖來自不同攝影師，色溫與對比都不一致。即使動畫一幀不掉，眼睛仍會讀成
+   「一張一張的照片」而不是一部片。這層把它們壓進同一次沖印裡。
+   全部靜態：不進動畫迴圈，捲動時只是同一張已光柵化的貼圖跟著合成。 */
+.surf-grade {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+/* 暗角 + 青藍色溫 */
+.surf-grade::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(125% 90% at 50% 45%, transparent 34%, rgba(5, 9, 12, 0.5) 100%),
+    linear-gradient(to bottom, rgba(14, 38, 54, 0.15), rgba(8, 20, 30, 0.2));
+}
+/* 顆粒。用 feTurbulence 產一張 160px 的噪點磚重複平鋪，不額外請求檔案。
+   不用 mix-blend-mode：混合模式要逐幀重讀底下的畫面，這裡疊一層就夠了 */
+.surf-grade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

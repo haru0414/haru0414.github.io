@@ -19,6 +19,53 @@ const SCENES = [
   [".surf-s7", "EP.07 SUNSET"],
 ] as const;
 
+// scrub 的 catch-up 秒數。原本全頁用 scrub: true（值與捲動位置硬綁），
+// 滾輪本身是離散事件，畫面就跟著一格一格跳。給半秒的追趕距離之後，
+// 鏡頭是「跟著」捲動而不是「被捲動拖著」。實測不影響幀率（全程 120fps）。
+const SCRUB = 0.5;
+
+/**
+ * 幕間交接。
+ *
+ * pin 結束到下一幕 pin 開始之間有一段死區：畫面只是被推上去，什麼都沒發生。
+ * 那一段的靜止才是「一張接一張」的來源——實測全程滿幀，從來不是掉幀問題。
+ *
+ * 每幕進場時從頁面底色浮起、離場時沉回底色，遮幕用的正是 --surf-ink。
+ * 相鄰兩幕的深色在視口中上下相接，接縫就溶掉了，硬切變成 dissolve。
+ * 淡入與淡出拆成兩個元素是必要的：同一個元素掛兩條 scrub tween 會互相
+ * 覆寫 opacity，誰後 render 誰贏。
+ */
+const handoff = (
+  gsap: Parameters<SurfSetup>[0],
+  scene: string,
+  { enter = true, exit = true }: { enter?: boolean; exit?: boolean } = {},
+) => {
+  // 峰值 0.9 不會變成黑屏：下一幕的淡入比上一幕的淡出早開始，兩條曲線在
+  // 交界處相交於約 0.35，畫面只是暗一下就交棒了
+  if (enter) {
+    gsap.fromTo(
+      `${scene} .surf-in`,
+      { opacity: 0.9 },
+      {
+        opacity: 0,
+        ease: "none",
+        scrollTrigger: { trigger: scene, start: "top bottom", end: "top 20%", scrub: SCRUB },
+      },
+    );
+  }
+  if (exit) {
+    gsap.fromTo(
+      `${scene} .surf-out`,
+      { opacity: 0 },
+      {
+        opacity: 0.9,
+        ease: "none",
+        scrollTrigger: { trigger: scene, start: "bottom 80%", end: "bottom top", scrub: SCRUB },
+      },
+    );
+  }
+};
+
 // 動畫編排。放在模組層級是刻意的：內容不隨 render 變動，也讓 useSurfScroll
 // 的 effect 能安全地只跑一次。
 // 全程只碰 transform / opacity——filter、box-shadow、width/height 都會觸發
@@ -72,16 +119,16 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
     yPercent: -60,
     opacity: 0,
     ease: "none",
-    scrollTrigger: { trigger: ".surf-s0", start: "top top", end: "bottom top", scrub: true },
+    scrollTrigger: { trigger: ".surf-s0", start: "top top", end: "bottom top", scrub: SCRUB },
   });
   gsap.to(".surf-s0 .surf-bg", {
     scale: 1.25,
     ease: "none",
-    scrollTrigger: { trigger: ".surf-s0", start: "top top", end: "bottom top", scrub: true },
+    scrollTrigger: { trigger: ".surf-s0", start: "top top", end: "bottom top", scrub: SCRUB },
   });
   gsap.to(".surf-hint", {
     opacity: 0,
-    scrollTrigger: { trigger: ".surf-s0", start: "top top", end: "+=240", scrub: true },
+    scrollTrigger: { trigger: ".surf-s0", start: "top top", end: "+=240", scrub: SCRUB },
   });
 
   // 覆蓋規則：底圖任何時刻的 scale 都必須大於「最大位移 + 旋轉所需的額外
@@ -96,14 +143,14 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
       scale: 1.16,
       rotation: 2,
       ease: "none",
-      scrollTrigger: { trigger: ".surf-s1", start: "top bottom", end: "bottom top", scrub: true },
+      scrollTrigger: { trigger: ".surf-s1", start: "top bottom", end: "bottom top", scrub: SCRUB },
     },
   );
   gsap.from(".surf-s1 .surf-line", {
     opacity: 0,
     y: 20,
     stagger: 0.2,
-    scrollTrigger: { trigger: ".surf-s1", start: "top 62%", end: "center center", scrub: true },
+    scrollTrigger: { trigger: ".surf-s1", start: "top 62%", end: "center center", scrub: SCRUB },
   });
 
   // ── S2 Line-up：全片唯一零位移的一幕 ──────────────────────
@@ -120,7 +167,8 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
     start: "top top",
     end: "+=180%",
     pin: true,
-    scrub: true,
+    anticipatePin: 1,
+    scrub: SCRUB,
     animation: s2tl,
   });
 
@@ -137,7 +185,8 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
         start: "top top",
         end: () => `+=${distance()}`,
         pin: ".surf-s3-viewport",
-        scrub: true,
+        anticipatePin: 1,
+        scrub: SCRUB,
         invalidateOnRefresh: true,
       },
     });
@@ -153,7 +202,7 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
           trigger: ".surf-s3",
           start: "top top",
           end: () => `+=${distance()}`,
-          scrub: true,
+          scrub: SCRUB,
           invalidateOnRefresh: true,
         },
       },
@@ -168,7 +217,8 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
     start: "top top",
     end: "+=170%",
     pin: true,
-    scrub: true,
+    anticipatePin: 1,
+    scrub: SCRUB,
     animation: gsap
       .timeline()
       .fromTo(
@@ -195,7 +245,8 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
     start: "top top",
     end: "+=210%",
     pin: true,
-    scrub: true,
+    anticipatePin: 1,
+    scrub: SCRUB,
     animation: gsap
       .timeline()
       .fromTo(
@@ -226,7 +277,8 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
     start: "top top",
     end: "+=150%",
     pin: true,
-    scrub: true,
+    anticipatePin: 1,
+    scrub: SCRUB,
     animation: gsap
       .timeline()
       .fromTo(
@@ -253,7 +305,8 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
     start: "top top",
     end: "+=140%",
     pin: true,
-    scrub: true,
+    anticipatePin: 1,
+    scrub: SCRUB,
     animation: gsap
       .timeline()
       .fromTo(
@@ -270,6 +323,14 @@ const setup: SurfSetup = (gsap, ScrollTrigger) => {
         0.25,
       ),
   });
+
+  // ── 幕間交接 ─────────────────────────────────────────────
+  // 最後才掛：這些 tween 只碰 .surf-in / .surf-out，與各幕主編排互不重疊。
+  // S0 是首屏，沒有可以浮起的來處，只掛離場。
+  handoff(gsap, ".surf-s0", { enter: false });
+  for (const sel of [".surf-s1", ".surf-s2", ".surf-s3", ".surf-s4", ".surf-s5", ".surf-s6", ".surf-s7"]) {
+    handoff(gsap, sel);
+  }
 };
 
 
@@ -283,6 +344,8 @@ export default function SurfPage() {
         ← 返回作品集
       </Link>
 
+      <div className="surf-grade" aria-hidden="true" />
+
       <div className="surf-hud" aria-hidden="true">
         <span className="surf-hud-ep">EP.01 PADDLE OUT</span>
         <span className="surf-hud-rail">
@@ -291,6 +354,8 @@ export default function SurfPage() {
       </div>
 
       <section className="surf-scene surf-s0">
+        <span className="surf-in" aria-hidden="true" />
+        <span className="surf-out" aria-hidden="true" />
         <SurfImage className="surf-bg" name="s0-hero" alt="從空中俯瞰的海面，浪紋層層推向岸邊" priority />
         <div className="surf-copy">
           <h1 className="surf-title surf-mask">
@@ -302,6 +367,8 @@ export default function SurfPage() {
       </section>
 
       <section className="surf-scene surf-s1">
+        <span className="surf-in" aria-hidden="true" />
+        <span className="surf-out" aria-hidden="true" />
         <SurfImage className="surf-bg" name="s1-paddle-out" alt="從空中俯瞰，三名衝浪者趴在長板上於深青色海面划水出海" />
         <div className="surf-copy">
           <p className="surf-eyebrow">EP.01 PADDLE OUT</p>
@@ -311,6 +378,8 @@ export default function SurfPage() {
       </section>
 
       <section className="surf-scene surf-s2">
+        <span className="surf-in" aria-hidden="true" />
+        <span className="surf-out" aria-hidden="true" />
         <SurfImage className="surf-bg" name="s2-lineup" alt="兩名衝浪者坐在板上，於平坦無浪的灰色海面遠遠等待" />
         <div className="surf-copy">
           <p className="surf-eyebrow">EP.02 LINE-UP</p>
@@ -332,6 +401,8 @@ export default function SurfPage() {
           </div>
           {/* 必須放在被 pin 的 viewport 內：放外面的話它會以整個含 pin spacer
               的區塊置中，而不是以視口置中，文字就會跑到畫面頂端 */}
+          <span className="surf-in" aria-hidden="true" />
+          <span className="surf-out" aria-hidden="true" />
           <div className="surf-copy surf-s3-copy">
             <p className="surf-eyebrow">EP.03 TAKE-OFF</p>
             <p className="surf-line">站起來的那一下，沒有時間考慮。</p>
@@ -340,6 +411,8 @@ export default function SurfPage() {
       </section>
 
       <section className="surf-scene surf-s4">
+        <span className="surf-in" aria-hidden="true" />
+        <span className="surf-out" aria-hidden="true" />
         <SurfImage className="surf-bg" name="s4-barrel" alt="衝浪者正乘在一道乾淨的藍色浪面上" />
         {/* 去背的浪唇疊在文字前面，捲動時壓下來把畫面蓋住 */}
         <SurfImage className="surf-s4-lip" name="s4-barrel-cut" alt="" />
@@ -350,6 +423,8 @@ export default function SurfPage() {
       </section>
 
       <section className="surf-scene surf-s5">
+        <span className="surf-in" aria-hidden="true" />
+        <span className="surf-out" aria-hidden="true" />
         <SurfImage className="surf-bg" name="s5-wipeout" alt="從水面下往上看的視角，光線穿過翻攪的海水" />
         <div className="surf-s5-veil" aria-hidden="true" />
         <div className="surf-copy">
@@ -362,6 +437,8 @@ export default function SurfPage() {
       {/* 新增的過渡幕：S5 沉下去與 S7 日落之間，少了「回到水面」這一拍，
           情緒會從溺水直接跳到收尾。這幕也是全片唯一主動選擇的時刻 */}
       <section className="surf-scene surf-s6">
+        <span className="surf-in" aria-hidden="true" />
+        <span className="surf-out" aria-hidden="true" />
         <SurfImage className="surf-bg" name="s6-surface" alt="人剛破水而出，只有頭浮在暗色水面上，水紋反著低角度的暖光" />
         <div className="surf-copy">
           <p className="surf-eyebrow">EP.06 SURFACE</p>
@@ -371,6 +448,8 @@ export default function SurfPage() {
       </section>
 
       <section className="surf-scene surf-s7">
+        <span className="surf-in" aria-hidden="true" />
+        <span className="surf-out" aria-hidden="true" />
         <SurfImage className="surf-bg" name="s7-sunset" alt="日落時分，衝浪者的剪影映在金橘色的海面上" />
         <div className="surf-copy">
           <p className="surf-eyebrow">EP.07 SUNSET</p>
