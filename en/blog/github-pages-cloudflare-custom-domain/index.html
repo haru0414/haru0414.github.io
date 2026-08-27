@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- 在繪製前套用深/淺色，避免主題閃爍 -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (
+            t === "dark" ||
+            (!t && matchMedia("(prefers-color-scheme: dark)").matches)
+          ) {
+            document.documentElement.classList.add("dark");
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Title -->
+    <title>把 GitHub Pages 換成 Cloudflare 買的自訂網域｜Haru Li</title>
+
+    <!-- Description -->
+    <meta
+      name="description"
+      content="從 Cloudflare DNS、GitHub Pages 到專案裡的 CNAME 與 SEO 網址，完整記錄我把 haru0414.github.io 換成 www.haruli.com 的設定流程。"
+    />
+
+    <!-- Keywords -->
+    <meta
+      name="keywords"
+      content="前端工程師, Frontend Engineer, React, Next.js, TypeScript, Tailwind CSS, SCSS, TanStack Query, WebSocket, LINE LIFF, GA4, GTM, Docker, GCP, 求職, 台灣, Haru Li, 李哲瑋"
+    />
+
+    <!-- Author -->
+    <meta name="author" content="Haru Li" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.haruli.com/en/blog/github-pages-cloudflare-custom-domain/" />
+
+    <!-- Open Graph URL -->
+    <meta property="og:url" content="https://www.haruli.com/en/blog/github-pages-cloudflare-custom-domain/" />
+    <meta
+      property="og:image"
+      content="https://www.haruli.com/og-image.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Haru Li — Frontend Developer Portfolio"
+    />
+
+    <!-- Open Graph (社群分享預覽) -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="把 GitHub Pages 換成 Cloudflare 買的自訂網域｜Haru Li" />
+    <meta
+      property="og:description"
+      content="從 Cloudflare DNS、GitHub Pages 到專案裡的 CNAME 與 SEO 網址，完整記錄我把 haru0414.github.io 換成 www.haruli.com 的設定流程。"
+    />
+    <meta property="og:locale" content="zh_TW" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="把 GitHub Pages 換成 Cloudflare 買的自訂網域｜Haru Li" />
+    <meta
+      name="twitter:description"
+      content="從 Cloudflare DNS、GitHub Pages 到專案裡的 CNAME 與 SEO 網址，完整記錄我把 haru0414.github.io 換成 www.haruli.com 的設定流程。"
+    />
+    <meta
+      name="twitter:image"
+      content="https://www.haruli.com/og-image.jpg"
+    />
+
+    <!-- Fonts -->
+    <!-- 標題字型 Dela Gothic One 已自架，preload 首屏 LCP 標題用的 Latin 子集 -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/dela-gothic-one-latin.woff2"
+      crossorigin
+    />
+    <script type="module" crossorigin src="/assets/index-kvi96yH4.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/react-vendor-ClJ_uj84.js">
+    <link rel="modulepreload" crossorigin href="/assets/i18n-BNQjnds_.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-CHViKpzi.css">
+      <link rel="alternate" hreflang="zh-Hant-TW" href="https://www.haruli.com/blog/github-pages-cloudflare-custom-domain/" />
+    <link rel="alternate" hreflang="en" href="https://www.haruli.com/en/blog/github-pages-cloudflare-custom-domain/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.haruli.com/blog/github-pages-cloudflare-custom-domain/" />
+    <meta property="article:published_time" content="2026-08-27" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BlogPosting","headline":"把 GitHub Pages 換成 Cloudflare 買的自訂網域","description":"從 Cloudflare DNS、GitHub Pages 到專案裡的 CNAME 與 SEO 網址，完整記錄我把 haru0414.github.io 換成 www.haruli.com 的設定流程。","datePublished":"2026-08-27","dateModified":"2026-08-27","keywords":"GitHub Pages, Cloudflare, DNS","inLanguage":"zh-Hant-TW","author":{"@type":"Person","name":"Haru Li","alternateName":"李哲瑋","url":"https://www.haruli.com/","sameAs":["https://github.com/haru0414","https://linkedin.com/in/liiiharu/"]},"publisher":{"@type":"Person","name":"Haru Li","alternateName":"李哲瑋","url":"https://www.haruli.com/","sameAs":["https://github.com/haru0414","https://linkedin.com/in/liiiharu/"]},"mainEntityOfPage":"https://www.haruli.com/en/blog/github-pages-cloudflare-custom-domain/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.haruli.com/en/"},{"@type":"ListItem","position":2,"name":"BLOG","item":"https://www.haruli.com/en/blog/"},{"@type":"ListItem","position":3,"name":"把 GitHub Pages 換成 Cloudflare 買的自訂網域","item":"https://www.haruli.com/en/blog/github-pages-cloudflare-custom-domain/"}]}]}</script>
+  </head>
+  <body>
+    <div id="root"><link rel="preload" as="image" href="/assets/cover-F4R5e6yy.webp"/><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="crayon-rough-1" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" seed="7" result="noise"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="5"></feDisplacementMap></filter><filter id="crayon-rough-2" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" seed="14" result="noise"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="5"></feDisplacementMap></filter><filter id="crayon-rough-3" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" seed="21" result="noise"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="5"></feDisplacementMap></filter></defs></svg><div class="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full border-2" style="width:20px;height:20px;background-color:var(--color-nekoma);border-color:var(--color-ink);opacity:0;will-change:transform;transition:width 0.15s, height 0.15s, background-color 0.15s;mix-blend-mode:difference"></div><div class="pointer-events-none fixed bottom-2 right-5 z-60 flex flex-col items-end gap-3"><div class="transition-all duration-300 origin-bottom-right scale-90 opacity-0 translate-y-2 pointer-events-none"><div aria-label="Code Supervisor" class="border-2 overflow-hidden w-52" style="background-color:var(--color-surface);border-color:var(--color-ink);box-shadow:4px 4px 0 0 var(--color-ink)"><div class="relative"><img src="/assets/cover-F4R5e6yy.webp" alt="Onigiri the cat" width="1658" height="1414" class="w-full h-24 object-cover object-bottom block"/><div class="absolute bottom-0 left-0 right-0 px-3 py-1.5 flex items-center justify-between" style="background-color:var(--color-panel)"><span class="text-xs text-white" style="font-family:var(--font-heading)">ONIGIRI</span><span class="text-[10px] text-white/70">Code Supervisor<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-paw-print ml-1 inline-block align-[-1px]" aria-hidden="true"><circle cx="11" cy="4" r="2"></circle><circle cx="18" cy="8" r="2"></circle><circle cx="20" cy="16" r="2"></circle><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"></path></svg></span></div></div><button type="button" class="interactive w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-left transition-colors hover:bg-poster hover:text-(--color-panel)" style="font-family:var(--font-heading)"><span class="text-base w-5 text-center"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg></span>Dark mode</button><button type="button" class="interactive w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-left border-t-2 transition-colors hover:bg-poster hover:text-(--color-panel)" style="font-family:var(--font-heading);border-color:var(--color-ink)"><span class="text-base w-5 text-center">文</span>中文</button><button type="button" class="interactive w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-left border-t-2 transition-colors hover:bg-poster hover:text-(--color-panel)" style="font-family:var(--font-heading);border-color:var(--color-ink)"><span class="flex w-5 justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up" aria-hidden="true"><path d="m5 12 7-7 7 7"></path><path d="M12 19V5"></path></svg></span>Back to top</button></div></div><button aria-label="Open supervisor menu" aria-expanded="false" class="interactive pointer-events-auto w-11 transition-all duration-200 hover:-translate-y-1 opacity-100" style="filter:drop-shadow(2px 4px 0px rgba(0,0,0,0.4))"><svg viewBox="0 0 140 90" class="block h-auto w-full" fill="none" stroke="var(--color-ink)" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><ellipse cx="70" cy="78" rx="27" ry="6" fill="var(--color-poster)"></ellipse><path d="M16,38 C18,58 30,72 50,75 C63,76 77,76 90,75 C110,72 122,58 124,38 Z" fill="var(--color-poster)"></path><g fill="#8A5A2B" stroke="none"><ellipse cx="70" cy="61" rx="8" ry="6"></ellipse><circle cx="60" cy="54" r="3"></circle><circle cx="70" cy="51" r="3.2"></circle><circle cx="80" cy="54" r="3"></circle></g><ellipse cx="70" cy="38" rx="54" ry="12" fill="#FCEFD2"></ellipse><ellipse cx="70" cy="37" rx="43" ry="8" fill="#5A3A20"></ellipse><path d="M30,38 C36,26 50,27 60,32 C66,24 80,25 85,33 C96,27 105,31 108,38 C88,46 50,46 30,38 Z" fill="#A9651F"></path><g fill="#7C461A" stroke="none"><circle cx="48" cy="35" r="3"></circle><circle cx="66" cy="32" r="3.2"></circle><circle cx="84" cy="35" r="3"></circle></g></svg></button></div><header class="sticky top-0 z-40 border-b-2" style="background-color:var(--color-bg);border-color:var(--color-ink)"><div class="container mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4"><a class="text-lg tracking-wider no-underline" style="font-family:var(--font-heading);color:var(--color-badge-red)" href="/en/" data-discover="true">H·L</a><nav aria-label="Site navigation" class="hidden items-center gap-7 md:flex"><a class="relative text-xs tracking-[0.14em] no-underline transition-colors hover:text-(--color-nekoma)" style="font-family:var(--font-heading);color:var(--color-ink)" aria-label="Work" href="/en/work/" data-discover="true">WORK</a><a class="relative text-xs tracking-[0.14em] no-underline transition-colors hover:text-(--color-nekoma)" style="font-family:var(--font-heading);color:var(--color-ink)" aria-label="Performance lab" href="/en/lab/" data-discover="true">LAB</a><a class="relative text-xs tracking-[0.14em] no-underline transition-colors hover:text-(--color-nekoma)" style="font-family:var(--font-heading);color:var(--color-nekoma)" aria-label="Blog" aria-current="page" href="/en/blog/" data-discover="true">BLOG<span aria-hidden="true" class="absolute -bottom-1.5 left-0 right-0 h-0.5" style="background-color:var(--color-nekoma)"></span></a><a class="border-2 px-3 py-1.5 text-xs tracking-[0.14em] no-underline transition-colors hover:bg-(--color-nekoma) hover:text-white" style="font-family:var(--font-heading);border-color:var(--color-ink);color:var(--color-ink);box-shadow:var(--shadow-manga-sm)" href="/en/#next" data-discover="true">Say hi</a></nav><button type="button" aria-expanded="false" aria-label="Open menu" class="md:hidden" style="background:none;border:none;color:var(--color-ink);cursor:pointer"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg></button></div></header><main class="blog-bg min-h-screen"><header class="blog-topbar"><div class="container mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3"><a class="text-lg no-underline" style="font-family:var(--font-heading);color:var(--color-ink)" href="/en/blog/" data-discover="true">BLOG</a><nav aria-label="site navigation" class="flex items-center gap-4 text-[11px]" style="font-family:var(--font-heading)"><span class="tabular-nums" style="color:var(--color-muted)">14 posts</span><a class="tracking-[0.12em] no-underline underline-offset-4 hover:underline" style="color:var(--color-ink)" href="/en/" data-discover="true">← <!-- -->back to portfolio</a></nav></div></header><div class="container mx-auto max-w-5xl px-4 py-12 md:py-16"><nav aria-label="breadcrumb" class="mb-5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px]" style="color:var(--color-muted)"><a class="no-underline hover:underline" style="color:var(--color-muted)" href="/en/" data-discover="true">home</a><svg class="crayon-boil pointer-events-none overflow-visible h-3 w-2 shrink-0 opacity-70" viewBox="0 0 100 100" aria-hidden="true"><path class="draw-stroke" d="M68 12 C 60 34 52 52 44 70 C 40 79 36 85 32 90" fill="none" stroke="var(--color-nekoma)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" style="animation-duration:800ms;animation-delay:0ms"></path></svg><a class="no-underline hover:underline" style="color:var(--color-muted)" href="/en/blog/" data-discover="true">all topics</a><svg class="crayon-boil pointer-events-none overflow-visible h-3 w-2 shrink-0 opacity-70" viewBox="0 0 100 100" aria-hidden="true"><path class="draw-stroke" d="M68 12 C 60 34 52 52 44 70 C 40 79 36 85 32 90" fill="none" stroke="var(--color-nekoma)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" style="animation-duration:800ms;animation-delay:0ms"></path></svg><a class="no-underline hover:underline" style="color:var(--color-muted)" href="/en/blog/board/github-pages/" data-discover="true">GitHub Pages</a></nav><div class="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-10"><article class="min-w-0 flex-1 border-2" style="border-color:var(--color-ink);background-color:var(--color-surface);box-shadow:var(--shadow-manga)"><div class="flex flex-wrap items-center justify-between gap-2 border-b-2 px-4 py-2 text-[11px]" style="border-color:var(--color-ink);background-color:var(--color-panel);color:var(--color-on-panel);font-family:var(--font-heading)"><span>original post</span><span class="tabular-nums opacity-80">2026-08-27</span></div><div class="flex flex-col sm:flex-row"><div class="flex shrink-0 items-center gap-3 border-b-2 p-4 sm:w-36 sm:flex-col sm:items-start sm:border-b-0 sm:border-r-2" style="border-color:color-mix(in srgb, var(--color-ink) 20%, transparent)"><img src="/assets/cover-F4R5e6yy.webp" alt="Onigiri the cat" width="48" height="48" loading="lazy" decoding="async" class="h-12 w-12 shrink-0 border-2 object-cover" style="border-color:var(--color-ink)"/><div class="min-w-0"><p class="m-0 text-xs" style="font-family:var(--font-heading)">Haru Li</p><p class="m-0 text-[10px]" style="color:var(--color-muted)">Frontend Developer</p><p class="m-0 mt-1 text-[10px] tabular-nums" style="color:var(--color-muted)">14 posts</p></div></div><div class="min-w-0 flex-1 p-4 md:p-6"><header class="relative mb-6 border-b-2 pb-5" style="border-color:color-mix(in srgb, var(--color-ink) 25%, transparent)"><div class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px]" style="color:var(--color-muted)"><time dateTime="2026-08-27" class="tabular-nums">2026-08-27</time><span>·</span><span>11 min read</span><span class="px-1.5 py-0.5" style="background-color:color-mix(in srgb, var(--color-teal) 18%, transparent);color:var(--color-teal)">GitHub Pages</span><span class="px-1.5 py-0.5" style="background-color:color-mix(in srgb, var(--color-teal) 18%, transparent);color:var(--color-teal)">Cloudflare</span><span class="px-1.5 py-0.5" style="background-color:color-mix(in srgb, var(--color-teal) 18%, transparent);color:var(--color-teal)">DNS</span></div><h1 class="m-0 text-2xl leading-snug md:text-4xl" style="font-family:var(--font-heading)">把 GitHub Pages 換成 Cloudflare 買的自訂網域</h1><svg class="crayon-boil pointer-events-none overflow-visible pointer-events-none absolute -right-2 -top-4 h-7 w-7" viewBox="0 0 100 100" aria-hidden="true"><path class="draw-stroke" d="M5 62 L20 40 L35 62 L50 40 L65 62 L80 40 L95 62" fill="none" stroke="var(--color-poster)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" style="animation-duration:800ms;animation-delay:400ms"></path></svg></header><div class="blog-prose"><p>我的作品集原本放在 <code>haru0414.github.io</code>，後來在 Cloudflare Registrar 買了 <code>haruli.com</code>，想把正式網址換成：</p>
+<pre><code>https://www.haruli.com
+</code></pre>
+<p>最後採用的規則是：</p>
+<ul>
+<li><code>www.haruli.com</code> 是正式網址</li>
+<li><code>haruli.com</code> 自動轉去 <code>www.haruli.com</code></li>
+<li><code>haru0414.github.io</code> 也自動轉去 <code>www.haruli.com</code></li>
+</ul>
+<p>買下網域不代表它會自動連到網站。這件事其實有三層：Cloudflare 負責 DNS、GitHub Pages 負責託管網站，專案本身則要停止輸出舊網址。只設其中一層，網站可能打得開，搜尋引擎和分享預覽卻還是舊的。</p>
+<p>這篇以目前這個 Vite + React 專案為例，但 DNS 的部分也適用於一般 GitHub Pages 網站。</p>
+<h2 id="h-1">開始前先決定正式網址</h2>
+<p>先在裸網域和 <code>www</code> 之間選一個當唯一的正式網址：</p>
+<pre><code>haruli.com
+www.haruli.com
+</code></pre>
+<p>我選 <code>www.haruli.com</code>。只要裸網域和 <code>www</code> 的 DNS 都設好，GitHub Pages 會依照 Pages 裡填的 Custom domain，自動把另一個版本重新導向正式網址。</p>
+<p>以下範例中的值可以這樣替換：</p>
+<table>
+<thead>
+<tr>
+<th>這個專案</th>
+<th>你的值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>haru0414</code></td>
+<td>GitHub 使用者名稱或組織名稱</td>
+</tr>
+<tr>
+<td><code>haruli.com</code></td>
+<td>在 Cloudflare 購買的網域</td>
+</tr>
+<tr>
+<td><code>www.haruli.com</code></td>
+<td>想公開使用的正式網址</td>
+</tr>
+<tr>
+<td><code>haru0414.github.io</code></td>
+<td>GitHub Pages 原本的預設網域</td>
+</tr>
+</tbody></table>
+<p>這個專案的 repository 剛好叫 <code>haru0414.github.io</code>，屬於使用者網站，所以 CNAME 的目標就是 <code>haru0414.github.io</code>，<strong>不用加 repository 名稱，也不要加 <code>https://</code> 或路徑</strong>。</p>
+<h2 id="h-2">先在 GitHub 驗證網域</h2>
+<p>這一步不是讓網站上線，而是證明這個網域屬於我，避免日後 repository 被刪除、Pages 暫時停用時，別人接管仍指向 GitHub Pages 的網域。</p>
+<ol>
+<li>點 GitHub 右上角頭像，進入 <strong>Settings</strong>。</li>
+<li>左側選 <strong>Pages</strong>，在 Verified domains 按 <strong>Add a domain</strong>。</li>
+<li>輸入裸網域 <code>haruli.com</code>。</li>
+<li>GitHub 會提供一筆 TXT record 的名稱和值。</li>
+<li>先不要關閉 GitHub 頁面，另開 Cloudflare Dashboard。</li>
+<li>選擇 <code>haruli.com</code>，進入 <strong>DNS → Records → Add record</strong>。</li>
+<li>Type 選 <code>TXT</code>，Name 和 Content 貼上 GitHub 提供的內容，儲存後回 GitHub 按 <strong>Verify</strong>。</li>
+</ol>
+<p>驗證 <code>haruli.com</code> 也會保護它的第一層子網域，例如 <code>www.haruli.com</code>。TXT record 驗證成功後不要刪掉，GitHub 才能持續確認網域所有權。</p>
+<p>GitHub 也提供指令檢查 TXT 是否已經傳播；把使用者名稱和網域換成自己的：</p>
+<pre><code class="language-bash">dig _github-pages-challenge-haru0414.haruli.com TXT +short
+</code></pre>
+<h2 id="h-3">在 GitHub Pages 填入自訂網域</h2>
+<p>接著到網站 repository 的 <strong>Settings → Pages</strong>，在 Custom domain 輸入：</p>
+<pre><code>www.haruli.com
+</code></pre>
+<p>按下 <strong>Save</strong>。GitHub 官方建議先在 Pages 加入自訂網域，再設定指向 GitHub 的 DNS，避免留下可被接管的空窗。</p>
+<p>這裡只填一個正式網域，不要同時塞入裸網域，也不要填 <code>https://www.haruli.com</code>。</p>
+<h2 id="h-4">在 Cloudflare 建立 DNS records</h2>
+<p>回到 Cloudflare Dashboard 的 <strong>DNS → Records</strong>。如果剛買完網域時已經有停放頁用的 <code>A</code>、<code>AAAA</code> 或 <code>CNAME</code> record，先確認同名 record 不會衝突。</p>
+<p>我的設定如下：</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Name</th>
+<th>Content</th>
+<th>Proxy status</th>
+<th>TTL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>A</code></td>
+<td><code>@</code></td>
+<td><code>185.199.108.153</code></td>
+<td>DNS only</td>
+<td>Auto</td>
+</tr>
+<tr>
+<td><code>A</code></td>
+<td><code>@</code></td>
+<td><code>185.199.109.153</code></td>
+<td>DNS only</td>
+<td>Auto</td>
+</tr>
+<tr>
+<td><code>A</code></td>
+<td><code>@</code></td>
+<td><code>185.199.110.153</code></td>
+<td>DNS only</td>
+<td>Auto</td>
+</tr>
+<tr>
+<td><code>A</code></td>
+<td><code>@</code></td>
+<td><code>185.199.111.153</code></td>
+<td>DNS only</td>
+<td>Auto</td>
+</tr>
+<tr>
+<td><code>CNAME</code></td>
+<td><code>www</code></td>
+<td><code>haru0414.github.io</code></td>
+<td>DNS only</td>
+<td>Auto</td>
+</tr>
+</tbody></table>
+<p><code>@</code> 代表裸網域 <code>haruli.com</code>；<code>www</code> 代表 <code>www.haruli.com</code>。四個 IP 都是 GitHub Pages 官方提供的 IPv4 位址，不是任選一個填上去。</p>
+<p>Cloudflare 新增可代理的 record 時可能預設開啟橘色雲朵。第一次設定我先全部切成灰色的 <strong>DNS only</strong>，讓 GitHub 可以直接檢查 DNS 並簽發憑證。這樣 HTTPS、快取和重新導向的責任也比較單純，都由 GitHub Pages 處理。</p>
+<p>Cloudflare Proxy 不是自訂網域上線的必要條件。若網站正常後真的要開橘色雲朵，等於在訪客和 GitHub 之間再加入一層反向代理，還要另外確認 Cloudflare 的 SSL/TLS mode、快取與 Redirect Rules；設定互相衝突時可能造成重新導向迴圈。這篇先維持 DNS only。</p>
+<h2 id="h-5">讓部署保留 CNAME</h2>
+<p>這個專案用 <code>peaceiris/actions-gh-pages</code> 把 <code>dist</code> 發佈到 <code>gh-pages</code> branch：</p>
+<pre><code class="language-yaml">- name: Deploy
+  uses: peaceiris/actions-gh-pages@v4
+  with:
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+    publish_dir: ./dist
+</code></pre>
+<p>因此我在 <code>public/CNAME</code> 放入正式網域：</p>
+<pre><code>www.haruli.com
+</code></pre>
+<p>Vite build 時會把 <code>public</code> 裡的檔案原樣複製到 <code>dist</code>，部署後 <code>gh-pages</code> branch 根目錄就會保留 <code>CNAME</code>。如果只在 GitHub 網頁介面產生檔案，下次部署剛好覆寫整個 branch，自訂網域設定可能跟著消失。</p>
+<p><code>CNAME</code> 有三個限制：</p>
+<ul>
+<li>檔名必須是大寫的 <code>CNAME</code></li>
+<li>只能有一行、一個網域</li>
+<li>只寫 hostname，不加 <code>https://</code>、結尾斜線或其他路徑</li>
+</ul>
+<p>如果專案採用 GitHub 官方的 Actions Pages deployment，而不是發佈一個 Pages branch，GitHub 官方文件說 <code>CNAME</code> 會被忽略且不是必要檔案；是否需要它要看自己的 publishing source。這個專案是 branch publishing，所以我選擇把它留在建置產物裡。</p>
+<h2 id="h-6">把專案裡的舊網址一起換掉</h2>
+<p>能開啟新網域還不算完成。canonical、Open Graph 和 sitemap 如果仍指向 <code>github.io</code>，搜尋引擎會收到互相矛盾的訊號。</p>
+<p>我先搜尋所有寫死的網址：</p>
+<pre><code class="language-bash">rg -n &quot;haru0414.github.io|www.haruli.com|CNAME|canonical|sitemap&quot; \
+  README.md index.html public src scripts .github
+</code></pre>
+<p>這個專案需要確認的地方有：</p>
+<table>
+<thead>
+<tr>
+<th>檔案</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>public/CNAME</code></td>
+<td>GitHub Pages 的自訂網域</td>
+</tr>
+<tr>
+<td><code>index.html</code></td>
+<td>首頁的 canonical、<code>og:url</code>、分享圖片網址</td>
+</tr>
+<tr>
+<td><code>src/entry-server.tsx</code></td>
+<td>prerender 時產生各頁的絕對網址</td>
+</tr>
+<tr>
+<td><code>src/components/SeoMeta.tsx</code></td>
+<td>前端換頁時更新 canonical 與社群 meta</td>
+</tr>
+<tr>
+<td><code>scripts/prerender.mjs</code></td>
+<td>sitemap 的網域來源</td>
+</tr>
+<tr>
+<td><code>public/robots.txt</code></td>
+<td>sitemap 的完整網址</td>
+</tr>
+<tr>
+<td><code>scripts/make-og.mjs</code></td>
+<td>分享圖片上顯示的網址文字</td>
+</tr>
+<tr>
+<td><code>README.md</code></td>
+<td>專案文件裡的 Live URL</td>
+</tr>
+</tbody></table>
+<p>目前核心程式都把 origin 統一成：</p>
+<pre><code class="language-ts">const ORIGIN = &quot;https://www.haruli.com&quot;;
+</code></pre>
+<p>更大型的專案可以再把它抽成單一設定或環境變數，避免下次換網域時要改很多份。</p>
+<p>另外，這是 <code>haru0414.github.io</code> 使用者網站，Vite 預設的 <code>base: &quot;/&quot;</code> 就能正常運作。若原本是 <code>username.github.io/repository/</code> 形式的 project site，而且 <code>vite.config.ts</code> 曾設成 <code>base: &quot;/repository/&quot;</code>，換到獨立網域根目錄後也要檢查是否應改成 <code>/</code>，否則 CSS 和 JavaScript 可能仍從錯誤路徑載入。</p>
+<h2 id="h-7">等 DNS 生效，再開啟 HTTPS</h2>
+<p>DNS 更新不一定馬上傳到每個地方。GitHub 提醒最長可能需要 24 小時，所以剛設定後看到 DNS check pending，不用立刻把 record 刪掉重做。</p>
+<p>我用這幾個指令分層確認：</p>
+<pre><code class="language-bash"># www 是否指向原本的 GitHub Pages 網域
+dig www.haruli.com CNAME +short
+
+# 裸網域是否得到 GitHub Pages 的四個 IPv4
+dig haruli.com A +short
+
+# github.io 是否轉向正式網址
+curl -I https://haru0414.github.io
+
+# 裸網域是否轉向 www
+curl -I https://haruli.com
+
+# 正式網址是否正常回應
+curl -I https://www.haruli.com
+</code></pre>
+<p>這個專案最後得到的關係是：</p>
+<pre><code>haru0414.github.io ──301──┐
+                          ├──&gt; https://www.haruli.com
+haruli.com ─────────301───┘
+</code></pre>
+<p>等 GitHub Pages 的 DNS check 成功、憑證簽發完成後，在 <strong>Settings → Pages</strong> 勾選 <strong>Enforce HTTPS</strong>。最後再用無痕視窗測試三個網址，避免瀏覽器快取讓結果看起來和實際設定不同。</p>
+<h2 id="h-8">我會特別檢查的坑</h2>
+<h3>DNS 顯示正常，GitHub 卻一直檢查失敗</h3>
+<p>先檢查同一個 Name 是否還有舊的 <code>A</code>、<code>AAAA</code> 或 <code>CNAME</code>。尤其是多出來、卻沒有指向 GitHub Pages 的 <code>AAAA</code>，可能妨礙 DNS 檢查和 HTTPS 憑證簽發。</p>
+<h3>CNAME 填成完整網址</h3>
+<p>Cloudflare 的 CNAME Content 應該是 <code>haru0414.github.io</code>，不是 <code>https://haru0414.github.io/</code>，也不是 <code>haru0414.github.io/Resume</code>。</p>
+<h3>部署一次後 Custom domain 消失</h3>
+<p>檢查正式 build 裡是否真的有檔案：</p>
+<pre><code class="language-bash">npm run build
+cat dist/CNAME
+</code></pre>
+<p>結果應該只有 <code>www.haruli.com</code>。</p>
+<h3>網站正常，但 Google 還留著舊網址</h3>
+<p>先確認每一頁的 canonical、sitemap、<code>og:url</code> 都已改成新網域。舊的 <code>github.io</code> 會由 GitHub 重新導向，但搜尋引擎重新整理索引仍需要時間；有使用 Google Search Console 的話，也要新增並驗證新網域資源，再提交新的 sitemap。</p>
+<h2 id="h-9">完成後的檢查清單</h2>
+<ul>
+<li>GitHub 帳號的 Pages 設定已驗證裸網域，TXT record 沒有刪除</li>
+<li>Repository Pages 的 Custom domain 只填正式網址</li>
+<li>Cloudflare 的 <code>@</code> 有四筆 GitHub Pages A records</li>
+<li>Cloudflare 的 <code>www</code> CNAME 指向 <code>&lt;username&gt;.github.io</code></li>
+<li>第一次設定先使用 DNS only</li>
+<li><code>public/CNAME</code> 會出現在實際發佈的 branch 根目錄</li>
+<li>GitHub Pages 已開啟 Enforce HTTPS</li>
+<li>裸網域、<code>www</code>、舊 <code>github.io</code> 都會收斂到同一個 HTTPS 網址</li>
+<li>canonical、sitemap、Open Graph 和 README 都不再指向舊網域</li>
+</ul>
+<p>網域替換真正麻煩的不是某一筆 DNS，而是要讓 DNS、GitHub Pages 和網站輸出的網址三者一致。一旦先選定唯一正式網址，再照這三層逐一驗證，整個流程就會清楚很多。</p>
+<p>延伸閱讀：<a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site">GitHub Pages 自訂網域設定</a>、<a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages">GitHub Pages 網域驗證</a>、<a href="https://developers.cloudflare.com/dns/manage-dns-records/how-to/create-dns-records/">Cloudflare DNS records</a>、<a href="https://developers.cloudflare.com/dns/proxy-status/">Cloudflare Proxy status</a>。</p>
+</div></div></div></article><aside class="flex w-full flex-col gap-5 lg:sticky lg:top-20 lg:w-64 lg:shrink-0"><section class="border-2 p-4" style="background-color:var(--color-surface);border-color:var(--color-ink);box-shadow:var(--shadow-manga-sm)"><h2 class="mb-3 text-xs tracking-[0.16em]" style="font-family:var(--font-heading);color:var(--color-nekoma)">contents</h2><ol class="m-0 flex list-none flex-col gap-1 p-0"><li><a href="#h-1" class="flex gap-2 py-1 text-[11px] leading-snug no-underline transition-colors" style="color:var(--color-muted)"><span class="tabular-nums opacity-60">01</span><span>開始前先決定正式網址</span></a></li><li><a href="#h-2" class="flex gap-2 py-1 text-[11px] leading-snug no-underline transition-colors" style="color:var(--color-muted)"><span class="tabular-nums opacity-60">02</span><span>先在 GitHub 驗證網域</span></a></li><li><a href="#h-3" class="flex gap-2 py-1 text-[11px] leading-snug no-underline transition-colors" style="color:var(--color-muted)"><span class="tabular-nums opacity-60">03</span><span>在 GitHub Pages 填入自訂網域</span></a></li><li><a href="#h-4" class="flex gap-2 py-1 text-[11px] leading-snug no-underline transition-colors" style="color:var(--color-muted)"><span class="tabular-nums opacity-60">04</span><span>在 Cloudflare 建立 DNS records</span></a></li><li><a href="#h-5" class="flex gap-2 py-1 text-[11px] leading-snug no-underline transition-colors" style="color:var(--color-muted)"><span class="tabular-nums opacity-60">05</span><span>讓部署保留 CNAME</span></a></li><li><a href="#h-6" class="flex gap-2 py-1 text-[11px] leading-snug no-underline transition-colors" style="color:var(--color-muted)"><span class="tabular-nums opacity-60">06</span><span>把專案裡的舊網址一起換掉</span></a></li><li><a href="#h-7" class="flex gap-2 py-1 text-[11px] leading-snug no-underline transition-colors" style="color:var(--color-muted)"><span class="tabular-nums opacity-60">07</span><span>等 DNS 生效，再開啟 HTTPS</span></a></li><li><a href="#h-8" class="flex gap-2 py-1 text-[11px] leading-snug no-underline transition-colors" style="color:var(--color-muted)"><span class="tabular-nums opacity-60">08</span><span>我會特別檢查的坑</span></a></li><li><a href="#h-9" class="flex gap-2 py-1 text-[11px] leading-snug no-underline transition-colors" style="color:var(--color-muted)"><span class="tabular-nums opacity-60">09</span><span>完成後的檢查清單</span></a></li></ol></section><section class="border-2 p-4" style="background-color:var(--color-surface);border-color:var(--color-ink);box-shadow:var(--shadow-manga-sm)"><div class="flex items-center gap-3"><img src="/assets/cover-F4R5e6yy.webp" alt="Onigiri the cat" width="56" height="56" loading="lazy" decoding="async" class="h-14 w-14 shrink-0 border-2 object-cover" style="border-color:var(--color-ink)"/><div class="min-w-0"><p class="m-0 text-sm" style="font-family:var(--font-heading)">Haru Li</p><p class="m-0 text-[11px]" style="color:var(--color-muted)">Frontend Developer</p></div></div><p class="mt-3 text-[11px] leading-relaxed" style="color:var(--color-muted)">Frontend engineer. I write here mainly to organise the traps I have fallen into — mostly implementation detail and measurements.</p><a class="mt-3 inline-block text-[11px] tracking-[0.12em] underline underline-offset-4" style="font-family:var(--font-heading);color:var(--color-ink)" href="/en/" data-discover="true">view portfolio<!-- --> →</a></section><section class="border-2 p-4" style="background-color:var(--color-surface);border-color:var(--color-ink);box-shadow:var(--shadow-manga-sm)"><h2 class="mb-3 text-xs tracking-[0.16em]" style="font-family:var(--font-heading);color:var(--color-nekoma)">recent posts</h2><ol class="m-0 flex list-none flex-col gap-2.5 p-0"><li><a class="block text-[12px] leading-snug no-underline hover:underline" style="color:var(--color-ink)" href="/en/blog/measuring-performance-honestly/" data-discover="true">做十個效能 demo 之後，我對「值得展示」的標準變嚴格了</a><time dateTime="2026-08-23" class="text-[10px] tabular-nums" style="color:var(--color-muted)">2026-08-23</time></li><li><a class="block text-[12px] leading-snug no-underline hover:underline" style="color:var(--color-ink)" href="/en/blog/safari-scrollbar-overlap/" data-discover="true">一條沒有前綴的 CSS，和只有 Safari 看得到的 bug</a><time dateTime="2026-08-23" class="text-[10px] tabular-nums" style="color:var(--color-muted)">2026-08-23</time></li><li><a class="block text-[12px] leading-snug no-underline hover:underline" style="color:var(--color-ink)" href="/en/blog/github-pages-trailing-slash/" data-discover="true">一個不存在的 bug，和一個真的 bug</a><time dateTime="2026-08-20" class="text-[10px] tabular-nums" style="color:var(--color-muted)">2026-08-20</time></li><li><a class="block text-[12px] leading-snug no-underline hover:underline" style="color:var(--color-ink)" href="/en/blog/usememo-caching-expensive-work/" data-discover="true">useMemo 到底省下多少？我量了三次才拿到能信的數字</a><time dateTime="2026-08-19" class="text-[10px] tabular-nums" style="color:var(--color-muted)">2026-08-19</time></li><li><a class="block text-[12px] leading-snug no-underline hover:underline" style="color:var(--color-ink)" href="/en/blog/lazy-loading-on-scroll/" data-discover="true">捲到才載入：省的不只是資料，還有那個 JS 檔</a><time dateTime="2026-08-18" class="text-[10px] tabular-nums" style="color:var(--color-muted)">2026-08-18</time></li></ol></section></aside></div><nav class="mt-14 grid gap-3 border-t-2 pt-6 sm:grid-cols-2" style="border-color:var(--color-ink)" aria-label="post navigation: previous / next"><a class="flex flex-col gap-1 border-2 p-3 no-underline transition-transform hover:-translate-y-0.5" style="background-color:var(--color-surface);border-color:var(--color-ink);color:var(--color-ink);box-shadow:var(--shadow-manga-sm);text-align:left" href="/en/blog/measuring-performance-honestly/" data-discover="true"><span class="text-[10px] tracking-[0.14em]" style="font-family:var(--font-heading);color:var(--color-muted)">previous</span><span class="text-sm leading-snug">做十個效能 demo 之後，我對「值得展示」的標準變嚴格了</span></a><span></span></nav></div><footer class="mt-16 border-t-2 py-10" style="border-color:var(--color-ink)"><div class="container mx-auto flex max-w-5xl flex-col gap-2 px-4 text-[11px]" style="color:var(--color-muted)"><p class="m-0">Every post here lives as a markdown file in this repo — publishing is adding a file.</p><p class="m-0">© 2026 HARU LI</p></div></footer></main><footer class="border-t-4 py-12" style="background-color:var(--color-panel);border-color:var(--color-ink);color:var(--color-on-panel)"><div class="container mx-auto grid max-w-6xl gap-8 px-4 sm:grid-cols-2 lg:grid-cols-4"><div class="flex flex-col gap-3"><span class="text-2xl tracking-wider" style="font-family:var(--font-heading)">HARU LI</span><p class="m-0 max-w-[28ch] text-sm leading-relaxed" style="color:var(--color-muted)">Frontend Developer</p></div><nav aria-labelledby="footer-explore" class="flex flex-col gap-2 text-sm"><span id="footer-explore" class="mb-1 text-xs tracking-[0.14em]" style="font-family:var(--font-heading);color:var(--color-poster)">Explore</span><a class="no-underline underline-offset-4 transition-colors hover:text-(--color-nekoma) hover:underline" style="color:inherit" href="/en/work/" data-discover="true">Work</a><a class="no-underline underline-offset-4 transition-colors hover:text-(--color-nekoma) hover:underline" style="color:inherit" href="/en/lab/" data-discover="true">Performance lab</a><a class="no-underline underline-offset-4 transition-colors hover:text-(--color-nekoma) hover:underline" style="color:inherit" href="/en/blog/" data-discover="true">Blog</a><a class="no-underline underline-offset-4 transition-colors hover:text-(--color-nekoma) hover:underline" style="color:inherit" href="/en/surf/" data-discover="true">Seven Scenes</a></nav><nav aria-labelledby="footer-latest" class="flex flex-col gap-2 text-sm"><span id="footer-latest" class="mb-1 text-xs tracking-[0.14em]" style="font-family:var(--font-heading);color:var(--color-poster)">Latest posts</span><a class="no-underline underline-offset-4 transition-colors hover:text-(--color-nekoma) hover:underline" style="color:inherit" href="/en/blog/github-pages-cloudflare-custom-domain/" data-discover="true"><span class="line-clamp-2">把 GitHub Pages 換成 Cloudflare 買的自訂網域</span><span class="block text-xs tabular-nums" style="color:var(--color-muted)">2026-08-27</span></a><a class="no-underline underline-offset-4 transition-colors hover:text-(--color-nekoma) hover:underline" style="color:inherit" href="/en/blog/measuring-performance-honestly/" data-discover="true"><span class="line-clamp-2">做十個效能 demo 之後，我對「值得展示」的標準變嚴格了</span><span class="block text-xs tabular-nums" style="color:var(--color-muted)">2026-08-23</span></a><a class="no-underline underline-offset-4 transition-colors hover:text-(--color-nekoma) hover:underline" style="color:inherit" href="/en/blog/safari-scrollbar-overlap/" data-discover="true"><span class="line-clamp-2">一條沒有前綴的 CSS，和只有 Safari 看得到的 bug</span><span class="block text-xs tabular-nums" style="color:var(--color-muted)">2026-08-23</span></a></nav><nav aria-labelledby="footer-contact" class="flex flex-col gap-2 text-sm"><span id="footer-contact" class="mb-1 text-xs tracking-[0.14em]" style="font-family:var(--font-heading);color:var(--color-poster)">Contact</span><a href="mailto:skb900414@gmail.com" class="no-underline underline-offset-4 transition-colors hover:text-(--color-nekoma) hover:underline" style="color:inherit">Email me</a><a href="https://github.com/haru0414" target="_blank" rel="noreferrer" class="no-underline underline-offset-4 transition-colors hover:text-(--color-nekoma) hover:underline" style="color:inherit">GitHub</a><a href="https://linkedin.com/in/liiiharu/" target="_blank" rel="noreferrer" class="no-underline underline-offset-4 transition-colors hover:text-(--color-nekoma) hover:underline" style="color:inherit">LinkedIn</a><a href="/files/resume.pdf" class="no-underline underline-offset-4 transition-colors hover:text-(--color-nekoma) hover:underline" style="color:inherit">Resume PDF</a></nav></div><div class="container mx-auto mt-10 flex max-w-6xl flex-col gap-2 border-t px-4 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between" style="border-color:color-mix(in srgb, var(--color-on-panel) 20%, transparent)"><span style="color:var(--color-muted)">© 2026 Haru Li</span><span style="color:var(--color-muted)">Built with React 19 + Vite</span></div></footer></div>
+  </body>
+</html>
