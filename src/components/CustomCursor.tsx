@@ -24,6 +24,13 @@ export default function CustomCursor() {
     coarsePointer.getServer,
   );
 
+  // 只有自訂游標真的掛載且裝置適用時，才讓 CSS 隱藏系統游標。
+  // JS 尚未載入、元件發生錯誤或切到 /surf 時，都會安全退回原生游標。
+  useEffect(() => {
+    document.documentElement.classList.toggle("custom-cursor-active", isDesktop);
+    return () => document.documentElement.classList.remove("custom-cursor-active");
+  }, [isDesktop]);
+
   useEffect(() => {
     if (!isDesktop) return;
 

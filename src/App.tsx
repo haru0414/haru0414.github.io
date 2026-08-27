@@ -13,6 +13,7 @@ import ScrollCat from "./components/play/ScrollCat";
 import NotFoundPage from "./pages/NotFoundPage";
 import SeoMeta from "./components/SeoMeta";
 import CrayonDefs from "./components/crayon/CrayonDefs";
+import CustomCursor from "./components/CustomCursor";
 // 詳情頁同步 import（非 lazy）：專案頁已在建置時 prerender，renderToString
 // 必須能渲染出完整內容；lazy 會在 SSR 只渲染 Suspense fallback、導致 hydration
 // 邊界不一致（React #419）。
@@ -119,19 +120,6 @@ function App() {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Hide default cursor on desktop
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      !window.matchMedia("(pointer: coarse)").matches
-    ) {
-      document.body.style.cursor = "none";
-    }
-    return () => {
-      document.body.style.cursor = "auto";
-    };
   }, []);
 
   return (
@@ -341,6 +329,19 @@ function LangSync() {
   return null;
 }
 
+/**
+ * 游標放在 ErrorBoundary 外：真正的 render error 會把 Routes（包含
+ * SiteLayout）整棵換成 ErrorScreen，若游標留在 layout 裡，系統游標又被
+ * CSS 隱藏，500 畫面就會完全沒有指標。
+ *
+ * /surf 是唯一不用漫畫自訂游標的沉浸頁，維持原本的系統游標。
+ */
+function SiteCursor() {
+  const { pathname } = useLocation();
+  const path = stripLang(pathname).replace(/\/+$/, "") || "/";
+  return path === "/surf" ? null : <CustomCursor />;
+}
+
 export function AppShell() {
   return (
     <>
@@ -348,6 +349,7 @@ export function AppShell() {
       <ScrollToTop />
       <CrayonDefs />
       <SeoMeta />
+      <SiteCursor />
       {/* 攔住 render 期例外。這站是靜態站沒有伺服器 500，等價的線上故障
           就是元件拋錯導致整頁空白——沒有這層就連「出錯了」都不會顯示 */}
       <ErrorBoundary>

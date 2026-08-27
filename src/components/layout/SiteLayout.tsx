@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
-import CustomCursor from "../CustomCursor";
 import FloatingCat from "../FloatingCat";
 
 /**
@@ -15,7 +14,6 @@ import FloatingCat from "../FloatingCat";
 export default function SiteLayout() {
   return (
     <>
-      <CustomCursor />
       <FloatingCat />
       <SiteHeader />
       <Outlet />

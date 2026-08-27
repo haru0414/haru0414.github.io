@@ -152,9 +152,9 @@
      以自訂游標放大作為 hover 提示。Hero 蠟筆畫布是刻意的塗鴉提示，
      由 JS 以 important 優先權保留其蠟筆游標（見 CrayonTrail）。 */
   @media (hover: hover) and (pointer: fine) {
-    *,
-    *::before,
-    *::after {
+    .custom-cursor-active *,
+    .custom-cursor-active *::before,
+    .custom-cursor-active *::after {
       cursor: none !important;
     }
   }
