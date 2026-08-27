@@ -2,7 +2,7 @@
 
 個人作品集與履歷網站，採用 manga / 漫畫風格設計。
 
-🔗 **Live:** https://haru0414.github.io
+🔗 **Live:** https://www.haruli.com
 
 ---
 

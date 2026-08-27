@@ -112,6 +112,8 @@ const BOARD_SLUGS: Record<string, string> = {
   React: "react",
   量測: "measurement",
   "GitHub Pages": "github-pages",
+  Cloudflare: "cloudflare",
+  DNS: "dns",
   除錯: "debugging",
   CSS: "css",
   Safari: "safari",
