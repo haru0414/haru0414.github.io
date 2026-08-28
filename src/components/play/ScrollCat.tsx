@@ -41,11 +41,18 @@ export default function ScrollCat() {
   // 等初始頁面載入完成、瀏覽器有空時再掛上動畫幀；使用者開始捲動（interaction）
   // 前它們通常已進快取，也不會延後初始 LCP。
   useEffect(() => {
-    let idle = 0;
+    let cancel = () => {};
     const schedule = () => {
-      idle = window.requestIdleCallback(() => setSpritesReady(true), {
-        timeout: 3000,
-      });
+      // Safari 17.3 以下沒有 requestIdleCallback，退回 setTimeout。
+      if (typeof window.requestIdleCallback === "function") {
+        const id = window.requestIdleCallback(() => setSpritesReady(true), {
+          timeout: 3000,
+        });
+        cancel = () => window.cancelIdleCallback(id);
+      } else {
+        const id = window.setTimeout(() => setSpritesReady(true), 300);
+        cancel = () => window.clearTimeout(id);
+      }
     };
 
     if (document.readyState === "complete") schedule();
@@ -53,7 +60,7 @@ export default function ScrollCat() {
 
     return () => {
       window.removeEventListener("load", schedule);
-      if (idle) window.cancelIdleCallback(idle);
+      cancel();
     };
   }, []);
 
