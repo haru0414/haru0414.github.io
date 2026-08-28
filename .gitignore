@@ -24,3 +24,6 @@ dist-server
 *.sln
 *.sw?
 
+
+# 徽章抓取腳本的核對輸出，不是原始碼
+scripts/.badges-meta.json

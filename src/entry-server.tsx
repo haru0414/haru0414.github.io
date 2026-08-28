@@ -22,6 +22,7 @@ const PAGES: string[] = [
   "/surf",
   "/500",
   "/lab",
+  "/certs",
   "/blog",
   ...allBoards().map(([tag]) => `/blog/board/${boardSlug(tag)}`),
   ...posts.map((p) => `/blog/${p.slug}`),
@@ -240,6 +241,7 @@ function metaFor(path: string, lang: Lang) {
   if (path === "/blog") return page("blog");
   if (path === "/work") return page("work");
   if (path === "/lab") return page("lab");
+  if (path === "/certs") return page("certs");
   if (path === "/500") {
     return {
       ...page("e500"),

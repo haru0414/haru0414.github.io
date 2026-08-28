@@ -12,6 +12,7 @@ const en = {
       about: "About",
       projects: "Projects",
       career: "Career",
+      badges: "Badges",
       contact: "Contact",
     },
     // Site header. Visible labels are latin codes; these strings are the aria-labels.
@@ -302,6 +303,24 @@ const en = {
     },
     // Per-page SEO copy. Shared by prerender (entry-server) and client-side
     // navigation (SeoMeta) so the strings live in one place.
+    badges: {
+      intro:
+        "Course and platform badges — {{n}} in total. These are the ones closest to hands-on engineering; each links to the issuer's official page for verification.",
+      viewAll: "See all {{n}} →",
+    },
+    certs: {
+      intro:
+        "Course and platform badges — {{n}} in total. Each links to the issuer's official page for verification.",
+      count: "{{n}} badges",
+      issuer: {
+        "claude-academy": "Claude Academy",
+      },
+      group: {
+        core: "CLAUDE FUNDAMENTALS",
+        dev: "BUILDING & INTEGRATION",
+        fluency: "AI FLUENCY",
+      },
+    },
     pageSeo: {
       home: {
         title: "Haru Li｜Frontend Engineer Portfolio",
@@ -317,6 +336,11 @@ const en = {
         title: "PERF LAB｜Hands-on Frontend Performance Demos",
         description:
           "useMemo caching, lazy loading on scroll, Suspense data fetching — hands-on frontend performance demos where the numbers are measured live in your browser.",
+      },
+      certs: {
+        title: "BADGES｜Course & Platform Badges by Haru Li",
+        description:
+          "20 course completion badges from Claude Academy: Claude Code, the Claude API, Model Context Protocol, Amazon Bedrock and Vertex AI integration, plus the AI Fluency series. Every badge links to the issuer's official page for verification.",
       },
       surf: {
         title: "SURF｜A GSAP Scroll Narrative Experiment",

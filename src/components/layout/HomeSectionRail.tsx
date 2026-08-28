@@ -7,6 +7,7 @@ const sections = [
   { id: "character", navKey: "about" },
   { id: "episodes", navKey: "projects" },
   { id: "career", navKey: "career" },
+  { id: "badges", navKey: "badges" },
   { id: "next", navKey: "contact" },
 ];
 

@@ -13,6 +13,7 @@ const zh = {
       about: "關於",
       projects: "專案",
       career: "經歷",
+      badges: "徽章",
       contact: "聯絡",
     },
     // 站台頁首。顯示文字是拉丁字碼，這裡的中文走 aria-label
@@ -323,6 +324,23 @@ const zh = {
     },
     // 各頁的 SEO 文案。集中在這裡，prerender（entry-server）與 client 換頁
     // （SeoMeta）共用同一份，不必兩邊各維護一份中文字串
+    badges: {
+      intro:
+        "修過的課程與平台徽章，共 {{n}} 張。下面是與工程實作最相關的幾張，點擊可到發證單位的官方頁面查證。",
+      viewAll: "看全部 {{n}} 張 →",
+    },
+    certs: {
+      intro: "修過的課程與平台徽章，共 {{n}} 張。每一張都能點進發證單位的官方頁面查證。",
+      count: "{{n}} 張",
+      issuer: {
+        "claude-academy": "Claude Academy",
+      },
+      group: {
+        core: "CLAUDE 基礎",
+        dev: "開發與整合",
+        fluency: "AI FLUENCY",
+      },
+    },
     pageSeo: {
       home: {
         title: "Haru Li｜Frontend Engineer Portfolio",
@@ -338,6 +356,11 @@ const zh = {
         title: "PERF LAB｜可操作的前端效能實作 Haru Li",
         description:
           "useMemo 快取、捲動延遲載入、Suspense 等待資料——三個可以自己操作的前端效能實作，數字當場量出來。",
+      },
+      certs: {
+        title: "BADGES｜課程與平台徽章 Haru Li",
+        description:
+          "Claude Academy 20 張課程完成徽章：Claude Code、Claude API、Model Context Protocol、Amazon Bedrock 與 Vertex AI 整合，以及 AI Fluency 系列。每張皆可連到發證單位的官方頁面查證。",
       },
       surf: {
         title: "SURF｜GSAP 捲動敘事實驗 Haru Li",

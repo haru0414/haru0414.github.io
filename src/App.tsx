@@ -8,6 +8,7 @@ import AboutSection from "./components/sections/AboutSection";
 import PortfolioSection from "./components/sections/PortfolioSection";
 import SkillsSection from "./components/sections/SkillsSection";
 import LabSection from "./components/sections/LabSection";
+import BadgesSection from "./components/sections/BadgesSection";
 import ContactSection from "./components/sections/ContactSection";
 import ScrollCat from "./components/play/ScrollCat";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -22,6 +23,7 @@ import WorkPage from "./pages/WorkPage";
 // 同步 import 的理由同上：/surf 也要進 prerender
 import SurfPage from "./pages/SurfPage";
 import LabPage from "./pages/LabPage";
+import CertsPage from "./pages/CertsPage";
 import BlogPage from "./pages/BlogPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import ErrorBoundary, { ErrorScreen } from "./components/ErrorBoundary";
@@ -152,6 +154,7 @@ function App() {
         <PortfolioSection />
         <LabSection />
         <SkillsSection />
+        <BadgesSection />
         <ContactSection />
       </main>
 
@@ -298,6 +301,7 @@ function localizedRoutes(base: string) {
         <Route path="work" element={<WorkPage />} />
         <Route path="project/:id" element={<ProjectDetailPage />} />
         <Route path="lab" element={<LabPage />} />
+        <Route path="certs" element={<CertsPage />} />
         <Route path="blog" element={<BlogPage />} />
         {/* 看板路由必須排在文章路由之前，否則 /blog/board/x 會被
             當成 slug 為 "board" 的文章 */}

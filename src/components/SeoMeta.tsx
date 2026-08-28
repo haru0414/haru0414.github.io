@@ -87,6 +87,7 @@ export default function SeoMeta() {
     } else if (path === "/blog") page("blog");
     else if (path === "/work") page("work");
     else if (path === "/lab") page("lab");
+    else if (path === "/certs") page("certs");
     else if (path === "/surf") page("surf");
     else if (path === "/500") page("e500");
 
