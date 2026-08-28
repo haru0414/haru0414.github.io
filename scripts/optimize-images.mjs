@@ -18,6 +18,15 @@ const webpJobs = [
   { in: "src/assets/images/onigiri/cover.jpeg", out: "src/assets/images/onigiri/cover.webp", width: 500, q: 80 },
   { in: "src/assets/images/onigiri/stickers/1.png", out: "src/assets/images/onigiri/stickers/1.webp", width: 256, q: 85, alpha: true },
   { in: "src/assets/images/onigiri/stickers/3.png", out: "src/assets/images/onigiri/stickers/3.webp", width: 256, q: 85, alpha: true },
+  // 陪跑貓走路七幀。原稿是 640×640 PNG（單張約 90–140KB），站上只顯示 100px，
+  // 轉成 512 寬的 WebP 後單張約 18KB——七幀合計從約 800KB 降到約 130KB。
+  ...[1, 2, 3, 4, 5, 6, 7].map((n) => ({
+    in: `src/assets/images/onigiri/run-cat-${n}.png`,
+    out: `src/assets/images/onigiri/run-cat-${n}.webp`,
+    width: 512,
+    q: 85,
+    alpha: true,
+  })),
   { in: "src/assets/images/website/www.nday.com.tw_.png", out: "src/assets/images/website/www.nday.com.tw_.webp", width: 1400, q: 78 },
   { in: "src/assets/images/website/www.jiahe.net.tw_.png", out: "src/assets/images/website/www.jiahe.net.tw_.webp", width: 1400, q: 78 },
   { in: "src/assets/images/website/www.asterisk-tech.com_.png", out: "src/assets/images/website/www.asterisk-tech.com_.webp", width: 1400, q: 78 },

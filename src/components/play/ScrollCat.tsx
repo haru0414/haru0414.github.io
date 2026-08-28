@@ -4,16 +4,21 @@ import OnigiriEgg from "../OnigiriEgg";
 import run1 from "../../assets/images/onigiri/run-cat-1.webp";
 import run2 from "../../assets/images/onigiri/run-cat-2.webp";
 import run3 from "../../assets/images/onigiri/run-cat-3.webp";
+import run4 from "../../assets/images/onigiri/run-cat-4.webp";
+import run5 from "../../assets/images/onigiri/run-cat-5.webp";
+import run6 from "../../assets/images/onigiri/run-cat-6.webp";
+import run7 from "../../assets/images/onigiri/run-cat-7.webp";
 import sleepCat from "../../assets/images/onigiri/sleep-cat.webp";
 import waitCat from "../../assets/images/onigiri/wait-cat.webp";
 
 // 捲動陪跑 mascot：Onigiri 沿著視窗底線走動，位置對應頁面捲動進度
 // （捲到頂 → 最左、捲到底 → 最右）。三種姿態：
-//   頂部靜止 → 睡覺（sleep-cat）、捲動中 → 走路三幀循環（run 1→2→3）、
-//   底部靜止 → 坐在碗邊等（wait-cat）。走路圖原圖面向左，往右走時水平翻轉。
+//   頂部靜止 → 睡覺（sleep-cat）、捲動中 → 走路七幀循環（run 1→…→7→1）、
+//   底部靜止 → 坐在碗邊等（wait-cat）。走路圖原稿面向右，往左走時水平翻轉。
 // 純裝飾（aria-hidden）、pointer-events:none、prefers-reduced-motion 時不跑動畫。
 
-const CAT_W = 100; // 貓框寬高（px，圖為 500×500 正方形）
+const RUN_FRAMES = 7; // 走路循環幀數。改這裡就要同步 index.css 的 data-frame 規則
+const CAT_W = 100; // 貓框寬高（px，圖為正方形）
 const RIGHT_GAP = 24; // 右側保留給飼料碗：捲到底時坐等貓湊到碗邊
 const LEFT_PAD = 8;
 // 整趟（最左↔最右）大約換幾次幀。手機可走範圍短，固定 px 步幅會換不了幾幀
@@ -70,8 +75,8 @@ export default function ScrollCat() {
 
     let curX = LEFT_PAD + progress() * range();
     let targetX = curX;
-    let facing = 1; // 1 面向左（原圖）、-1 翻面向右
-    let frameIdx = 0; // 0..2 對應 run 1/2/3
+    let facing = 1; // 1 = 原圖朝向（面向右）、-1 = 水平翻轉（面向左）
+    let frameIdx = 0; // 0..RUN_FRAMES-1，對應 run-cat-1..7
     let stride = 0;
     let bob = 0;
 
@@ -85,7 +90,7 @@ export default function ScrollCat() {
       if (p <= 0.01) {
         pose.dataset.pose = "sleep";
       } else if (p >= 0.99) {
-        facing = 1; // 坐等貓用原圖朝向（面左），不翻轉
+        facing = 1; // 坐等貓（wait-cat）用原圖朝向，不翻轉
         pose.dataset.pose = "wait";
       } else {
         pose.dataset.pose = "idle";
@@ -124,9 +129,9 @@ export default function ScrollCat() {
       curX += move;
       const speed = Math.abs(move) / Math.max(dt, 0.001);
 
-      if (dx > 1)
-        facing = -1; // 往右走 → 翻面
-      else if (dx < -1) facing = 1;
+      // 走路圖原稿面向右，所以往右走用原圖、往左走才翻面
+      if (dx > 1) facing = 1;
+      else if (dx < -1) facing = -1;
 
       // 抵達目標 → 收尾擺出靜止姿態，停 loop 省電
       if (adx < 0.5) {
@@ -145,7 +150,7 @@ export default function ScrollCat() {
         const strideLen = clamp(range() / STRIDE_STEPS, 6, 17);
         stride += Math.abs(move);
         if (stride >= strideLen) {
-          frameIdx = (frameIdx + 1) % 3;
+          frameIdx = (frameIdx + 1) % RUN_FRAMES;
           stride = 0;
         }
         bob = -Math.abs(Math.sin(performance.now() / 90)) * 2;
@@ -250,6 +255,38 @@ export default function ScrollCat() {
                 height={512}
                 draggable={false}
                 className="cat-sprite cat-run-3"
+              />
+              <img
+                src={run4}
+                alt=""
+                width={512}
+                height={512}
+                draggable={false}
+                className="cat-sprite cat-run-4"
+              />
+              <img
+                src={run5}
+                alt=""
+                width={512}
+                height={512}
+                draggable={false}
+                className="cat-sprite cat-run-5"
+              />
+              <img
+                src={run6}
+                alt=""
+                width={512}
+                height={512}
+                draggable={false}
+                className="cat-sprite cat-run-6"
+              />
+              <img
+                src={run7}
+                alt=""
+                width={512}
+                height={512}
+                draggable={false}
+                className="cat-sprite cat-run-7"
               />
               <img
                 src={waitCat}

@@ -434,7 +434,7 @@
     animation: cat-breathe 3.2s ease-in-out infinite;
   }
 
-  /* 捲動陪跑貓 sprite：5 張疊在同一框，依 data-pose / data-frame 切換顯示。
+  /* 捲動陪跑貓 sprite：9 張（睡 1 + 走路 7 + 坐等 1）疊在同一框，依 data-pose / data-frame 切換顯示。
      位移／翻面由 JS rAF 寫在外層 transform。 */
   .cat-sprites {
     position: relative;
@@ -470,9 +470,32 @@
   .cat-sprites[data-pose="idle"] .cat-run-1 {
     opacity: 1;
   }
+  /* 走路七幀的畫布留白比睡覺／坐等那兩張多，同樣 contain 進 100px 框後
+     貓會小一號（頭圍差約 1.3 倍），腳底也高出約 12%（73.5% vs 85.7%），
+     停下來換姿態時就會「突然放大又落地」。這裡把走路幀補正回同一個比例與地面線：
+       transform-origin 設在走路圖的腳底(73.5%) → 放大時腳不會離地
+       再 translateY 12.2% → 腳底對齊 wait/sleep 的 85.7%
+     改的是呈現而非原稿，數值由量測而來，不動素材本身。 */
+  .cat-run-1,
+  .cat-run-2,
+  .cat-run-3,
+  .cat-run-4,
+  .cat-run-5,
+  .cat-run-6,
+  .cat-run-7 {
+    transform-origin: center 73.5%;
+    transform: translateY(12.2%) scale(1.3);
+  }
+
+  /* 每一幀都要有對應規則：JS 的 RUN_FRAMES 若超出這裡涵蓋的範圍，
+     那幾幀會找不到規則而全部停在 opacity: 0，貓會整隻消失。 */
   .cat-sprites[data-pose="run"][data-frame="1"] .cat-run-1,
   .cat-sprites[data-pose="run"][data-frame="2"] .cat-run-2,
-  .cat-sprites[data-pose="run"][data-frame="3"] .cat-run-3 {
+  .cat-sprites[data-pose="run"][data-frame="3"] .cat-run-3,
+  .cat-sprites[data-pose="run"][data-frame="4"] .cat-run-4,
+  .cat-sprites[data-pose="run"][data-frame="5"] .cat-run-5,
+  .cat-sprites[data-pose="run"][data-frame="6"] .cat-run-6,
+  .cat-sprites[data-pose="run"][data-frame="7"] .cat-run-7 {
     opacity: 1;
   }
 
