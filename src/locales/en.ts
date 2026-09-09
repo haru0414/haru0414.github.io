@@ -440,6 +440,46 @@ const en = {
           },
         },
       },
+      "10": {
+        desc: "A React Native / Expo app for on-site property inspection, built offline-first: every screen reads local SQLite and a downloaded image bundle, while the network only pushes changes and pulls increments in the background.",
+        problem: "Inspections happen inside newly finished buildings, where basements and stairwells routinely have no signal. A single case carries hundreds of checklist items and photos — saving over a live connection means losing the lot the moment it drops.",
+        approach: "Built with another frontend engineer. Every screen reads local SQLite and an offline image bundle first; the network only pushes pending changes and pulls increments in the background. Two queues track pending operations and pending photos, pushed on three triggers — app foreground, a 10-minute poll, and pull-to-refresh — with exponential backoff up to 30 minutes on network failure. Saves batch instead of firing per item (sent 60 seconds after activity stops, or early at 10 operations or 3 photos), cutting the battery drain and heat from repeatedly waking the mobile radio. The pending-item list acts as a fuse on pulls so stale server values never overwrite local edits that have not synced. Case details sync by version, and the offline image bundle supports incremental download, cancellation and orphan cleanup. Reports render through react-native-pdf; errors and usage go to Firebase Crashlytics / Analytics.",
+        result: "In continuous development since July 2025, now at version 2.3.8, shipped to iOS and Android through EAS Build.",
+      },
+      "11": {
+        desc: "A K-pop fan map app — event discovery, a map for finding venues and pop-ups, trip planning, and a digital ticket collection. Expo SDK 57 + Expo Router + NativeWind.",
+        problem: "Fan event information is scattered across social platforms — where the birthday support event is, how long the pop-up store runs, which spot hands out the merch. Every time means digging through it all again.",
+        approach: "A team project; I own the frontend, a second frontend partner handles flow charts, UI/UX and the design system, and the backend is built by other team members. Built on Expo SDK 57 with Expo Router file-based routing, NativeWind for styling and Reanimated for motion. The map uses react-native-maps with city / district switching and six place categories (venues, support events, merch pickup points, pop-up stores, goods vendors, photo spots). Events, places and tickets share a single global Context so no screen drifts out of sync. Shipped event discovery, trip countdowns and today's itinerary, saved and visited records, and a digital ticket collection with add / edit / delete. Tested with Jest and React Native Testing Library.",
+        result: "Started July 2026 and still in active development.",
+        shots: {
+          "0": {
+            label: "Event discovery",
+            desc: "The home carousel features headline events, with trending and upcoming tabs below; each row saves to favorites or drops straight into a trip.",
+          },
+          "1": {
+            label: "Event detail",
+            desc: "Session times, venue address and ticketing info sit in one card, followed by the places tied to that event — the venue, support stations and photo walls.",
+          },
+          "2": {
+            label: "My plan",
+            desc: "Saved events appear as countdown cards, the month view marks days with something scheduled, and the day's timeline runs underneath.",
+          },
+          "3": {
+            label: "Digital tickets",
+            desc: "Past shows are collected as ticket stubs, topped by counts for upcoming, this year's shows and total tickets. Tickets can be added, edited and deleted.",
+          },
+          "4": {
+            label: "Profile",
+            desc: "Saved and visited counts, the ticket collection entry, help center and settings.",
+          },
+        },
+      },
+      "12": {
+        desc: "The admin console behind the fan map app: admin accounts with fine-grained permissions, event and place management, support-application review, and versioned legal documents.",
+        problem: "Everything the app shows — events, places, tickets, support applications — needs someone maintaining it, and the console's data model has to match the app exactly or the two ends grow separate formats.",
+        approach: "The admin console for the same team; I lead its frontend while the backend is built by other team members. Starting from an open-source Shadcn admin template, I rewrote the auth and permission layer: credential login, 8-hour sessions, protected routes, and admin accounts with roles and fine-grained permissions. It shares the app's core types for events, places, tickets and support applications rather than defining a second set. The contract with the backend was written in OpenAPI before either side built against it: admin endpoints all live under /admin/* behind JWT Bearer auth, and every operation declares the permission the backend must enforce — the frontend's route guards and hidden buttons are there for the experience, not the security. Legal documents keep draft and published versions apart so unfinished text never reaches the app. Tested with Vitest in browser mode.",
+        result: "The foundation and the legal-document page are operational; the remaining 14 admin routes have their fields and API skeletons in place and ship page by page as the backend lands.",
+      },
     },
   },
 };

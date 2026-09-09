@@ -1,6 +1,18 @@
 import ndayScreenshot from "../assets/images/website/www.nday.com.tw_.webp";
 import jiahescreenshot from "../assets/images/website/www.jiahe.net.tw_.webp";
 import asteriskScreenshot from "../assets/images/website/www.asterisk-tech.com_.webp";
+import ndayCaseList from "../assets/images/nday-app/01-case-list.webp";
+import ndayCaseDetail from "../assets/images/nday-app/02-case-detail.webp";
+import ndayChecklist from "../assets/images/nday-app/03-checklist.webp";
+import ndayDefectLog from "../assets/images/nday-app/04-defect-log.webp";
+import fanmapHome from "../assets/images/fanmap/01-home.webp";
+import fanmapEvent from "../assets/images/fanmap/02-event.webp";
+import fanmapPlan from "../assets/images/fanmap/03-plan.webp";
+import fanmapTickets from "../assets/images/fanmap/04-tickets.webp";
+import fanmapProfile from "../assets/images/fanmap/05-profile.webp";
+import fanmapAdminDashboard from "../assets/images/fanmap-admin/01-dashboard.webp";
+import fanmapAdminRoles from "../assets/images/fanmap-admin/02-roles.webp";
+import fanmapAdminEvents from "../assets/images/fanmap-admin/03-events.webp";
 import travcatLogin from "../assets/images/travcat/01-login.webp";
 import travcatMap from "../assets/images/travcat/02-map.webp";
 import travcatLog from "../assets/images/travcat/03-log.webp";
@@ -157,6 +169,78 @@ export const projects: ProjectData[] = [
     ],
     screenshots: [travcatLogin, travcatMap, travcatLog, travcatPlan, travcatProfile].map(
       (src) => ({ src, w: 720, h: 1559 }),
+    ),
+  },
+  {
+    id: "10",
+    title: "INSPECTION FIELD APP",
+    year: "2025",
+    color: "#ea580c",
+    techStack: [
+      "React Native",
+      "Expo SDK 54",
+      "TypeScript",
+      "Expo SQLite",
+      "Laravel API",
+      "Firebase Analytics",
+      "Crashlytics",
+      "EAS Build",
+      "iOS / Android",
+    ],
+    // App Store 上架用的行銷圖，本身已含手機構圖，走並排網格而非手機外框
+    screenshots: [
+      ndayCaseList,
+      ndayCaseDetail,
+      ndayChecklist,
+      ndayDefectLog,
+    ].map((src) => ({ src, w: 900, h: 1948 })),
+  },
+  {
+    id: "11",
+    title: "FANMAP",
+    year: "2026",
+    color: "#db2777",
+    portrait: true,
+    techStack: [
+      "React Native 0.86",
+      "Expo SDK 57",
+      "Expo Router",
+      "TypeScript",
+      "NativeWind",
+      "Reanimated",
+      "react-native-maps",
+      "Jest",
+      "RNTL",
+    ],
+    screenshots: [
+      fanmapHome,
+      fanmapEvent,
+      fanmapPlan,
+      fanmapTickets,
+      fanmapProfile,
+    ].map((src) => ({ src, w: 720, h: 1565 })),
+  },
+  {
+    id: "12",
+    title: "FANMAP ADMIN",
+    year: "2026",
+    color: "#7c3aed",
+    techStack: [
+      "React 19",
+      "Vite",
+      "TypeScript",
+      "TanStack Router",
+      "TanStack Query",
+      "TanStack Table",
+      "Shadcn UI",
+      "React Hook Form",
+      "Zod",
+      "i18next",
+      "Vitest",
+      "OpenAPI",
+    ],
+    screenshots: [fanmapAdminDashboard, fanmapAdminRoles, fanmapAdminEvents].map(
+      (src) => ({ src, w: 1400, h: 875 }),
     ),
   },
 ];
