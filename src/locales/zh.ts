@@ -500,6 +500,12 @@ const zh = {
         approach: "同一個團隊的管理後台，後台前端由我主導開發，後端由團隊其他成員負責。以開源 Shadcn admin 模板為基礎，重寫認證與權限層，實作帳密登入、8 小時 session、受保護路由，以及管理員帳號、角色與細粒度權限。與 App 共用活動、地點、票券、應援申請等核心型別，不另建一套格式。與後端以 OpenAPI 先定契約再各自實作，管理端點統一走 /admin/* 與 JWT Bearer，每個 operation 標註所需權限交由後端強制授權，前端的路由與按鈕隱藏只負責使用體驗。法務文件採草稿／發布版本分離，避免未完成的文字直接被 App 讀到。測試以 Vitest browser mode 執行。",
         result: "後台基礎層與法務文件管理頁已可操作，其餘 14 條管理路由的欄位與 API 骨架已就位，依後端完成順序逐頁實作中。",
       },
+      "13": {
+        desc: "個人 Side Project：Pokémon GO 玩家交換媒合平台，Next.js + Fastify + PostgreSQL 全端 Monorepo，從 Have / Want 清單、雙向媒合一路串到交換邀請、完成確認與評價",
+        problem: "Pokémon GO 的交換要雙方剛好都有對方想要的那一隻，還得約得到時間地點。玩家只能在群組和社團裡反覆洗版喊換，訊息很快就被沖掉，也無從判斷對方是否可靠。",
+        approach: "以 AI Agent 協作開發，我擔任 Tech Lead，負責產品定義、分階段規劃與架構決策，每個階段驗收通過才進下一步。以 Turborepo Monorepo 拆成 Next.js 16 玩家端、Vite + React 19 管理後台與 Fastify API，三端共用 Zod schema 與型別，資料層為 PostgreSQL 17 + Prisma，登入走 Clerk，後台另以 Organization 權限控管。寶可夢圖鑑資料從開源資料集匯入 staging，經正規化、人工審核與預覽才發佈，每次變更都留下 revision 紀錄。媒合採可解釋的規則比對：依種類、型態、異色、特殊條件與交換地區比對雙方的 Have / Want，並逐條列出符合的理由；附近交換先以 bounding box 縮小範圍，再在 SQL 內用 Haversine 計算距離，精確座標從不離開伺服器。交換邀請以 partial unique index 擋下重複提案，接受時在同一筆交易裡鎖定雙方的寶可夢；完成與放棄都需要雙方確認，並用 Serializable 交易處理同時送出的併發。評價採雙盲機制，貢獻點數由事件紀錄推導而非存成可變欄位；好友代碼只在雙方接受後才揭露，所有 API 回應都經過隱私欄位過濾。",
+        result: "2026 年 9 月啟動，已完成 Have / Want、媒合、附近交換、交換邀請與通知、完成確認、評價與交換協調，API、玩家端與管理後台共 290 個測試（含 PostgreSQL 整合測試）全數通過，持續開發中。",
+      },
     },
   },
 };

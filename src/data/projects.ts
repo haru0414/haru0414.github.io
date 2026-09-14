@@ -18,6 +18,12 @@ import travcatMap from "../assets/images/travcat/02-map.webp";
 import travcatLog from "../assets/images/travcat/03-log.webp";
 import travcatPlan from "../assets/images/travcat/04-plan.webp";
 import travcatProfile from "../assets/images/travcat/05-profile.webp";
+import linkleHome from "../assets/images/linkle/01-home.webp";
+import linkleDiscover from "../assets/images/linkle/02-discover.webp";
+import linkleDetail from "../assets/images/linkle/03-detail.webp";
+import linkleProposals from "../assets/images/linkle/04-proposals.webp";
+import linkleHistory from "../assets/images/linkle/05-history.webp";
+import linklePlayer from "../assets/images/linkle/06-player.webp";
 
 // 只放結構性 / 非翻譯資料；標題為風格化英文保留。
 // 描述（desc / full）依 id 放在 i18n：t(`projects.${id}.desc` | `.full`)。
@@ -242,5 +248,33 @@ export const projects: ProjectData[] = [
     screenshots: [fanmapAdminDashboard, fanmapAdminRoles, fanmapAdminEvents].map(
       (src) => ({ src, w: 1400, h: 875 }),
     ),
+  },
+  {
+    id: "13",
+    title: "LINKLE",
+    year: "2026",
+    color: "#8b5cf6",
+    side: true,
+    techStack: [
+      "Next.js 16",
+      "React 19",
+      "TypeScript",
+      "Tailwind CSS",
+      "Fastify",
+      "Zod",
+      "PostgreSQL",
+      "Prisma",
+      "Clerk",
+      "Turborepo",
+      "Vitest",
+    ],
+    screenshots: [
+      linkleHome,
+      linkleDiscover,
+      linkleDetail,
+      linkleProposals,
+      linkleHistory,
+      linklePlayer,
+    ].map((src) => ({ src, w: 1400, h: 826 })),
   },
 ];
